@@ -58,10 +58,11 @@ function filterMechanics() {
 
     for (let i = 1; i < rows.length; i++) {
         let service = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
-        let price = parseInt(rows[i].getElementsByTagName("td")[3].innerText.replace("₹", ""));
+        let priceText = rows[i].getElementsByTagName("td")[3].innerText.replace("₹", "").trim();
+        let price = parseInt(priceText);
 
         if ((service.includes(serviceInput) || serviceInput === "") && 
-            (isNaN(priceInput) || price <= priceInput)) {
+            (isNaN(priceInput) || price <= parseInt(priceInput))) {
             rows[i].style.display = "";
         } else {
             rows[i].style.display = "none";
