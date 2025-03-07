@@ -1,40 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Mechanic</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Find My Mechanic</h1>
-        <p>Compare prices and find the best mechanic near you!</p>
-    </header>
 
-    <section id="mechanic-list">
-        <h2>Available Mechanics</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Service</th>
-                    <th>Price</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tbody id="mechanicTable">
-                <!-- Data will be added dynamically -->
-            </tbody>
-        </table>
-    </section>
+    <h1>Find My Mechanic</h1>
+    <p>Compare prices and find the best mechanic near you!</p>
 
-    <footer>
-        <p>© 2025 Find My Mechanic. All rights reserved.</p>
-    </footer>
+    <h2>Available Mechanics</h2>
 
-    <script src="script.js"></script>
+    <!-- Search Box -->
+    <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by location or service...">
+
+    <table id="mechanicTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Service</th>
+                <th>Price</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Rahul's Garage</td>
+                <td>Mumbai</td>
+                <td>Puncture Repair</td>
+                <td>₹200</td>
+                <td>9876543210</td>
+            </tr>
+            <tr>
+                <td>AutoFix</td>
+                <td>Pune</td>
+                <td>Oil Change</td>
+                <td>₹500</td>
+                <td>8765432109</td>
+            </tr>
+            <tr>
+                <td>Speedy Repairs</td>
+                <td>Delhi</td>
+                <td>Tire Replacement</td>
+                <td>₹1500</td>
+                <td>7654321098</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function searchMechanics() {
+            let input = document.getElementById("searchBox").value.toLowerCase();
+            let table = document.getElementById("mechanicTable");
+            let rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) {
+                let location = rows[i].getElementsByTagName("td")[1].innerText.toLowerCase();
+                let service = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
+
+                if (location.includes(input) || service.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
