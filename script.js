@@ -49,3 +49,22 @@ function showError(error) {
 }
 
 // Add a button to HTML to trigger location tracking
+function filterMechanics() {
+    let serviceInput = document.getElementById("serviceFilter").value.toLowerCase();
+    let priceInput = document.getElementById("priceFilter").value;
+
+    let table = document.getElementById("mechanicTable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let service = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
+        let price = parseInt(rows[i].getElementsByTagName("td")[3].innerText.replace("₹", ""));
+
+        if ((service.includes(serviceInput) || serviceInput === "") && 
+            (isNaN(priceInput) || price <= priceInput)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
