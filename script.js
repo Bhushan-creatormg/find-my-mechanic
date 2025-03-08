@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const mechanics = [
-        { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: 200, contact: "9876543210" },
-        { name: "AutoFix", location: "Pune", service: "Oil Change", price: 500, contact: "8765432109" },
-        { name: "Speedy Repairs", location: "Delhi", service: "Tire Replacement", price: 1500, contact: "7654321098" }
+        { name: "Rahul's Garage", location: "Mumbai", vehicle: "Car", service: "Puncture Repair", price: 200, contact: "9876543210" },
+        { name: "AutoFix", location: "Pune", vehicle: "Bike", service: "Oil Change", price: 500, contact: "8765432109" },
+        { name: "Speedy Repairs", location: "Delhi", vehicle: "Truck", service: "Tire Replacement", price: 1500, contact: "7654321098" }
     ];
 
     const mechanicTableBody = document.getElementById("mechanicTableBody");
@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = `<tr>
                 <td>${mechanic.name}</td>
                 <td>${mechanic.location}</td>
+                <td>${mechanic.vehicle}</td>
                 <td>${mechanic.service}</td>
                 <td>₹${mechanic.price}</td>
                 <td>${mechanic.contact}</td>
@@ -24,9 +25,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function applyFilters() {
         const locationFilter = document.getElementById("locationFilter").value.toLowerCase();
-        
+        const vehicleFilter = document.getElementById("vehicleFilter").value;
+
         const filteredMechanics = mechanics.filter(mechanic =>
-            mechanic.location.toLowerCase().includes(locationFilter)
+            (locationFilter === "" || mechanic.location.toLowerCase().includes(locationFilter)) &&
+            (vehicleFilter === "" || mechanic.vehicle === vehicleFilter)
         );
 
         updateTable(filteredMechanics);
