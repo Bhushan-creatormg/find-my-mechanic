@@ -1,8 +1,42 @@
-const mechanics = [
-    { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
-    { name: "AutoFix", location: "Pune", service: "Oil Change", price: "₹500", contact: "8765432109" },
-    { name: "Speedy Repairs", location: "Delhi", service: "Tire Replacement", price: "₹1500", contact: "7654321098" }
-];
+document.addEventListener("DOMContentLoaded", function () {
+    const mechanics = [
+        { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: 200, contact: "9876543210" },
+        { name: "AutoFix", location: "Pune", service: "Oil Change", price: 500, contact: "8765432109" },
+        { name: "Speedy Repairs", location: "Delhi", service: "Tire Replacement", price: 1500, contact: "7654321098" }
+    ];
+
+    const mechanicTableBody = document.getElementById("mechanicTableBody");
+
+    function updateTable(filteredMechanics) {
+        mechanicTableBody.innerHTML = ""; // Clear table before adding new rows
+
+        filteredMechanics.forEach(mechanic => {
+            const row = `<tr>
+                <td>${mechanic.name}</td>
+                <td>${mechanic.location}</td>
+                <td>${mechanic.service}</td>
+                <td>₹${mechanic.price}</td>
+                <td>${mechanic.contact}</td>
+            </tr>`;
+            mechanicTableBody.innerHTML += row;
+        });
+    }
+
+    function applyFilters() {
+        const locationFilter = document.getElementById("locationFilter").value.toLowerCase();
+        
+        const filteredMechanics = mechanics.filter(mechanic =>
+            mechanic.location.toLowerCase().includes(locationFilter)
+        );
+
+        updateTable(filteredMechanics);
+    }
+
+    updateTable(mechanics); // Load initial data
+
+    // Attach filter function to the button
+    window.applyFilters = applyFilters;
+});
 
 function loadMechanics() {
     const table = document.getElementById("mechanicTable");
