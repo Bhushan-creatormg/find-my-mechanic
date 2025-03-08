@@ -79,47 +79,40 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateModelDropdown() {
-        const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
-        const carCompanyFilter = document.getElementById("carCompanyFilter").value;
-        const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
-        const carCompanyOther = document.getElementById("carCompanyOther");
-        const bikeCompanyOther = document.getElementById("bikeCompanyOther");
-        const modelDropdown = document.getElementById("modelFilter");
+    let modelDropdown = document.getElementById("modelFilter");
+    modelDropdown.innerHTML = '<option value="">Select Model</option>'; // Clear previous options
 
-        // Show custom company input if "Others" is selected
-        carCompanyOther.style.display = carCompanyFilter === "Others" ? "inline-block" : "none";
-        bikeCompanyOther.style.display = bikeCompanyFilter === "Others" ? "inline-block" : "none";
+    const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+    const carCompanyFilter = document.getElementById("carCompanyFilter").value;
+    const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
 
-        // Clear previous models
-        modelDropdown.innerHTML = '<option value="">Select Model</option>';
+    let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
 
-        // Predefined models for each company
-        const models = {
-            Honda: ["City", "Civic", "Amaze"],
-            Toyota: ["Corolla", "Innova", "Fortuner"],
-            Ford: ["EcoSport", "Endeavour", "Figo"],
-            Hyundai: ["i20", "Creta", "Verna"],
-            Tata: ["Nexon", "Harrier", "Safari"],
-            Bajaj: ["Pulsar", "Avenger", "Platina"],
-            Hero: ["Splendor", "HF Deluxe", "Glamour"],
-            Yamaha: ["R15", "FZ", "MT-15"],
-            TVS: ["Apache", "Jupiter", "Radeon"],
-            "Royal Enfield": ["Classic 350", "Meteor", "Himalayan"]
-        };
+    // Debugging: Check what company is selected
+    console.log("Selected Vehicle Type:", vehicleTypeFilter);
+    console.log("Selected Company:", selectedCompany);
 
-        let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
-        if (selectedCompany === "Others") return;
+    const models = {
+        "Honda": ["City", "Civic", "Amaze"],
+        "Toyota": ["Corolla", "Innova", "Fortuner"],
+        "Yamaha": ["R15", "MT-15"],
+        "Royal Enfield": ["Classic 350", "Meteor", "Himalayan"]
+    };
 
-        if (selectedCompany in models) {
-            models[selectedCompany].forEach(model => {
-                let option = document.createElement("option");
-                option.value = model;
-                option.textContent = model;
-                modelDropdown.appendChild(option);
-            });
-        }
+    // Check if the selected company exists in models
+    console.log("Available Models for Company:", models[selectedCompany]);
+
+    if (selectedCompany in models) {
+        models[selectedCompany].forEach(model => {
+            let option = document.createElement("option");
+            option.value = model;
+            option.textContent = model;
+            modelDropdown.appendChild(option);
+        });
+    } else {
+        console.error("No models found for:", selectedCompany);
     }
-
+}
     updateTable(mechanics);
     window.applyFilters = applyFilters;
     document.getElementById("vehicleTypeFilter").addEventListener("change", updateCompanyDropdown);
