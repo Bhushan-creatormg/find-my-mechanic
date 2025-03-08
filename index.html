@@ -25,10 +25,12 @@
         th {
             background-color: #f4f4f4;
         }
-        input {
-            width: 100%;
-            padding: 8px;
+        input, select, button {
             margin-top: 10px;
+            padding: 8px;
+        }
+        button {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -41,12 +43,13 @@
 
     <!-- Search Box -->
     <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by location or service...">
-    <button onclick="getUserLocation()" style="padding: 10px 20px; font-size: 16px; background-color: green; color: white; border: none; cursor: pointer;">
-
-        <input type="text" id="locationFilter" placeholder="Enter location (e.g., Mumbai)">
-<button onclick="applyFilters()">Filter</button>
+    
+    <input type="text" id="locationFilter" placeholder="Enter location (e.g., Mumbai)">
+    <button onclick="applyFilters()">Filter</button>
+    
+    <button onclick="getUserLocation()" style="padding: 10px 20px; font-size: 16px; background-color: green; color: white; border: none;">
         Find Nearby Mechanics
-</button>
+    </button>
 
     <table id="mechanicTable">
         <thead>
@@ -81,50 +84,48 @@
                 <td>7654321098</td>
             </tr>
         </tbody>
-       
-    <select id="vehicleTypeFilter">
-    <option value="">Select Vehicle Type</option>
-    <option value="Car">Car</option>
-    <option value="Bike">Bike</option>
-</select>
-
-<select id="carCompanyFilter" style="display: none;">
-    <option value="">Select Car Company</option>
-    <option value="Honda">Honda</option>
-    <option value="Toyota">Toyota</option>
-    <option value="Ford">Ford</option>
-    <option value="Hyundai">Hyundai</option>
-    <option value="Tata">Tata</option>
-    <option value="Others">Others</option>
-</select>
-
-<input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
-
-<select id="bikeCompanyFilter" style="display: none;">
-    <option value="">Select Bike Company</option>
-    <option value="Bajaj">Bajaj</option>
-    <option value="Hero">Hero</option>
-    <option value="Yamaha">Yamaha</option>
-    <option value="TVS">TVS</option>
-    <option value="Royal Enfield">Royal Enfield</option>
-    <option value="Others">Others</option>
-</select>
-
-<input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
-
-<select id="modelFilter">
-    <option value="">Select Model</option>
-</select>
-</select>
-        <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
-<input type="number" id="priceFilter" placeholder="Max price (₹)">
-<button onclick="filterMechanics()">Filter</button>
     </table>
+
+    <!-- Filters -->
+    <select id="vehicleTypeFilter">
+        <option value="">Select Vehicle Type</option>
+        <option value="Car">Car</option>
+        <option value="Bike">Bike</option>
+    </select>
+
+    <select id="carCompanyFilter" style="display: none;">
+        <option value="">Select Car Company</option>
+        <option value="Honda">Honda</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Ford">Ford</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Tata">Tata</option>
+        <option value="Others">Others</option>
+    </select>
+
+    <input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
+
+    <select id="bikeCompanyFilter" style="display: none;">
+        <option value="">Select Bike Company</option>
+        <option value="Bajaj">Bajaj</option>
+        <option value="Hero">Hero</option>
+        <option value="Yamaha">Yamaha</option>
+        <option value="TVS">TVS</option>
+        <option value="Royal Enfield">Royal Enfield</option>
+        <option value="Others">Others</option>
+    </select>
+
+    <input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
+
+    <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
+    <input type="number" id="priceFilter" placeholder="Max price (₹)">
+    <button onclick="filterMechanics()">Filter</button>
+
     <h2>Are You a Mechanic?</h2>
-<p>List your services on our platform and get customers easily!</p>
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
-    <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; cursor: pointer;">Register as Mechanic</button>
-</a>
+    <p>List your services on our platform and get customers easily!</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
+        <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none;">Register as Mechanic</button>
+    </a>
 
     <script>
         function searchMechanics() {
@@ -136,13 +137,15 @@
                 let location = rows[i].getElementsByTagName("td")[1].innerText.toLowerCase();
                 let service = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
 
-                if (location.includes(input) || service.includes(input)) {
-                    rows[i].style.display = "";
-                } else {
-                    rows[i].style.display = "none";
-                }
+                rows[i].style.display = (location.includes(input) || service.includes(input)) ? "" : "none";
             }
         }
+
+        document.getElementById("vehicleTypeFilter").addEventListener("change", function() {
+            let vehicleType = this.value;
+            document.getElementById("carCompanyFilter").style.display = vehicleType === "Car" ? "block" : "none";
+            document.getElementById("bikeCompanyFilter").style.display = vehicleType === "Bike" ? "block" : "none";
+        });
     </script>
 
 </body>
