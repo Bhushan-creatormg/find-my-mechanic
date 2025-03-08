@@ -85,7 +85,39 @@
     <option value="">Select Vehicle Type</option>
     <option value="Car">Car</option>
     <option value="Bike">Bike</option>
-    <option value="Truck">Truck</option>
+    <select id="vehicleTypeFilter">
+    <option value="">Select Vehicle Type</option>
+    <option value="Car">Car</option>
+    <option value="Bike">Bike</option>
+</select>
+
+<select id="carCompanyFilter" style="display: none;">
+    <option value="">Select Car Company</option>
+    <option value="Honda">Honda</option>
+    <option value="Toyota">Toyota</option>
+    <option value="Ford">Ford</option>
+    <option value="Hyundai">Hyundai</option>
+    <option value="Tata">Tata</option>
+    <option value="Others">Others</option>
+</select>
+
+<input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
+
+<select id="bikeCompanyFilter" style="display: none;">
+    <option value="">Select Bike Company</option>
+    <option value="Bajaj">Bajaj</option>
+    <option value="Hero">Hero</option>
+    <option value="Yamaha">Yamaha</option>
+    <option value="TVS">TVS</option>
+    <option value="Royal Enfield">Royal Enfield</option>
+    <option value="Others">Others</option>
+</select>
+
+<input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
+
+<select id="modelFilter">
+    <option value="">Select Model</option>
+</select>
 </select>
         <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
 <input type="number" id="priceFilter" placeholder="Max price (₹)">
