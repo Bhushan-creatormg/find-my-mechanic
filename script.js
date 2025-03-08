@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCompanyDropdown() {
         const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+        console.log("Selected vehicle type:",vehicleTypeFilter);//Debug
         const carCompanyDropdown = document.getElementById("carCompanyFilter");
         const bikeCompanyDropdown = document.getElementById("bikeCompanyFilter");
         const carCompanyOther = document.getElementById("carCompanyOther");
