@@ -4,46 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Mechanic</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Find My Mechanic</h1>
-        <p>Compare prices and find the best mechanic near you!</p>
-    </header>
 
-    <!-- Vehicle Selection -->
-    <section id="vehicle-selection">
-        <h2>Select Your Vehicle</h2>
-        <select id="vehicle-type">
-            <option value="">Select Type</option>
-            <option value="car">Car</option>
-            <option value="bike">Bike</option>
-        </select>
+    <h1>Find My Mechanic</h1>
+    <p>Get Quote & Compare prices to find the best mechanic near you!</p>
 
-        <select id="manufacturer">
-            <option value="">Select Manufacturer</option>
-            <option value="honda">Honda</option>
-            <option value="hero">Hero</option>
-            <option value="suzuki">Suzuki</option>
-            <option value="tata">Tata Motors</option>
-            <option value="toyota">Toyota</option>
-        </select>
+    <h2>Available Mechanics</h2>
 
-        <select id="vehicle-model">
-            <option value="">Select Model</option>
-        </select>
-    </section>
+    <!-- Search Box -->
+    <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by location or service...">
+    <button onclick="getUserLocation()" style="padding: 10px 20px; font-size: 16px; background-color: green; color: white; border: none; cursor: pointer;">
 
-    <!-- Filter Mechanics -->
-    <section id="filter-section">
-        <h2>Available Mechanics</h2>
-        <input type="text" id="location" placeholder="Enter location (e.g., Mumbai)">
-        <button onclick="filterMechanics()">Filter</button>
-    </section>
+        <input type="text" id="locationFilter" placeholder="Enter location (e.g., Mumbai)">
+<button onclick="applyFilters()">Filter</button>
+        Find Nearby Mechanics
+</button>
 
-    <!-- Mechanics List -->
-    <table>
+    <table id="mechanicTable">
         <thead>
             <tr>
                 <th>Name</th>
@@ -53,22 +58,92 @@
                 <th>Contact</th>
             </tr>
         </thead>
-        <tbody id="mechanic-list">
-            <!-- Mechanics Data will be added dynamically -->
+        <tbody>
+            <tr>
+                <td>Rahul's Garage</td>
+                <td>Mumbai</td>
+                <td>Puncture Repair</td>
+                <td>₹200</td>
+                <td>9876543210</td>
+            </tr>
+            <tr>
+                <td>AutoFix</td>
+                <td>Pune</td>
+                <td>Oil Change</td>
+                <td>₹500</td>
+                <td>8765432109</td>
+            </tr>
+            <tr>
+                <td>Speedy Repairs</td>
+                <td>Delhi</td>
+                <td>Tire Replacement</td>
+                <td>₹1500</td>
+                <td>7654321098</td>
+            </tr>
         </tbody>
+       
+    <select id="vehicleTypeFilter">
+    <option value="">Select Vehicle Type</option>
+    <option value="Car">Car</option>
+    <option value="Bike">Bike</option>
+</select>
+
+<select id="carCompanyFilter" style="display: none;">
+    <option value="">Select Car Company</option>
+    <option value="Honda">Honda</option>
+    <option value="Toyota">Toyota</option>
+    <option value="Ford">Ford</option>
+    <option value="Hyundai">Hyundai</option>
+    <option value="Tata">Tata</option>
+    <option value="Others">Others</option>
+</select>
+
+<input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
+
+<select id="bikeCompanyFilter" style="display: none;">
+    <option value="">Select Bike Company</option>
+    <option value="Bajaj">Bajaj</option>
+    <option value="Hero">Hero</option>
+    <option value="Yamaha">Yamaha</option>
+    <option value="TVS">TVS</option>
+    <option value="Royal Enfield">Royal Enfield</option>
+    <option value="Others">Others</option>
+</select>
+
+<input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
+
+<select id="modelFilter">
+    <option value="">Select Model</option>
+</select>
+</select>
+        <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
+<input type="number" id="priceFilter" placeholder="Max price (₹)">
+<button onclick="filterMechanics()">Filter</button>
     </table>
+    <h2>Are You a Mechanic?</h2>
+<p>List your services on our platform and get customers easily!</p>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
+    <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; cursor: pointer;">Register as Mechanic</button>
+</a>
 
-    <!-- Register as Mechanic -->
-    <section id="register">
-        <h2>Are You a Mechanic?</h2>
-        <input type="text" id="mech-name" placeholder="Enter Your Name">
-        <input type="text" id="mech-location" placeholder="Enter Location">
-        <input type="text" id="mech-service" placeholder="Enter Service">
-        <input type="number" id="mech-price" placeholder="Enter Price">
-        <input type="text" id="mech-contact" placeholder="Enter Contact">
-        <button onclick="registerMechanic()">Register</button>
-    </section>
+    <script>
+        function searchMechanics() {
+            let input = document.getElementById("searchBox").value.toLowerCase();
+            let table = document.getElementById("mechanicTable");
+            let rows = table.getElementsByTagName("tr");
 
-    <script src="script.js"></script>
+            for (let i = 1; i < rows.length; i++) {
+                let location = rows[i].getElementsByTagName("td")[1].innerText.toLowerCase();
+                let service = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
+
+                if (location.includes(input) || service.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
