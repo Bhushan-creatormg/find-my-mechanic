@@ -9,6 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const mechanicTableBody = document.getElementById("mechanicTableBody");
 
     function updateTable(filteredMechanics) {
+        function fetchMechanics() {
+    fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+    .then(response => response.json())
+    .then(data => {
+        updateTable(data); // Update the table with fetched data
+    })
+    .catch(error => console.error("Error fetching data:", error));
+}
+
+// Fetch mechanics when the page loads
+document.addEventListener("DOMContentLoaded", fetchMechanics);
         mechanicTableBody.innerHTML = ""; // Clear existing table rows
 
         filteredMechanics.forEach(mechanic => {
