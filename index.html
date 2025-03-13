@@ -46,22 +46,44 @@
     <h1>Find My Mechanic</h1>
     <p>Get Quotes & Compare prices to find the best mechanic near you!</p>
 
-    <!-- Login & Signup Form -->
-    <div id="authSection">
-        <h2>Login / Sign Up</h2>
-        <input type="text" id="username" placeholder="Enter username">
-        <input type="password" id="password" placeholder="Enter password">
-        <button onclick="signUp()">Sign Up</button>
-        <button onclick="login()">Login</button>
-    </div>
+    <!-- Filters -->
+    <h2>Filter Mechanics</h2>
+    <label>Location:</label>
+    <input type="text" id="locationFilter" placeholder="Enter location">
 
-    <button id="logout" onclick="logout()">Logout</button>
+    <label>Vehicle Type:</label>
+    <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
+        <option value="">Select</option>
+        <option value="Car">Car</option>
+        <option value="Bike">Bike</option>
+    </select>
+
+    <label>Car Company:</label>
+    <select id="carCompanyFilter" style="display:none;">
+        <option value="">Select</option>
+        <option value="Maruti">Maruti</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Others">Others</option>
+    </select>
+    <input type="text" id="carCompanyOther" placeholder="Enter car company" style="display:none;">
+
+    <label>Bike Company:</label>
+    <select id="bikeCompanyFilter" style="display:none;">
+        <option value="">Select</option>
+        <option value="Honda">Honda</option>
+        <option value="Bajaj">Bajaj</option>
+        <option value="Others">Others</option>
+    </select>
+    <input type="text" id="bikeCompanyOther" placeholder="Enter bike company" style="display:none;">
+
+    <label>Model:</label>
+    <input type="text" id="modelFilter" placeholder="Enter model">
+
+    <button onclick="applyFilters()">Apply Filters</button>
 
     <!-- Mechanics Listing -->
-    <div id="mechanicSection" style="display: none;">
+    <div id="mechanicSection">
         <h2>Available Mechanics</h2>
-
-        <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
         <button onclick="fetchMechanics()">Refresh</button>
 
         <table id="mechanicTable">
