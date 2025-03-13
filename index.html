@@ -5,105 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Mechanic</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        input, select, button {
-            margin-top: 10px;
-            padding: 8px;
-        }
-        button {
-            cursor: pointer;
-        }
-        #logout {
-            display: none;
-            background-color: red;
-            color: white;
-            padding: 10px;
-            border: none;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        input, select, button { margin-top: 10px; padding: 8px; }
+        button { cursor: pointer; }
     </style>
 </head>
 <body>
 
     <h1>Find My Mechanic</h1>
-    <p>Get Quotes & Compare prices to find the best mechanic near you!</p>
+    <p>Get Quote & Compare prices to find the best mechanic near you!</p>
+
+    <!-- Search Box -->
+    <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
+    <button onclick="fetchMechanics()">Refresh</button>
+
+    <!-- Mechanic Table -->
+    <table id="mechanicTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Vehicle</th>
+                <th>Company</th>
+                <th>Model</th>
+                <th>Service</th>
+                <th>Price</th>
+                <th>Contact</th>
+            </tr>
+        </thead>
+        <tbody id="mechanicTableBody"></tbody>
+    </table>
 
     <!-- Filters -->
-    <h2>Filter Mechanics</h2>
-    <label>Location:</label>
-    <input type="text" id="locationFilter" placeholder="Enter location">
-
-    <label>Vehicle Type:</label>
     <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
-        <option value="">Select</option>
+        <option value="">Select Vehicle Type</option>
         <option value="Car">Car</option>
         <option value="Bike">Bike</option>
     </select>
 
-    <label>Car Company:</label>
-    <select id="carCompanyFilter" style="display:none;">
-        <option value="">Select</option>
-        <option value="Maruti">Maruti</option>
-        <option value="Hyundai">Hyundai</option>
-        <option value="Others">Others</option>
-    </select>
-    <input type="text" id="carCompanyOther" placeholder="Enter car company" style="display:none;">
-
-    <label>Bike Company:</label>
-    <select id="bikeCompanyFilter" style="display:none;">
-        <option value="">Select</option>
+    <select id="carCompanyFilter" style="display: none;">
+        <option value="">Select Car Company</option>
         <option value="Honda">Honda</option>
-        <option value="Bajaj">Bajaj</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Ford">Ford</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Tata">Tata</option>
         <option value="Others">Others</option>
     </select>
-    <input type="text" id="bikeCompanyOther" placeholder="Enter bike company" style="display:none;">
 
-    <label>Model:</label>
-    <input type="text" id="modelFilter" placeholder="Enter model">
+    <input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
 
-    <button onclick="applyFilters()">Apply Filters</button>
+    <select id="bikeCompanyFilter" style="display: none;">
+        <option value="">Select Bike Company</option>
+        <option value="Bajaj">Bajaj</option>
+        <option value="Hero">Hero</option>
+        <option value="Yamaha">Yamaha</option>
+        <option value="TVS">TVS</option>
+        <option value="Royal Enfield">Royal Enfield</option>
+        <option value="Others">Others</option>
+    </select>
 
-    <!-- Mechanics Listing -->
-    <div id="mechanicSection">
-        <h2>Available Mechanics</h2>
-        <button onclick="fetchMechanics()">Refresh</button>
-
-        <table id="mechanicTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Vehicle</th>
-                    <th>Company</th>
-                    <th>Model</th>
-                    <th>Service</th>
-                    <th>Price</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tbody id="mechanicTableBody">
-                <!-- Data will be loaded here -->
-            </tbody>
-        </table>
-    </div>
+    <input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
+    
+    <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
+    <input type="number" id="priceFilter" placeholder="Max price (₹)">
+    <button onclick="applyFilters()">Filter</button>
 
     <h2>Are You a Mechanic?</h2>
     <p>List your services on our platform and get customers easily!</p>
@@ -111,7 +81,82 @@
         <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none;">Register as Mechanic</button>
     </a>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mechanicTableBody = document.getElementById("mechanicTableBody");
 
+            function fetchMechanics() {
+                fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+                    .then(response => response.json())
+                    .then(data => updateTable(data))
+                    .catch(error => console.error("Error fetching data:", error));
+            }
+
+            function updateTable(mechanics) {
+                mechanicTableBody.innerHTML = "";
+                if (mechanics.length === 0) {
+                    mechanicTableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
+                    return;
+                }
+                mechanics.forEach(mechanic => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${mechanic.name}</td>
+                        <td>${mechanic.location}</td>
+                        <td>${mechanic.vehicle}</td>
+                        <td>${mechanic.company}</td>
+                        <td>${mechanic.model}</td>
+                        <td>${mechanic.service}</td>
+                        <td>₹${mechanic.price}</td>
+                        <td>${mechanic.contact}</td>
+                    `;
+                    mechanicTableBody.appendChild(row);
+                });
+            }
+
+            function applyFilters() {
+                const locationFilter = document.getElementById("searchBox").value.toLowerCase();
+                const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+                const carCompanyFilter = document.getElementById("carCompanyFilter").value;
+                const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
+                const serviceFilter = document.getElementById("serviceFilter").value.toLowerCase();
+                const priceFilter = document.getElementById("priceFilter").value;
+
+                let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
+
+                fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+                    .then(response => response.json())
+                    .then(mechanics => {
+                        const filteredMechanics = mechanics.filter(mechanic =>
+                            (locationFilter === "" || mechanic.location.toLowerCase().includes(locationFilter)) &&
+                            (vehicleTypeFilter === "" || mechanic.vehicle === vehicleTypeFilter) &&
+                            (selectedCompany === "" || mechanic.company.toLowerCase() === selectedCompany.toLowerCase()) &&
+                            (serviceFilter === "" || mechanic.service.toLowerCase().includes(serviceFilter)) &&
+                            (priceFilter === "" || mechanic.price <= parseInt(priceFilter))
+                        );
+                        updateTable(filteredMechanics);
+                    })
+                    .catch(error => console.error("Error fetching filtered data:", error));
+            }
+
+            function updateCompanyDropdown() {
+                const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+                document.getElementById("carCompanyFilter").style.display = vehicleTypeFilter === "Car" ? "inline-block" : "none";
+                document.getElementById("bikeCompanyFilter").style.display = vehicleTypeFilter === "Bike" ? "inline-block" : "none";
+            }
+
+            function searchMechanics() {
+                let input = document.getElementById("searchBox").value.toLowerCase();
+                let rows = document.querySelectorAll("#mechanicTableBody tr");
+                rows.forEach(row => {
+                    let name = row.cells[0].innerText.toLowerCase();
+                    let location = row.cells[1].innerText.toLowerCase();
+                    row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
+                });
+            }
+
+            fetchMechanics();
+        });
+    </script>
 </body>
 </html>
