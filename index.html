@@ -6,42 +6,26 @@
     <title>Find My Mechanic</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body onload="checkLogin()">
 
-    <!-- Login Form -->
-    <div id="loginContainer">
+    <div id="login-container">
         <h2>Login</h2>
         <input type="text" id="username" placeholder="Enter Username">
         <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="login()">Login</button>
-        <p id="loginError"></p>
+        <button onclick="loginUser()">Login</button>
     </div>
 
-    <!-- Main Content (Hidden until login) -->
-    <div id="mainContent" style="display: none;">
-        <h1>Find My Mechanic</h1>
-        <p>Get Quote & Compare prices to find the best mechanic near you!</p>
+    <div id="main-container" style="display: none;">
+        <header>
+            <h1>Find My Mechanic</h1>
+            <button onclick="logoutUser()">Logout</button>
+        </header>
 
-        <!-- Search -->
+        <p>Compare prices & find the best mechanic near you!</p>
+
         <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
         <button onclick="fetchMechanics()">Refresh</button>
 
-        <!-- Filters -->
-        <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
-            <option value="">Select Vehicle Type</option>
-            <option value="Car">Car</option>
-            <option value="Bike">Bike</option>
-        </select>
-
-        <select id="companyFilter">
-            <option value="">Select Company</option>
-        </select>
-
-        <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
-        <input type="number" id="priceFilter" placeholder="Max price (₹)">
-        <button onclick="applyFilters()">Filter</button>
-
-        <!-- Mechanic Table -->
         <table id="mechanicTable">
             <thead>
                 <tr>
@@ -56,15 +40,13 @@
                 </tr>
             </thead>
             <tbody id="mechanicTableBody">
-                <!-- Data loads here -->
+                <!-- Data will be loaded here -->
             </tbody>
         </table>
 
-        <!-- Register as Mechanic -->
         <h2>Are You a Mechanic?</h2>
-        <p>List your services on our platform and get customers easily!</p>
         <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
-            <button class="registerBtn">Register as Mechanic</button>
+            <button class="register-button">Register as Mechanic</button>
         </a>
     </div>
 
