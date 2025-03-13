@@ -1,60 +1,102 @@
-/* Apply a clean and modern font */
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
     padding: 20px;
-    background-color: #f4f4f4;
-    text-align: center;
-}
-
-/* Improve heading styles */
-h1 {
     color: #333;
-    font-size: 28px;
 }
 
-h2 {
+/* Header */
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+p {
+    text-align: center;
+    font-size: 1.1rem;
     color: #555;
-    font-size: 22px;
 }
 
-/* Style the table */
-table {
+/* Search & Filters */
+input, select, button {
+    margin: 10px 5px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 15px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#searchBox {
     width: 80%;
-    margin: 20px auto;
+    padding: 12px;
+    margin: 10px auto;
+    display: block;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
     background: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
 }
 
-/* Style table header */
+th, td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+}
+
 th {
-    background-color: #007BFF;
+    background-color: #007bff;
     color: white;
-    padding: 10px;
 }
 
-/* Style table rows */
-td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Alternate row colors */
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Add hover effect */
 tr:hover {
     background-color: #f1f1f1;
 }
 
-/* Footer styling */
-footer {
-    margin-top: 20px;
-    color: #555;
-    font-size: 14px;
+/* Filters Section */
+#vehicleTypeFilter, #carCompanyFilter, #bikeCompanyFilter, #serviceFilter, #priceFilter, #carCompanyOther, #bikeCompanyOther {
+    width: 200px;
+}
+
+@media (max-width: 768px) {
+    input, select, button {
+        width: 100%;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
 }
