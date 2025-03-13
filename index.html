@@ -12,102 +12,119 @@
         h1 {
             color: #333;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .container {
+            display: none;
         }
-        th, td {
+        .auth-container {
+            display: flex;
+            flex-direction: column;
+            max-width: 300px;
+            margin: auto;
+            padding: 20px;
             border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
         }
-        th {
-            background-color: #f4f4f4;
-        }
-        input, select, button {
+        input, button {
             margin-top: 10px;
-            padding: 8px;
+            padding: 10px;
+            width: 100%;
         }
         button {
+            background-color: #007bff;
+            color: white;
+            border: none;
             cursor: pointer;
+        }
+        .logout {
+            background-color: red;
         }
     </style>
 </head>
 <body>
 
-    <h1>Find My Mechanic</h1>
-    <p>Get Quote & Compare prices to find the best mechanic near you!</p>
+    <!-- Sign-up/Login Form -->
+    <div id="auth" class="auth-container">
+        <h2>Login / Sign Up</h2>
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="tel" id="phone" placeholder="Phone Number">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="signup()">Sign Up / Login</button>
+    </div>
 
-    <h2>Available Mechanics</h2>
+    <!-- Main Content (Hidden until login) -->
+    <div id="mainContent" class="container">
+        <h1>Find My Mechanic</h1>
+        <p>Get Quotes & Compare prices to find the best mechanic near you!</p>
+        <button class="logout" onclick="logout()">Logout</button>
 
-    <!-- Search Box -->
-    <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
-    
-    <button onclick="fetchMechanics()">Refresh</button>
+        <h2>Available Mechanics</h2>
 
-    <table id="mechanicTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Location</th>
-                <th>Vehicle</th>
-                <th>Company</th>
-                <th>Model</th>
-                <th>Service</th>
-                <th>Price</th>
-                <th>Contact</th>
-            </tr>
-        </thead>
-        <tbody id="mechanicTableBody">
-            <!-- Data will be loaded here -->
-        </tbody>
-    </table>
+        <!-- Search & Filter -->
+        <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
+        <button onclick="fetchMechanics()">Refresh</button>
 
-    <!-- Filters -->
-    <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
-        <option value="">Select Vehicle Type</option>
-        <option value="Car">Car</option>
-        <option value="Bike">Bike</option>
-    </select>
+        <table id="mechanicTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Vehicle</th>
+                    <th>Company</th>
+                    <th>Model</th>
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th>Contact</th>
+                </tr>
+            </thead>
+            <tbody id="mechanicTableBody">
+                <!-- Data will be loaded here -->
+            </tbody>
+        </table>
 
-    <select id="carCompanyFilter" style="display: none;">
-        <option value="">Select Car Company</option>
-        <option value="Honda">Honda</option>
-        <option value="Toyota">Toyota</option>
-        <option value="Ford">Ford</option>
-        <option value="Hyundai">Hyundai</option>
-        <option value="Tata">Tata</option>
-        <option value="Others">Others</option>
-    </select>
-
-    <input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
-
-    <select id="bikeCompanyFilter" style="display: none;">
-        <option value="">Select Bike Company</option>
-        <option value="Bajaj">Bajaj</option>
-        <option value="Hero">Hero</option>
-        <option value="Yamaha">Yamaha</option>
-        <option value="TVS">TVS</option>
-        <option value="Royal Enfield">Royal Enfield</option>
-        <option value="Others">Others</option>
-    </select>
-
-    <input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
-
-    <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
-    <input type="number" id="priceFilter" placeholder="Max price (₹)">
-    <button onclick="applyFilters()">Filter</button>
-
-    <h2>Are You a Mechanic?</h2>
-    <p>List your services on our platform and get customers easily!</p>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
-        <button style="padding: 10px 20px; font-size: 16px; background-color: #007bff; color: white; border: none;">Register as Mechanic</button>
-    </a>
+        <h2>Are You a Mechanic?</h2>
+        <p>List your services on our platform and get customers easily!</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
+            <button>Register as Mechanic</button>
+        </a>
+    </div>
 
     <script>
-        const mechanicTableBody = document.getElementById("mechanicTableBody");
+        // Check if user is already logged in
+        function checkLogin() {
+            const user = localStorage.getItem("user");
+            if (user) {
+                document.getElementById("auth").style.display = "none";
+                document.getElementById("mainContent").style.display = "block";
+                fetchMechanics();
+            }
+        }
 
+        // Sign-up/Login Function
+        function signup() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const password = document.getElementById("password").value;
+
+            if (!name || !email || !phone || !password) {
+                alert("Please fill in all fields!");
+                return;
+            }
+
+            // Store user in local storage
+            localStorage.setItem("user", JSON.stringify({ name, email, phone }));
+            alert("Login Successful!");
+            checkLogin();
+        }
+
+        // Logout Function
+        function logout() {
+            localStorage.removeItem("user");
+            location.reload();
+        }
+
+        // Fetch Mechanics Data
         function fetchMechanics() {
             fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
                 .then(response => response.json())
@@ -118,7 +135,8 @@
         }
 
         function updateTable(mechanics) {
-            mechanicTableBody.innerHTML = ""; // Clear table
+            let mechanicTableBody = document.getElementById("mechanicTableBody");
+            mechanicTableBody.innerHTML = "";
 
             if (mechanics.length === 0) {
                 mechanicTableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
@@ -141,30 +159,7 @@
             });
         }
 
-        function applyFilters() {
-            const locationFilter = document.getElementById("locationFilter").value.toLowerCase();
-            const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
-            const carCompanyFilter = document.getElementById("carCompanyFilter").value;
-            const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
-            const modelFilter = document.getElementById("modelFilter").value;
-            const serviceFilter = document.getElementById("serviceFilter").value.toLowerCase();
-
-            let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
-            
-            fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
-                .then(response => response.json())
-                .then(mechanics => {
-                    const filteredMechanics = mechanics.filter(mechanic =>
-                        (locationFilter === "" || mechanic.location.toLowerCase().includes(locationFilter)) &&
-                        (vehicleTypeFilter === "" || mechanic.vehicle === vehicleTypeFilter) &&
-                        (selectedCompany === "" || mechanic.company.toLowerCase() === selectedCompany.toLowerCase()) &&
-                        (serviceFilter === "" || mechanic.service.toLowerCase().includes(serviceFilter))
-                    );
-                    updateTable(filteredMechanics);
-                })
-                .catch(error => console.error("Error fetching filtered data:", error));
-        }
-
+        // Search Function
         function searchMechanics() {
             let input = document.getElementById("searchBox").value.toLowerCase();
             let rows = document.querySelectorAll("#mechanicTableBody tr");
@@ -176,7 +171,7 @@
             });
         }
 
-        fetchMechanics(); // Fetch data on page load
+        checkLogin(); // Run on page load
     </script>
 
 </body>
