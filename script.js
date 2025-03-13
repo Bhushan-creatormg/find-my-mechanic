@@ -1,33 +1,44 @@
-// Fake User Login Data
-const users = {
-    admin: "1234",  // Username: admin, Password: 1234
-};
+document.addEventListener("DOMContentLoaded", function () {
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        showMainPage();
+    }
+});
 
-// Login Function
-function login() {
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+function loginUser() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
 
-    if (users[username] === password) {
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-        fetchMechanics();
+    if (username === "admin" && password === "12345") {
+        localStorage.setItem("isLoggedIn", "true");
+        showMainPage();
     } else {
-        document.getElementById("loginError").innerText = "Invalid credentials!";
+        alert("Invalid Username or Password!");
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
     }
 }
 
-// Fetch Mechanics from API
+function logoutUser() {
+    localStorage.removeItem("isLoggedIn");
+    document.getElementById("mainPage").style.display = "none";
+    document.getElementById("loginPage").style.display = "block";
+}
+
+function showMainPage() {
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("mainPage").style.display = "block";
+    fetchMechanics();
+}
+
 function fetchMechanics() {
-    fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+    fetch("https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec")
         .then(response => response.json())
         .then(data => updateTable(data))
         .catch(error => console.error("Error fetching data:", error));
 }
 
-// Update Table with Mechanic Data
 function updateTable(mechanics) {
-    const tableBody = document.getElementById("mechanicTableBody");
+    let tableBody = document.getElementById("mechanicTableBody");
     tableBody.innerHTML = "";
 
     if (mechanics.length === 0) {
@@ -36,22 +47,39 @@ function updateTable(mechanics) {
     }
 
     mechanics.forEach(mechanic => {
-        const row = document.createElement("tr");
+        let row = document.createElement("tr");
         row.innerHTML = `
-            <td>${mechanic.name || "N/A"}</td>
-            <td>${mechanic.location || "N/A"}</td>
-            <td>${mechanic.vehicle || "N/A"}</td>
-            <td>${mechanic.company || "N/A"}</td>
-            <td>${mechanic.model || "N/A"}</td>
-            <td>${mechanic.service || "N/A"}</td>
-            <td>₹${mechanic.price !== undefined ? mechanic.price : "N/A"}</td>
-            <td>${mechanic.contact || "N/A"}</td>
+            <td>${mechanic.name}</td>
+            <td>${mechanic.location}</td>
+            <td>${mechanic.vehicle}</td>
+            <td>${mechanic.company}</td>
+            <td>${mechanic.model}</td>
+            <td>${mechanic.service}</td>
+            <td>₹${mechanic.price}</td>
+            <td>${mechanic.contact}</td>
         `;
         tableBody.appendChild(row);
     });
 }
 
-// Search Mechanics
+function applyFilters() {
+    let vehicleType = document.getElementById("vehicleTypeFilter").value;
+    let company = document.getElementById("companyFilter").value.toLowerCase();
+    let service = document.getElementById("serviceFilter").value.toLowerCase();
+
+    fetch("https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec")
+        .then(response => response.json())
+        .then(mechanics => {
+            let filtered = mechanics.filter(mechanic =>
+                (vehicleType === "" || mechanic.vehicle === vehicleType) &&
+                (company === "" || mechanic.company.toLowerCase().includes(company)) &&
+                (service === "" || mechanic.service.toLowerCase().includes(service))
+            );
+            updateTable(filtered);
+        })
+        .catch(error => console.error("Error fetching filtered data:", error));
+}
+
 function searchMechanics() {
     let input = document.getElementById("searchBox").value.toLowerCase();
     let rows = document.querySelectorAll("#mechanicTableBody tr");
@@ -62,24 +90,3 @@ function searchMechanics() {
         row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
     });
 }
-
-// Apply Filters
-function applyFilters() {
-    const vehicleType = document.getElementById("vehicleTypeFilter").value;
-    const company = document.getElementById("companyFilter").value;
-    const service = document.getElementById("serviceFilter").value.toLowerCase();
-
-    fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
-        .then(response => response.json())
-        .then(mechanics => {
-            const filtered = mechanics.filter(mech =>
-                (vehicleType === "" || mech.vehicle === vehicleType) &&
-                (company === "" || mech.company === company) &&
-                (service === "" || mech.service.toLowerCase().includes(service))
-            );
-            updateTable(filtered);
-        })
-        .catch(error => console.error("Error filtering data:", error));
-}
-
-fetchMechanics();  // Load data on page load
