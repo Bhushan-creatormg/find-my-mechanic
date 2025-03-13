@@ -6,22 +6,18 @@
     <title>Find My Mechanic</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body onload="checkLogin()">
+<body>
 
-    <div id="login-container">
-        <h2>Login</h2>
+    <div id="loginPage">
+        <h1>Login</h1>
         <input type="text" id="username" placeholder="Enter Username">
         <input type="password" id="password" placeholder="Enter Password">
         <button onclick="loginUser()">Login</button>
     </div>
 
-    <div id="main-container" style="display: none;">
-        <header>
-            <h1>Find My Mechanic</h1>
-            <button onclick="logoutUser()">Logout</button>
-        </header>
-
-        <p>Compare prices & find the best mechanic near you!</p>
+    <div id="mainPage" style="display: none;">
+        <h1>Find My Mechanic</h1>
+        <p>Get Quote & Compare prices to find the best mechanic near you!</p>
 
         <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
         <button onclick="fetchMechanics()">Refresh</button>
@@ -40,16 +36,40 @@
                 </tr>
             </thead>
             <tbody id="mechanicTableBody">
-                <!-- Data will be loaded here -->
+                <!-- Mechanics Data Here -->
             </tbody>
         </table>
 
+        <h2>Filters</h2>
+        <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
+            <option value="">Select Vehicle Type</option>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+        </select>
+
+        <select id="companyFilter">
+            <option value="">Select Company</option>
+            <option value="Honda">Honda</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Ford">Ford</option>
+            <option value="Bajaj">Bajaj</option>
+            <option value="Hero">Hero</option>
+        </select>
+
+        <input type="text" id="serviceFilter" placeholder="Enter Service (e.g., Oil Change)">
+        <input type="number" id="priceFilter" placeholder="Max Price (₹)">
+        <button onclick="applyFilters()">Filter</button>
+
         <h2>Are You a Mechanic?</h2>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
-            <button class="register-button">Register as Mechanic</button>
+        <p>List your services and get customers easily!</p>
+        <a href="https://docs.google.com/forms/...">
+            <button class="register-btn">Register as Mechanic</button>
         </a>
+
+        <button onclick="logoutUser()">Logout</button>
     </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>
