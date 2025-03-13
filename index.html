@@ -30,11 +30,11 @@
                 <th>Name</th>
                 <th>Location</th>
                 <th>Vehicle</th>
-                <th>Contact</th>
+                <th>Company</th>
                 <th>Model</th>
                 <th>Service</th>
                 <th>Price</th>
-            
+                <th>Contact</th>
             </tr>
         </thead>
         <tbody id="mechanicTableBody"></tbody>
@@ -47,7 +47,7 @@
         <option value="Bike">Bike</option>
     </select>
 
-    <select id="carCompanyFilter" style="display: none;">
+    <select id="carCompanyFilter" style="display: none;" onchange="checkOtherOption('car')">
         <option value="">Select Car Company</option>
         <option value="Honda">Honda</option>
         <option value="Toyota">Toyota</option>
@@ -59,7 +59,7 @@
 
     <input type="text" id="carCompanyOther" style="display: none;" placeholder="Enter Car Company">
 
-    <select id="bikeCompanyFilter" style="display: none;">
+    <select id="bikeCompanyFilter" style="display: none;" onchange="checkOtherOption('bike')">
         <option value="">Select Bike Company</option>
         <option value="Bajaj">Bajaj</option>
         <option value="Hero">Hero</option>
@@ -70,7 +70,7 @@
     </select>
 
     <input type="text" id="bikeCompanyOther" style="display: none;" placeholder="Enter Bike Company">
-    
+
     <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
     <input type="number" id="priceFilter" placeholder="Max price (₹)">
     <button onclick="applyFilters()">Filter</button>
@@ -83,80 +83,90 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const mechanicTableBody = document.getElementById("mechanicTableBody");
-
-            function fetchMechanics() {
-                fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
-                    .then(response => response.json())
-                    .then(data => updateTable(data))
-                    .catch(error => console.error("Error fetching data:", error));
-            }
-
-            function updateTable(mechanics) {
-                mechanicTableBody.innerHTML = "";
-                if (mechanics.length === 0) {
-                    mechanicTableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
-                    return;
-                }
-                mechanics.forEach(mechanic => {
-                    const row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${mechanic.name}</td>
-                        <td>${mechanic.location}</td>
-                        <td>${mechanic.vehicle}</td>
-                        <td>${mechanic.company}</td>
-                        <td>${mechanic.model}</td>
-                        <td>${mechanic.service}</td>
-                        <td>₹${mechanic.price}</td>
-                        <td>${mechanic.contact}</td>
-                    `;
-                    mechanicTableBody.appendChild(row);
-                });
-            }
-
-            function applyFilters() {
-                const locationFilter = document.getElementById("searchBox").value.toLowerCase();
-                const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
-                const carCompanyFilter = document.getElementById("carCompanyFilter").value;
-                const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
-                const serviceFilter = document.getElementById("serviceFilter").value.toLowerCase();
-                const priceFilter = document.getElementById("priceFilter").value;
-
-                let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
-
-                fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
-                    .then(response => response.json())
-                    .then(mechanics => {
-                        const filteredMechanics = mechanics.filter(mechanic =>
-                            (locationFilter === "" || mechanic.location.toLowerCase().includes(locationFilter)) &&
-                            (vehicleTypeFilter === "" || mechanic.vehicle === vehicleTypeFilter) &&
-                            (selectedCompany === "" || mechanic.company.toLowerCase() === selectedCompany.toLowerCase()) &&
-                            (serviceFilter === "" || mechanic.service.toLowerCase().includes(serviceFilter)) &&
-                            (priceFilter === "" || mechanic.price <= parseInt(priceFilter))
-                        );
-                        updateTable(filteredMechanics);
-                    })
-                    .catch(error => console.error("Error fetching filtered data:", error));
-            }
-
-            function updateCompanyDropdown() {
-                const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
-                document.getElementById("carCompanyFilter").style.display = vehicleTypeFilter === "Car" ? "inline-block" : "none";
-                document.getElementById("bikeCompanyFilter").style.display = vehicleTypeFilter === "Bike" ? "inline-block" : "none";
-            }
-
-            function searchMechanics() {
-                let input = document.getElementById("searchBox").value.toLowerCase();
-                let rows = document.querySelectorAll("#mechanicTableBody tr");
-                rows.forEach(row => {
-                    let name = row.cells[0].innerText.toLowerCase();
-                    let location = row.cells[1].innerText.toLowerCase();
-                    row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
-                });
-            }
-
             fetchMechanics();
         });
+
+        function fetchMechanics() {
+            fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+                .then(response => response.json())
+                .then(data => updateTable(data))
+                .catch(error => console.error("Error fetching data:", error));
+        }
+
+        function updateTable(mechanics) {
+            const mechanicTableBody = document.getElementById("mechanicTableBody");
+            mechanicTableBody.innerHTML = "";
+
+            if (mechanics.length === 0) {
+                mechanicTableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
+                return;
+            }
+
+            mechanics.forEach(mechanic => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${mechanic.name}</td>
+                    <td>${mechanic.location}</td>
+                    <td>${mechanic.vehicle}</td>
+                    <td>${mechanic.company}</td>
+                    <td>${mechanic.model}</td>
+                    <td>${mechanic.service}</td>
+                    <td>₹${mechanic.price}</td>
+                    <td>${mechanic.contact}</td>
+                `;
+                mechanicTableBody.appendChild(row);
+            });
+        }
+
+        function applyFilters() {
+            const vehicleType = document.getElementById("vehicleTypeFilter").value;
+            let company = "";
+            if (vehicleType === "Car") {
+                company = document.getElementById("carCompanyFilter").value;
+                if (company === "Others") company = document.getElementById("carCompanyOther").value;
+            } else if (vehicleType === "Bike") {
+                company = document.getElementById("bikeCompanyFilter").value;
+                if (company === "Others") company = document.getElementById("bikeCompanyOther").value;
+            }
+
+            fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+                .then(response => response.json())
+                .then(mechanics => {
+                    const filteredMechanics = mechanics.filter(mechanic =>
+                        (vehicleType === "" || mechanic.vehicle === vehicleType) &&
+                        (company === "" || mechanic.company.toLowerCase() === company.toLowerCase())
+                    );
+                    updateTable(filteredMechanics);
+                })
+                .catch(error => console.error("Error filtering data:", error));
+        }
+
+        function updateCompanyDropdown() {
+            const vehicleType = document.getElementById("vehicleTypeFilter").value;
+            document.getElementById("carCompanyFilter").style.display = vehicleType === "Car" ? "inline-block" : "none";
+            document.getElementById("bikeCompanyFilter").style.display = vehicleType === "Bike" ? "inline-block" : "none";
+        }
+
+        function checkOtherOption(type) {
+            if (type === "car") {
+                document.getElementById("carCompanyOther").style.display = 
+                    document.getElementById("carCompanyFilter").value === "Others" ? "inline-block" : "none";
+            } else if (type === "bike") {
+                document.getElementById("bikeCompanyOther").style.display = 
+                    document.getElementById("bikeCompanyFilter").value === "Others" ? "inline-block" : "none";
+            }
+        }
+
+        function searchMechanics() {
+            let input = document.getElementById("searchBox").value.toLowerCase();
+            let rows = document.querySelectorAll("#mechanicTableBody tr");
+            rows.forEach(row => {
+                let name = row.cells[0].innerText.toLowerCase();
+                let location = row.cells[1].innerText.toLowerCase();
+                row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
+            });
+        }
     </script>
+
 </body>
 </html>
