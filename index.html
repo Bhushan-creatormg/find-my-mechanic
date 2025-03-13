@@ -3,58 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find My Mechanic - Login</title>
+    <title>Find My Mechanic</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Login Section -->
-    <div id="login-section">
+    <!-- Login Form -->
+    <div id="loginContainer">
         <h2>Login</h2>
-        <form id="login-form">
-            <input type="text" id="username" placeholder="Enter your username" required>
-            <input type="password" id="password" placeholder="Enter your password" required>
-            <button type="button" onclick="login()">Login</button>
-        </form>
-        <p id="login-error" style="color: red; display: none;">Invalid credentials!</p>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+        <p id="loginError"></p>
     </div>
 
-    <div id="main-content" style="display: none;">
+    <!-- Main Content (Hidden until login) -->
+    <div id="mainContent" style="display: none;">
         <h1>Find My Mechanic</h1>
-        <p>Find the best mechanic for your vehicle!</p>
+        <p>Get Quote & Compare prices to find the best mechanic near you!</p>
 
-        <!-- Search & Filters -->
+        <!-- Search -->
         <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
         <button onclick="fetchMechanics()">Refresh</button>
 
-        <select id="vehicleTypeFilter" onchange="updateCompany()">
+        <!-- Filters -->
+        <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
             <option value="">Select Vehicle Type</option>
             <option value="Car">Car</option>
             <option value="Bike">Bike</option>
         </select>
 
-        <select id="carCompanyFilter" style="display: none;">
-            <option value="">Select Car Company</option>
-            <option value="Honda">Honda</option>
-            <option value="Toyota">Toyota</option>
-            <option value="Ford">Ford</option>
-            <option value="Hyundai">Hyundai</option>
-            <option value="Tata">Tata</option>
-            <option value="Others">Others</option>
+        <select id="companyFilter">
+            <option value="">Select Company</option>
         </select>
 
-        <select id="bikeCompanyFilter" style="display: none;">
-            <option value="">Select Bike Company</option>
-            <option value="Bajaj">Bajaj</option>
-            <option value="Hero">Hero</option>
-            <option value="Yamaha">Yamaha</option>
-            <option value="TVS">TVS</option>
-            <option value="Royal Enfield">Royal Enfield</option>
-        </select>
-
+        <input type="text" id="serviceFilter" placeholder="Enter service (e.g., Oil Change)">
+        <input type="number" id="priceFilter" placeholder="Max price (₹)">
         <button onclick="applyFilters()">Filter</button>
 
-        <!-- Mechanics Table -->
+        <!-- Mechanic Table -->
         <table id="mechanicTable">
             <thead>
                 <tr>
@@ -69,9 +56,16 @@
                 </tr>
             </thead>
             <tbody id="mechanicTableBody">
-                <!-- Data will be added here dynamically -->
+                <!-- Data loads here -->
             </tbody>
         </table>
+
+        <!-- Register as Mechanic -->
+        <h2>Are You a Mechanic?</h2>
+        <p>List your services on our platform and get customers easily!</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdBB9gADvYhi5VAhyGfufia13uAbzQSD_xksyzo69FSZTLzEQ/viewform?usp=pp_url">
+            <button class="registerBtn">Register as Mechanic</button>
+        </a>
     </div>
 
     <script src="script.js"></script>
