@@ -1,89 +1,89 @@
-const apiUrl = "https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec";
 
-function fetchMechanics() {
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => updateTable(data))
-        .catch(error => console.error("Error fetching data:", error));
-}
-
-function updateTable(mechanics) {
+document.addEventListener("DOMContentLoaded", function () {
     const mechanicTableBody = document.getElementById("mechanicTableBody");
-    mechanicTableBody.innerHTML = ""; // Clear table
 
-    if (mechanics.length === 0) {
-        mechanicTableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
-        return;
+    function fetchMechanics() {
+        fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+            .then(response => response.json())
+            .then(data => {
+                updateTable(data); // Update the table with fetched data
+            })
+            .catch(error => console.error("Error fetching data:", error));
     }
 
-    mechanics.forEach(mechanic => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${mechanic.name || "N/A"}</td>
-            <td>${mechanic.location || "N/A"}</td>
-            <td>${mechanic.vehicle || "N/A"}</td>
-            <td>${mechanic.company || "N/A"}</td>
-            <td>${mechanic.model || "N/A"}</td>
-            <td>${mechanic.service || "N/A"}</td>
-            <td>₹${mechanic.price || "N/A"}</td>
-            <td>${mechanic.contact || "N/A"}</td>
-        `;
-        mechanicTableBody.appendChild(row);
-    });
-}
+    function updateTable(mechanics) {
+        mechanicTableBody.innerHTML = ""; // Clear existing table rows
 
-function searchMechanics() {
-    let input = document.getElementById("searchBox").value.toLowerCase();
-    let rows = document.querySelectorAll("#mechanicTableBody tr");
-
-    rows.forEach(row => {
-        let name = row.cells[0].innerText.toLowerCase();
-        let location = row.cells[1].innerText.toLowerCase();
-        row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
-    });
-}
-
-// User Authentication
-function signUp() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-
-    if (localStorage.getItem(username)) {
-        alert("Username already exists. Please choose a different one.");
-    } else {
-        localStorage.setItem(username, password);
-        alert("Sign Up successful! Please log in.");
+        mechanics.forEach(mechanic => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${mechanic.name}</td>
+                <td>${mechanic.location}</td>
+                <td>${mechanic.vehicle}</td>
+                <td>${mechanic.company}</td>
+                <td>${mechanic.model}</td>
+                <td>${mechanic.service}</td>
+                <td>₹${mechanic.price}</td>
+                <td>${mechanic.contact}</td>
+            `;
+            mechanicTableBody.appendChild(row);
+        });
     }
-}
 
-function login() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+    function applyFilters() {
+        const locationFilter = document.getElementById("locationFilter").value.toLowerCase();
+        const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+        const carCompanyFilter = document.getElementById("carCompanyFilter").value;
+        const bikeCompanyFilter = document.getElementById("bikeCompanyFilter").value;
+        const modelFilter = document.getElementById("modelFilter").value;
+        const carCompanyOther = document.getElementById("carCompanyOther").value.trim();
+        const bikeCompanyOther = document.getElementById("bikeCompanyOther").value.trim();
 
-    if (localStorage.getItem(username) === password) {
-        alert("Login successful!");
-        document.getElementById("authSection").style.display = "none";
-        document.getElementById("logout").style.display = "block";
-        document.getElementById("mechanicSection").style.display = "block";
-        fetchMechanics();
-    } else {
-        alert("Invalid username or password.");
+        let selectedCompany = vehicleTypeFilter === "Car" ? carCompanyFilter : bikeCompanyFilter;
+        if (selectedCompany === "Others") {
+            selectedCompany = vehicleTypeFilter === "Car" ? carCompanyOther : bikeCompanyOther;
+        }
+
+        fetch("https://script.google.com/macros/s/AKfycbxYC-hUzcufX8cO8d3IOVLoYt_-bhNwKUdhWNUYI3ujp_ZiELeusMAn-Zcafabni2XyHA/exec")
+            .then(response => response.json())
+            .then(mechanics => {
+                const filteredMechanics = mechanics.filter(mechanic =>
+                    (locationFilter === "" || mechanic.location.toLowerCase().includes(locationFilter)) &&
+                    (vehicleTypeFilter === "" || mechanic.vehicle === vehicleTypeFilter) &&
+                    (selectedCompany === "" || mechanic.company === selectedCompany) &&
+                    (modelFilter === "" || mechanic.model === modelFilter)
+                );
+                updateTable(filteredMechanics);
+            })
+            .catch(error => console.error("Error fetching filtered data:", error));
     }
-}
 
-function logout() {
-    alert("You have been logged out.");
-    document.getElementById("authSection").style.display = "block";
-    document.getElementById("logout").style.display = "none";
-    document.getElementById("mechanicSection").style.display = "none";
-}
+    function updateCompanyDropdown() {
+        const vehicleTypeFilter = document.getElementById("vehicleTypeFilter").value;
+        const carCompanyDropdown = document.getElementById("carCompanyFilter");
+        const bikeCompanyDropdown = document.getElementById("bikeCompanyFilter");
+        const carCompanyOther = document.getElementById("carCompanyOther");
+        const bikeCompanyOther = document.getElementById("bikeCompanyOther");
 
-// Load mechanics on page load
-window.onload = function () {
-    if (localStorage.getItem("loggedInUser")) {
-        document.getElementById("authSection").style.display = "none";
-        document.getElementById("logout").style.display = "block";
-        document.getElementById("mechanicSection").style.display = "block";
-        fetchMechanics();
+        console.log("Selected Vehicle Type:", vehicleTypeFilter);
+
+        if (vehicleTypeFilter === "Car") {
+            carCompanyDropdown.style.display = "inline-block";
+            bikeCompanyDropdown.style.display = "none";
+            carCompanyOther.style.display = "none";
+            bikeCompanyOther.style.display = "none";
+        } else if (vehicleTypeFilter === "Bike") {
+            bikeCompanyDropdown.style.display = "inline-block";
+            carCompanyDropdown.style.display = "none";
+            carCompanyOther.style.display = "none";
+            bikeCompanyOther.style.display = "none";
+        } else {
+            carCompanyDropdown.style.display = "none";
+            bikeCompanyDropdown.style.display = "none";
+            carCompanyOther.style.display = "none";
+            bikeCompanyOther.style.display = "none";
+        }
     }
-};
+
+    fetchMechanics(); // Fetch mechanics on page load
+});
