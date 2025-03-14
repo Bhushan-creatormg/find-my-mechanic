@@ -4,89 +4,80 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function loginUser() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
+// Sample Mechanics Data (Temporary for Testing)
+let mechanics = [
+    { name: "John Mechanic", location: "Mumbai", vehicle: "Car", company: "Honda", service: "Engine Repair", price: "1500", contact: "9876543210" },
+    { name: "Mike Auto", location: "Pune", vehicle: "Bike", company: "Yamaha", service: "Brake Fix", price: "500", contact: "9123456789" }
+];
 
-    if (username === "admin" && password === "12345") {
+function registerUser() {
+    let username = document.getElementById("signupUsername").value;
+    let password = document.getElementById("signupPassword").value;
+
+    if (username && password) {
+        localStorage.setItem("user", JSON.stringify({ username, password }));
+        alert("Signup Successful! Please log in.");
+    } else {
+        alert("Please enter all details.");
+    }
+}
+
+function loginUser() {
+    let username = document.getElementById("loginUsername").value;
+    let password = document.getElementById("loginPassword").value;
+    let user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && username === user.username && password === user.password) {
         localStorage.setItem("isLoggedIn", "true");
         showMainPage();
     } else {
         alert("Invalid Username or Password!");
-        document.getElementById("username").value = "";
-        document.getElementById("password").value = "";
     }
 }
 
 function logoutUser() {
     localStorage.removeItem("isLoggedIn");
-    document.getElementById("mainPage").style.display = "none";
-    document.getElementById("loginPage").style.display = "block";
+    location.reload();
 }
 
 function showMainPage() {
-    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("authPage").style.display = "none";
     document.getElementById("mainPage").style.display = "block";
-    fetchMechanics();
+    displayMechanics();
 }
 
-function fetchMechanics() {
-    fetch("https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec")
-        .then(response => response.json())
-        .then(data => updateTable(data))
-        .catch(error => console.error("Error fetching data:", error));
+function registerMechanic() {
+    let name = document.getElementById("mechanicName").value;
+    let location = document.getElementById("mechanicLocation").value;
+    let vehicle = document.getElementById("mechanicVehicle").value;
+    let company = document.getElementById("company").value;
+    let service = document.getElementById("mechanicService").value;
+    let price = document.getElementById("mechanicPrice").value;
+    let contact = document.getElementById("mechanicContact").value;
+
+    if (name && location && vehicle && company && service && price && contact) {
+        mechanics.push({ name, location, vehicle, company, service, price, contact });
+        alert("Mechanic Registered!");
+        displayMechanics();
+    } else {
+        alert("Please fill all fields.");
+    }
 }
 
-function updateTable(mechanics) {
-    let tableBody = document.getElementById("mechanicTableBody");
+function displayMechanics() {
+    let tableBody = document.getElementById("mechanicTable").getElementsByTagName("tbody")[0];
     tableBody.innerHTML = "";
 
-    if (mechanics.length === 0) {
-        tableBody.innerHTML = "<tr><td colspan='8'>No mechanics found.</td></tr>";
-        return;
-    }
-
     mechanics.forEach(mechanic => {
-        let row = document.createElement("tr");
-        row.innerHTML = `
+        let row = `<tr>
             <td>${mechanic.name}</td>
             <td>${mechanic.location}</td>
             <td>${mechanic.vehicle}</td>
             <td>${mechanic.company}</td>
-            <td>${mechanic.model}</td>
             <td>${mechanic.service}</td>
-            <td>₹${mechanic.price}</td>
+            <td>${mechanic.price}</td>
             <td>${mechanic.contact}</td>
         `;
-        tableBody.appendChild(row);
-    });
-}
-
-function applyFilters() {
-    let vehicleType = document.getElementById("vehicleTypeFilter").value;
-    let company = document.getElementById("companyFilter").value.toLowerCase();
-    let service = document.getElementById("serviceFilter").value.toLowerCase();
-
-    fetch("https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec")
-        .then(response => response.json())
-        .then(mechanics => {
-            let filtered = mechanics.filter(mechanic =>
-                (vehicleType === "" || mechanic.vehicle === vehicleType) &&
-                (company === "" || mechanic.company.toLowerCase().includes(company)) &&
-                (service === "" || mechanic.service.toLowerCase().includes(service))
-            );
-            updateTable(filtered);
-        })
-        .catch(error => console.error("Error fetching filtered data:", error));
-}
-
-function searchMechanics() {
-    let input = document.getElementById("searchBox").value.toLowerCase();
-    let rows = document.querySelectorAll("#mechanicTableBody tr");
-
-    rows.forEach(row => {
-        let name = row.cells[0].innerText.toLowerCase();
-        let location = row.cells[1].innerText.toLowerCase();
-        row.style.display = (name.includes(input) || location.includes(input)) ? "" : "none";
+        tableBody.innerHTML += row;
     });
 }
