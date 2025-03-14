@@ -8,25 +8,27 @@
 </head>
 <body>
 
-    <!-- Customer Signup & Login -->
+    <!-- Authentication Page -->
     <div id="authPage">
         <h1>Find My Mechanic</h1>
-        <div id="signup">
-            <h2>Sign Up</h2>
-            <input type="text" id="signupUsername" placeholder="Username">
-            <input type="password" id="signupPassword" placeholder="Password">
-            <button onclick="registerUser()">Sign Up</button>
-        </div>
+        <div class="auth-container">
+            <div id="signup">
+                <h2>Sign Up</h2>
+                <input type="text" id="signupUsername" placeholder="Enter Username">
+                <input type="password" id="signupPassword" placeholder="Enter Password">
+                <button onclick="registerUser()">Sign Up</button>
+            </div>
 
-        <div id="login">
-            <h2>Login</h2>
-            <input type="text" id="loginUsername" placeholder="Username">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button onclick="loginUser()">Login</button>
+            <div id="login">
+                <h2>Login</h2>
+                <input type="text" id="loginUsername" placeholder="Enter Username">
+                <input type="password" id="loginPassword" placeholder="Enter Password">
+                <button onclick="loginUser()">Login</button>
+            </div>
         </div>
     </div>
 
-    <!-- Main Page -->
+    <!-- Main Application Page -->
     <div id="mainPage" style="display: none;">
         <h1>Find My Mechanic</h1>
 
@@ -64,16 +66,21 @@
         </table>
 
         <h2>Mechanic Registration</h2>
-        <input type="text" id="mechanicName" placeholder="Your Name">
-        <input type="text" id="mechanicLocation" placeholder="Enter your location">
-        <select id="mechanicVehicle">
-            <option value="Car">Car</option>
-            <option value="Bike">Bike</option>
-        </select>
-        <input type="text" id="mechanicService" placeholder="Service Offered">
-        <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
-        <input type="text" id="mechanicContact" placeholder="Contact Number">
-        <button onclick="registerMechanic()">Register</button>
+        <div class="mechanic-form">
+            <input type="text" id="mechanicName" placeholder="Your Name">
+            <input type="text" id="mechanicLocation" placeholder="Enter your location">
+            <select id="mechanicVehicle" onchange="updateCompanyDropdown()">
+                <option value="Car">Car</option>
+                <option value="Bike">Bike</option>
+            </select>
+            <select id="mechanicCompany">
+                <option value="">Select Company</option>
+            </select>
+            <input type="text" id="mechanicService" placeholder="Service Offered">
+            <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
+            <input type="text" id="mechanicContact" placeholder="Contact Number">
+            <button onclick="registerMechanic()">Register</button>
+        </div>
 
         <button onclick="logoutUser()">Logout</button>
     </div>
