@@ -8,38 +8,31 @@
 </head>
 <body>
 
-    <!-- Authentication Page -->
+    <!-- Customer Login Page -->
     <div id="authPage">
         <h1>Find My Mechanic</h1>
-        <div class="auth-container">
-            <div id="signup">
-                <h2>Sign Up</h2>
-                <input type="text" id="signupUsername" placeholder="Enter Username">
-                <input type="password" id="signupPassword" placeholder="Enter Password">
-                <button onclick="registerUser()">Sign Up</button>
-            </div>
-
-            <div id="login">
-                <h2>Login</h2>
-                <input type="text" id="loginUsername" placeholder="Enter Username">
-                <input type="password" id="loginPassword" placeholder="Enter Password">
-                <button onclick="loginUser()">Login</button>
-            </div>
+        <div id="login">
+            <h2>Customer Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button onclick="loginUser()">Login</button>
         </div>
     </div>
 
-    <!-- Main Application Page -->
+    <!-- Main Page -->
     <div id="mainPage" style="display: none;">
         <h1>Find My Mechanic</h1>
 
-        <input type="text" id="searchBox" placeholder="Search by location or mechanic name...">
+        <input type="text" id="searchBox" placeholder="Enter your location...">
         <button onclick="fetchMechanics()">Search</button>
 
-        <h2>Filters</h2>
+        <h2>Filter by Vehicle Type & Company</h2>
         <select id="vehicleType" onchange="updateCompanyDropdown()">
             <option value="">Select Vehicle Type</option>
             <option value="Car">Car</option>
             <option value="Bike">Bike</option>
+            <option value="Truck">Truck</option>
+            <option value="Others">Others</option>
         </select>
 
         <select id="company">
@@ -60,27 +53,25 @@
                     <th>Contact</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Mechanics Data Here -->
-            </tbody>
+            <tbody></tbody>
         </table>
 
         <h2>Mechanic Registration</h2>
-        <div class="mechanic-form">
-            <input type="text" id="mechanicName" placeholder="Your Name">
-            <input type="text" id="mechanicLocation" placeholder="Enter your location">
-            <select id="mechanicVehicle" onchange="updateCompanyDropdown()">
-                <option value="Car">Car</option>
-                <option value="Bike">Bike</option>
-            </select>
-            <select id="mechanicCompany">
-                <option value="">Select Company</option>
-            </select>
-            <input type="text" id="mechanicService" placeholder="Service Offered">
-            <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
-            <input type="text" id="mechanicContact" placeholder="Contact Number">
-            <button onclick="registerMechanic()">Register</button>
-        </div>
+        <input type="text" id="mechanicName" placeholder="Your Name">
+        <input type="text" id="mechanicLocation" placeholder="Enter your location">
+        <select id="mechanicVehicle" onchange="updateCompanyDropdown()">
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+            <option value="Truck">Truck</option>
+            <option value="Others">Others</option>
+        </select>
+        <select id="mechanicCompany">
+            <option value="">Select Company</option>
+        </select>
+        <input type="text" id="mechanicService" placeholder="Service Offered">
+        <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
+        <input type="text" id="mechanicContact" placeholder="Contact Number">
+        <button onclick="registerMechanic()">Register</button>
 
         <button onclick="logoutUser()">Logout</button>
     </div>
