@@ -8,19 +8,43 @@
 </head>
 <body>
 
-    <div id="loginPage">
-        <h1>Login</h1>
-        <input type="text" id="username" placeholder="Enter Username">
-        <input type="password" id="password" placeholder="Enter Password">
-        <button onclick="loginUser()">Login</button>
+    <!-- Customer Signup & Login -->
+    <div id="authPage">
+        <h1>Find My Mechanic</h1>
+        <div id="signup">
+            <h2>Sign Up</h2>
+            <input type="text" id="signupUsername" placeholder="Username">
+            <input type="password" id="signupPassword" placeholder="Password">
+            <button onclick="registerUser()">Sign Up</button>
+        </div>
+
+        <div id="login">
+            <h2>Login</h2>
+            <input type="text" id="loginUsername" placeholder="Username">
+            <input type="password" id="loginPassword" placeholder="Password">
+            <button onclick="loginUser()">Login</button>
+        </div>
     </div>
 
+    <!-- Main Page -->
     <div id="mainPage" style="display: none;">
         <h1>Find My Mechanic</h1>
-        <p>Get Quote & Compare prices to find the best mechanic near you!</p>
 
-        <input type="text" id="searchBox" onkeyup="searchMechanics()" placeholder="Search by name or location...">
-        <button onclick="fetchMechanics()">Refresh</button>
+        <input type="text" id="searchBox" placeholder="Search by location or mechanic name...">
+        <button onclick="fetchMechanics()">Search</button>
+
+        <h2>Filters</h2>
+        <select id="vehicleType" onchange="updateCompanyDropdown()">
+            <option value="">Select Vehicle Type</option>
+            <option value="Car">Car</option>
+            <option value="Bike">Bike</option>
+        </select>
+
+        <select id="company">
+            <option value="">Select Company</option>
+        </select>
+
+        <button onclick="applyFilters()">Apply Filters</button>
 
         <table id="mechanicTable">
             <thead>
@@ -29,42 +53,27 @@
                     <th>Location</th>
                     <th>Vehicle</th>
                     <th>Company</th>
-                    <th>Model</th>
                     <th>Service</th>
                     <th>Price</th>
                     <th>Contact</th>
                 </tr>
             </thead>
-            <tbody id="mechanicTableBody">
+            <tbody>
                 <!-- Mechanics Data Here -->
             </tbody>
         </table>
 
-        <h2>Filters</h2>
-        <select id="vehicleTypeFilter" onchange="updateCompanyDropdown()">
-            <option value="">Select Vehicle Type</option>
+        <h2>Mechanic Registration</h2>
+        <input type="text" id="mechanicName" placeholder="Your Name">
+        <input type="text" id="mechanicLocation" placeholder="Enter your location">
+        <select id="mechanicVehicle">
             <option value="Car">Car</option>
             <option value="Bike">Bike</option>
         </select>
-
-        <select id="companyFilter">
-            <option value="">Select Company</option>
-            <option value="Honda">Honda</option>
-            <option value="Toyota">Toyota</option>
-            <option value="Ford">Ford</option>
-            <option value="Bajaj">Bajaj</option>
-            <option value="Hero">Hero</option>
-        </select>
-
-        <input type="text" id="serviceFilter" placeholder="Enter Service (e.g., Oil Change)">
-        <input type="number" id="priceFilter" placeholder="Max Price (₹)">
-        <button onclick="applyFilters()">Filter</button>
-
-        <h2>Are You a Mechanic?</h2>
-        <p>List your services and get customers easily!</p>
-        <a href="https://docs.google.com/forms/...">
-            <button class="register-btn">Register as Mechanic</button>
-        </a>
+        <input type="text" id="mechanicService" placeholder="Service Offered">
+        <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
+        <input type="text" id="mechanicContact" placeholder="Contact Number">
+        <button onclick="registerMechanic()">Register</button>
 
         <button onclick="logoutUser()">Logout</button>
     </div>
