@@ -4,79 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Mechanic</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <!-- Customer Login Page -->
-    <div id="authPage">
+    <header>
         <h1>Find My Mechanic</h1>
-        <div id="login">
-            <h2>Customer Login</h2>
-            <input type="text" id="loginUsername" placeholder="Username">
-            <input type="password" id="loginPassword" placeholder="Password">
-            <button onclick="loginUser()">Login</button>
-        </div>
-    </div>
+        <button id="login-btn">Login</button>
+        <button id="logout-btn" style="display:none;">Logout</button>
+    </header>
 
-    <!-- Main Page -->
-    <div id="mainPage" style="display: none;">
-        <h1>Find My Mechanic</h1>
+    <div class="container">
+        <h2>Find a Mechanic Near You</h2>
 
-        <input type="text" id="searchBox" placeholder="Enter your location...">
-        <button onclick="fetchMechanics()">Search</button>
+        <label for="location">Enter Location:</label>
+        <input type="text" id="location" placeholder="Enter city..." oninput="autoSuggestLocation()">
+        <ul id="suggestions"></ul>
 
-        <h2>Filter by Vehicle Type & Company</h2>
-        <select id="vehicleType" onchange="updateCompanyDropdown()">
-            <option value="">Select Vehicle Type</option>
+        <label for="vehicle-type">Select Vehicle Type:</label>
+        <select id="vehicle-type">
             <option value="Car">Car</option>
             <option value="Bike">Bike</option>
             <option value="Truck">Truck</option>
             <option value="Others">Others</option>
         </select>
 
-        <select id="company">
-            <option value="">Select Company</option>
-        </select>
+        <button onclick="findMechanics()">Search Mechanics</button>
 
-        <button onclick="applyFilters()">Apply Filters</button>
+        <h3>Available Mechanics:</h3>
+        <ul id="mechanic-list"></ul>
+    </div>
 
-        <table id="mechanicTable">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Vehicle</th>
-                    <th>Company</th>
-                    <th>Service</th>
-                    <th>Price</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
+    <div class="container">
         <h2>Mechanic Registration</h2>
-        <input type="text" id="mechanicName" placeholder="Your Name">
-        <input type="text" id="mechanicLocation" placeholder="Enter your location">
-        <select id="mechanicVehicle" onchange="updateCompanyDropdown()">
+        <label for="name">Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+
+        <label for="service-location">Location:</label>
+        <input type="text" id="service-location" placeholder="Enter your service area">
+
+        <label for="mechanic-type">Vehicle Type:</label>
+        <select id="mechanic-type">
             <option value="Car">Car</option>
             <option value="Bike">Bike</option>
             <option value="Truck">Truck</option>
             <option value="Others">Others</option>
         </select>
-        <select id="mechanicCompany">
-            <option value="">Select Company</option>
-        </select>
-        <input type="text" id="mechanicService" placeholder="Service Offered">
-        <input type="number" id="mechanicPrice" placeholder="Service Price (₹)">
-        <input type="text" id="mechanicContact" placeholder="Contact Number">
-        <button onclick="registerMechanic()">Register</button>
 
-        <button onclick="logoutUser()">Logout</button>
+        <button onclick="registerMechanic()">Register</button>
     </div>
 
+    <script type="module" src="firebase-config.js"></script>
     <script src="script.js"></script>
-
 </body>
 </html>
