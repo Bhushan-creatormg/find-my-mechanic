@@ -7,54 +7,34 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <header>
         <h1>Find My Mechanic</h1>
-        <button id="login-btn">Login</button>
-        <button id="logout-btn" style="display:none;">Logout</button>
+        <p>Compare prices and find the best mechanic near you!</p>
     </header>
 
-    <div class="container">
-        <h2>Find a Mechanic Near You</h2>
+    <section id="mechanic-list">
+        <h2>Available Mechanics</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th>Contact</th>
+                </tr>
+            </thead>
+            <tbody id="mechanicTable">
+                <!-- Data will be added dynamically -->
+            </tbody>
+        </table>
+    </section>
 
-        <label for="location">Enter Location:</label>
-        <input type="text" id="location" placeholder="Enter city..." oninput="autoSuggestLocation()">
-        <ul id="suggestions"></ul>
+    <footer>
+        <p>© 2025 Find My Mechanic. All rights reserved.</p>
+    </footer>
 
-        <label for="vehicle-type">Select Vehicle Type:</label>
-        <select id="vehicle-type">
-            <option value="Car">Car</option>
-            <option value="Bike">Bike</option>
-            <option value="Truck">Truck</option>
-            <option value="Others">Others</option>
-        </select>
-
-        <button onclick="findMechanics()">Search Mechanics</button>
-
-        <h3>Available Mechanics:</h3>
-        <ul id="mechanic-list"></ul>
-    </div>
-
-    <div class="container">
-        <h2>Mechanic Registration</h2>
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter your name">
-
-        <label for="service-location">Location:</label>
-        <input type="text" id="service-location" placeholder="Enter your service area">
-
-        <label for="mechanic-type">Vehicle Type:</label>
-        <select id="mechanic-type">
-            <option value="Car">Car</option>
-            <option value="Bike">Bike</option>
-            <option value="Truck">Truck</option>
-            <option value="Others">Others</option>
-        </select>
-
-        <button onclick="registerMechanic()">Register</button>
-    </div>
-
-    <script type="module" src="firebase-config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
