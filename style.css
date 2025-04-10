@@ -38,7 +38,7 @@ th {
 .header-img {
     width: 100%;
     max-height: 300px;
-    object-fit: cover;
+    object-fit: contain; /* Fixed image cut-off */
     border-radius: 10px;
     margin-bottom: 20px;
 }
