@@ -1,29 +1,76 @@
-// script.js
+const mechanics = [
+    { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: "₹200", contact: "9876543210", image: "https://via.placeholder.com/300x180?text=Garage+1" },
+    { name: "AutoFix", location: "Pune", service: "Oil Change", price: "₹500", contact: "8765432109", image: "https://via.placeholder.com/300x180?text=Garage+2" },
+    { name: "Speedy Repairs", location: "Delhi", service: "Tire Replacement", price: "₹1500", contact: "7654321098", image: "https://via.placeholder.com/300x180?text=Garage+3" }
+];
 
-const mechanics = [ { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: "₹200", contact: "9876543210", image: "https://images.unsplash.com/photo-1605187165680-b64138aa4f3c" }, { name: "AutoFix", location: "Pune", service: "Oil Change", price: "₹500", contact: "8765432109", image: "https://images.unsplash.com/photo-1515920037688-79b97f4f8b9d" }, { name: "Speedy Repairs", location: "Delhi", service: "Tire Replacement", price: "₹1500", contact: "7654321098", image: "https://images.unsplash.com/photo-1587583773570-0f763be24b4f" } ];
-
-const brandOptions = { Car: ["Maruti", "Hyundai", "Tata", "Honda", "Toyota", "Others"], Bike: ["Hero", "Honda", "Royal Enfield", "TVS", "Bajaj", "Others"], Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "BharatBenz", "Others"], Others: ["Generic", "Local", "Imported", "Luxury", "Budget", "Others"] };
-
-function updateBrandOptions() { const vehicleType = document.getElementById("vehicleType").value; const brandSelect = document.getElementById("brand"); brandSelect.innerHTML = "<option value=''>Select Brand</option>"; if (vehicleType && brandOptions[vehicleType]) { brandOptions[vehicleType].forEach(brand => { const option = document.createElement("option"); option.value = brand; option.textContent = brand; brandSelect.appendChild(option); }); } }
-
-function filterMechanics() { const location = document.getElementById("location").value.toLowerCase(); const mechanicContainer = document.getElementById("mechanicCards"); mechanicContainer.innerHTML = "";
-
-const filtered = mechanics.filter(m =>
-    m.location.toLowerCase().includes(location)
-);
-
-filtered.forEach(mechanic => {
-    const card = `
-        <div class="card">
-            <img src="${mechanic.image}" alt="${mechanic.name}">
-            <h3>${mechanic.name}</h3>
-            <p><strong>Service:</strong> ${mechanic.service}</p>
-            <p><strong>Price:</strong> ${mechanic.price}</p>
-            <p><strong>Location:</strong> ${mechanic.location}</p>
-            <p><strong>Contact:</strong> ${mechanic.contact}</p>
-        </div>
-    `;
-    mechanicContainer.innerHTML += card;
-});
-
+function loadMechanics() {
+    const container = document.getElementById("mechanicCards");
+    container.innerHTML = "";
+    mechanics.forEach(mechanic => {
+        let card = `
+            <div class="card">
+                <img src="${mechanic.image}" alt="Mechanic">
+                <h3>${mechanic.name}</h3>
+                <p><strong>Location:</strong> ${mechanic.location}</p>
+                <p><strong>Service:</strong> ${mechanic.service}</p>
+                <p><strong>Price:</strong> ${mechanic.price}</p>
+                <p><strong>Contact:</strong> ${mechanic.contact}</p>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
 }
+
+function updateBrandOptions() {
+    const vehicleType = document.getElementById("vehicleType").value;
+    const brandDropdown = document.getElementById("brandOptions");
+    brandDropdown.innerHTML = '<option value="">Select Brand</option>';
+
+    let brands = [];
+    if (vehicleType === "bike") {
+        brands = ["Royal Enfield", "Hero", "Honda", "Bajaj", "TVS", "Others"];
+    } else if (vehicleType === "car") {
+        brands = ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Mahindra", "Others"];
+    } else if (vehicleType === "truck") {
+        brands = ["Tata", "Ashok Leyland", "Mahindra", "BharatBenz", "Eicher", "Others"];
+    }
+
+    brands.forEach(brand => {
+        const option = document.createElement("option");
+        option.value = brand;
+        option.textContent = brand;
+        brandDropdown.appendChild(option);
+    });
+}
+
+function filterMechanics() {
+    const location = document.getElementById("locationInput").value.toLowerCase();
+    const container = document.getElementById("mechanicCards");
+    container.innerHTML = "";
+
+    const filtered = mechanics.filter(m =>
+        m.location.toLowerCase().includes(location)
+    );
+
+    if (filtered.length === 0) {
+        container.innerHTML = "<p>No mechanics found for this location.</p>";
+        return;
+    }
+
+    filtered.forEach(mechanic => {
+        let card = `
+            <div class="card">
+                <img src="${mechanic.image}" alt="Mechanic">
+                <h3>${mechanic.name}</h3>
+                <p><strong>Location:</strong> ${mechanic.location}</p>
+                <p><strong>Service:</strong> ${mechanic.service}</p>
+                <p><strong>Price:</strong> ${mechanic.price}</p>
+                <p><strong>Contact:</strong> ${mechanic.contact}</p>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
+
+window.onload = loadMechanics;
