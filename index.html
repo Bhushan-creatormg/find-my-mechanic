@@ -4,37 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find My Mechanic</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Find My Mechanic</h1>
-        <p>Compare prices and find the best mechanic near you!</p>
-    </header>
+    <h2>Find My Mechanic</h2>
 
-    <section id="mechanic-list">
-        <h2>Available Mechanics</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Location</th>
-                    <th>Service</th>
-                    <th>Price</th>
-                    <th>Contact</th>
-                </tr>
-            </thead>
-            <tbody id="mechanicTable">
-                <!-- Data will be added dynamically -->
-            </tbody>
-        </table>
-    </section>
+    <label for="location">Enter Your Location:</label>
+    <input type="text" id="location" placeholder="Enter city">
+    <button onclick="filterMechanics()">Search</button><br>
 
-    <footer>
-        <p>© 2025 Find My Mechanic. All rights reserved.</p>
-    </footer>
+    <label for="vehicleType">Select Vehicle Type:</label>
+    <select id="vehicleType" onchange="updateBrands()">
+        <option value="">--Select--</option>
+        <option value="Car">Car</option>
+        <option value="Bike">Bike</option>
+        <option value="Others">Others</option>
+    </select><br>
+
+    <label for="brand">Select Brand:</label>
+    <select id="brand">
+        <option value="">--Select Vehicle Type First--</option>
+    </select><br>
+
+    <label for="issue">Describe Your Vehicle Issue:</label>
+    <input type="text" id="issue" placeholder="E.g. Engine noise, puncture..."><br><br>
+
+    <h3>Available Mechanics</h3>
+    <table id="mechanicTable">
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Service</th>
+            <th>Price</th>
+            <th>Contact</th>
+        </tr>
+    </table>
 
     <script src="script.js"></script>
 </body>
 </html>
-
