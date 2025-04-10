@@ -1,58 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find My Mechanic</title>
+    <title>MechMato - Find Nearby Mechanics</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header>
+        <h1>MechMato</h1>
+        <p>Find Trusted Mechanics Near You</p>
+    </header><section class="search-section">
+    <input type="text" id="location" placeholder="Enter your city">
 
-    <h2>Find My Mechanic</h2>
+    <select id="vehicleType" onchange="updateBrandOptions()">
+        <option value="">Select Vehicle Type</option>
+        <option value="Car">Car</option>
+        <option value="Bike">Bike</option>
+        <option value="Truck">Truck</option>
+        <option value="Others">Others</option>
+    </select>
 
-    <!-- Proper Mechanic Image -->
-    <img src="https://images.pexels.com/photos/3807328/pexels-photo-3807328.jpeg" 
-         alt="Mechanic working in garage" 
-         class="header-img">
+    <select id="brand">
+        <option value="">Select Brand</option>
+    </select>
 
-    <div class="input-section">
-        <label for="location">Enter Your Location:</label>
-        <input type="text" id="location" placeholder="Enter city">
-        <button onclick="filterMechanics()">Search</button><br>
+    <input type="text" id="issue" placeholder="What issue are you facing?">
+    <button onclick="filterMechanics()">Search</button>
+</section>
 
-        <label for="vehicleType">Select Vehicle Type:</label>
-        <select id="vehicleType" onchange="updateBrands()">
-            <option value="">--Select--</option>
-            <option value="Car">Car</option>
-            <option value="Bike">Bike</option>
-            <option value="Others">Others</option>
-        </select><br>
+<section id="mechanicCards" class="card-container">
+    <!-- Mechanic cards will be added here dynamically -->
+</section>
 
-        <label for="brand">Select Brand:</label>
-        <select id="brand">
-            <option value="">--Select Vehicle Type First--</option>
-        </select><br>
+<script src="script.js"></script>
 
-        <label for="issue">Describe Your Vehicle Issue:</label>
-        <input type="text" id="issue" placeholder="E.g. Engine noise, puncture..."><br>
-    </div>
-
-    <!-- Side Photo -->
-    <img src="https://images.pexels.com/photos/3806266/pexels-photo-3806266.jpeg" 
-         alt="Mechanic tools"
-         class="side-img">
-
-    <h3>Available Mechanics</h3>
-    <table id="mechanicTable">
-        <tr>
-            <th>Name</th>
-            <th>Location</th>
-            <th>Service</th>
-            <th>Price</th>
-            <th>Contact</th>
-        </tr>
-    </table>
-
-    <script src="script.js"></script>
 </body>
 </html>
