@@ -8,7 +8,7 @@ body {
 }
 
 header {
-    background-color: #d32f2f;
+    background-color: #009688;
     color: white;
     text-align: center;
     padding: 20px;
@@ -34,10 +34,15 @@ header {
 }
 
 .search-section button {
-    background-color: #d32f2f;
+    background-color: #009688;
     color: white;
     border: none;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-section button:hover {
+    background-color: #00796b;
 }
 
 .card-container {
@@ -55,6 +60,11 @@ header {
     width: 300px;
     overflow: hidden;
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
 }
 
 .card img {
