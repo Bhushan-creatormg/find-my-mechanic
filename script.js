@@ -1,4 +1,3 @@
-
 const mechanics = [
     { name: "Rahul's Garage", location: "Mumbai", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
     { name: "AutoFix", location: "Pune", service: "Oil Change", price: "₹500", contact: "8765432109" },
