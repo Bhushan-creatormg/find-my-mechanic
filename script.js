@@ -7,7 +7,8 @@ const mechanics = [
 const brandOptions = {
   Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
   Car: ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra", "Others"],
-  Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"]
+  Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"],
+  Others: ["Generic", "Unknown", "Others"]
 };
 
 function populateBrands(type) {
@@ -55,15 +56,6 @@ function filterMechanics() {
   }
 }
 
-window.onload = function () {
-  populateBrands(document.getElementById("vehicleType").value);
-  loadMechanics();
-
-  document.getElementById("vehicleType").addEventListener("change", function () {
-    populateBrands(this.value);
-  });
-};
-
 function loadMechanics() {
   const table = document.getElementById("mechanicTable");
   table.innerHTML = `<tr>
@@ -84,3 +76,12 @@ function loadMechanics() {
     table.innerHTML += row;
   });
 }
+
+window.onload = function () {
+  loadMechanics();
+  document.getElementById("vehicleType").addEventListener("change", function () {
+    const selectedType = this.value;
+    const formattedType = selectedType.charAt(0).toUpperCase() + selectedType.slice(1).toLowerCase();
+    populateBrands(formattedType);
+  });
+};
