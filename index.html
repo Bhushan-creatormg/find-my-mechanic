@@ -1,8 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Find My Mechanic</title>
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
@@ -11,28 +10,22 @@
   <header>
     <h1>Find My Mechanic</h1>
     <p>Your one-stop solution for vehicle issues</p>
-  </header>
-
-  <section class="search-section">
+  </header>  <section class="search-section">
     <input type="text" id="locationInput" placeholder="Enter your location..." />
-    <button onclick="filterMechanics()">Search</button>
+    <button onclick="filterMechanics()">Search</button><select id="vehicleType">
+  <option value="">Select Vehicle Type</option>
+  <option value="Bike">Bike</option>
+  <option value="Car">Car</option>
+  <option value="Truck">Truck</option>
+</select>
 
-    <select id="vehicleType">
-      <option value="">Select Vehicle Type</option>
-      <option value="Bike">Bike</option>
-      <option value="Car">Car</option>
-      <option value="Truck">Truck</option>
-      <option value="Others">Others</option>
-    </select>
+<select id="brand">
+  <option value="">Select Brand</option>
+</select>
 
-    <select id="brand">
-      <option value="">Select Brand</option>
-    </select>
+<input type="text" id="problemInput" placeholder="What's the problem with your vehicle?" />
 
-    <input type="text" id="problemInput" placeholder="What's the problem with your vehicle?" />
-  </section>
-
-  <section>
+  </section>  <section>
     <h2>Available Mechanics</h2>
     <table id="mechanicTable">
       <tr>
@@ -43,9 +36,7 @@
         <th>Contact</th>
       </tr>
     </table>
-  </section>
-
-  <section class="tips-section">
+  </section>  <section class="tips-section">
     <h2>Auto Tips & DIY Help</h2>
     <ul>
       <li>Check tire pressure monthly for better mileage.</li>
@@ -54,9 +45,7 @@
       <li>Inspect your brakes regularly for safety.</li>
       <li>Clean your air filter every 10,000 km for smooth functioning.</li>
     </ul>
-  </section>
-
-  <footer>
+  </section>  <footer>
     <p>© 2025 Find My Mechanic. All rights reserved.</p>
   </footer>
 </body>
