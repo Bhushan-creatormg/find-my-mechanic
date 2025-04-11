@@ -1,82 +1,29 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f6f6f6;
-}
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
 
-header {
-    background-color: #009688;
-    color: white;
-    text-align: center;
-    padding: 20px;
-}
+header { background-color: #1f2937; color: white; padding: 20px; text-align: center; }
 
-.search-section {
-    background: white;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+.search-section { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px; background-color: #ffffff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
 
-.search-section input,
-.search-section select,
-.search-section button {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
+.search-section input, .search-section select, .search-section button { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; }
 
-.search-section button {
-    background-color: #009688;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+.search-section button { background-color: #2563eb; color: white; border: none; cursor: pointer; }
 
-.search-section button:hover {
-    background-color: #00796b;
-}
+.search-section button:hover { background-color: #1d4ed8; }
 
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-}
+section { margin: 20px; }
 
-.card {
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 300px;
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
+h2 { text-align: center; margin-bottom: 10px; }
 
-.card:hover {
-    transform: translateY(-5px);
-}
+table { width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
 
-.card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-}
+table th, table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
 
-.card h3 {
-    margin: 10px 0 5px 0;
-}
+table th { background-color: #2563eb; color: white; }
 
-.card p {
-    margin: 5px;
-    font-size: 14px;
-    color: #555;
-}
+footer { background-color: #1f2937; color: white; text-align: center; padding: 10px; }
+
+.tips-section { max-height: 200px; overflow-y: auto; padding: 10px 20px; background-color: #fff; border-top: 2px solid #ccc; border-bottom: 2px solid #ccc; box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); }
+
+.tips-section ul { padding-left: 20px; }
+
+.tips-section li { margin-bottom: 10px; }
