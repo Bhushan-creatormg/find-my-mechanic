@@ -1,25 +1,7 @@
 const mechanics = [
-  {
-    name: "Rahul's Garage",
-    location: "Kalyan",
-    service: "Puncture Repair",
-    price: "₹200",
-    contact: "9876543210"
-  },
-  {
-    name: "AutoFix",
-    location: "Thane",
-    service: "Oil Change",
-    price: "₹500",
-    contact: "8765432109"
-  },
-  {
-    name: "Speedy Repairs",
-    location: "Navi Mumbai",
-    service: "Tire Replacement",
-    price: "₹1500",
-    contact: "7654321098"
-  }
+  { name: "Rahul's Garage", location: "Kalyan", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
+  { name: "AutoFix", location: "Thane", service: "Oil Change", price: "₹500", contact: "8765432109" },
+  { name: "Speedy Repairs", location: "Navi Mumbai", service: "Tire Replacement", price: "₹1500", contact: "7654321098" }
 ];
 
 const brandOptions = {
@@ -31,10 +13,9 @@ const brandOptions = {
 function populateBrands(type) {
   const brandSelect = document.getElementById("brand");
   brandSelect.innerHTML = "<option value=''>Select Brand</option>";
-
-  if (brandOptions[type]) {
+  if (type && brandOptions[type]) {
     brandOptions[type].forEach(brand => {
-      const option = document.createElement("option");
+      let option = document.createElement("option");
       option.value = brand;
       option.textContent = brand;
       brandSelect.appendChild(option);
@@ -44,37 +25,49 @@ function populateBrands(type) {
 
 function loadMechanics() {
   const table = document.getElementById("mechanicTable");
-  table.innerHTML = `
-    <tr>
-      <th>Name</th>
-      <th>Location</th>
-      <th>Service</th>
-      <th>Price</th>
-      <th>Contact</th>
-    </tr>
-  `;
-
+  table.innerHTML = `<tr>
+    <th>Name</th>
+    <th>Location</th>
+    <th>Service</th>
+    <th>Price</th>
+    <th>Contact</th>
+  </tr>`;
   mechanics.forEach(mechanic => {
-    const row = `
-      <tr>
+    let row = `<tr>
+      <td>${mechanic.name}</td>
+      <td>${mechanic.location}</td>
+      <td>${mechanic.service}</td>
+      <td>${mechanic.price}</td>
+      <td>${mechanic.contact}</td>
+    </tr>`;
+    table.innerHTML += row;
+  });
+}
+
+function filterMechanics() {
+  const locationInput = document.getElementById("locationInput").value.toLowerCase();
+  const table = document.getElementById("mechanicTable");
+  table.innerHTML = `<tr>
+    <th>Name</th>
+    <th>Location</th>
+    <th>Service</th>
+    <th>Price</th>
+    <th>Contact</th>
+  </tr>`;
+  mechanics
+    .filter(mechanic => mechanic.location.toLowerCase().includes(locationInput))
+    .forEach(mechanic => {
+      let row = `<tr>
         <td>${mechanic.name}</td>
         <td>${mechanic.location}</td>
         <td>${mechanic.service}</td>
         <td>${mechanic.price}</td>
         <td>${mechanic.contact}</td>
-      </tr>
-    `;
-    table.innerHTML += row;
-  });
+      </tr>`;
+      table.innerHTML += row;
+    });
 }
 
 window.onload = function () {
   loadMechanics();
-
-  const vehicleType = document.getElementById("vehicleType");
-  if (vehicleType) {
-    vehicleType.addEventListener("change", function () {
-      populateBrands(this.value);
-    });
-  }
 };
