@@ -23,6 +23,47 @@ function populateBrands(type) {
   }
 }
 
+function filterMechanics() {
+  const location = document.getElementById("locationInput").value.toLowerCase();
+  const table = document.getElementById("mechanicTable");
+
+  table.innerHTML = `<tr>
+    <th>Name</th>
+    <th>Location</th>
+    <th>Service</th>
+    <th>Price</th>
+    <th>Contact</th>
+  </tr>`;
+
+  const filtered = mechanics.filter(mechanic =>
+    mechanic.location.toLowerCase().includes(location)
+  );
+
+  filtered.forEach(mechanic => {
+    let row = `<tr>
+      <td>${mechanic.name}</td>
+      <td>${mechanic.location}</td>
+      <td>${mechanic.service}</td>
+      <td>${mechanic.price}</td>
+      <td>${mechanic.contact}</td>
+    </tr>`;
+    table.innerHTML += row;
+  });
+
+  if (filtered.length === 0) {
+    table.innerHTML += <tr><td colspan="5">No mechanics found in this location.</td></tr>;
+  }
+}
+
+window.onload = function () {
+  populateBrands(document.getElementById("vehicleType").value);
+  loadMechanics();
+
+  document.getElementById("vehicleType").addEventListener("change", function () {
+    populateBrands(this.value);
+  });
+};
+
 function loadMechanics() {
   const table = document.getElementById("mechanicTable");
   table.innerHTML = `<tr>
@@ -43,33 +84,3 @@ function loadMechanics() {
     table.innerHTML += row;
   });
 }
-
-function filterMechanics() {
-  const location = document.getElementById("locationInput").value.toLowerCase();
-  const filtered = mechanics.filter(m => m.location.toLowerCase().includes(location));
-  const table = document.getElementById("mechanicTable");
-  table.innerHTML = `<tr>
-    <th>Name</th>
-    <th>Location</th>
-    <th>Service</th>
-    <th>Price</th>
-    <th>Contact</th>
-  </tr>`;
-  filtered.forEach(mechanic => {
-    let row = `<tr>
-      <td>${mechanic.name}</td>
-      <td>${mechanic.location}</td>
-      <td>${mechanic.service}</td>
-      <td>${mechanic.price}</td>
-      <td>${mechanic.contact}</td>
-    </tr>`;
-    table.innerHTML += row;
-  });
-}
-
-window.onload = function () {
-  loadMechanics();
-  document.getElementById("vehicleType").addEventListener("change", function () {
-    populateBrands(this.value);
-  });
-};
