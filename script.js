@@ -4,12 +4,14 @@ const brandOptions = {
   Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"]
 };
 
-function populateBrands(type) {
-  const brandSelect = document.getElementById("mechBrand"); // updated to correct ID
+function populateBrands(vehicleTypeId, brandId) {
+  const vehicleType = document.getElementById(vehicleTypeId).value;
+  const brandSelect = document.getElementById(brandId);
+
   brandSelect.innerHTML = "<option value=''>Select Brand</option>";
 
-  if (brandOptions[type]) {
-    brandOptions[type].forEach(brand => {
+  if (brandOptions[vehicleType]) {
+    brandOptions[vehicleType].forEach(brand => {
       const option = document.createElement("option");
       option.value = brand;
       option.textContent = brand;
@@ -48,8 +50,13 @@ function sendChat() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("mechVehicleType").addEventListener("change", function () {
-    const selectedType = this.value;
-    populateBrands(selectedType);
+  // for top search section
+  document.getElementById("vehicleType").addEventListener("change", () => {
+    populateBrands("vehicleType", "brand");
+  });
+
+  // for mechanic registration form
+  document.getElementById("mechVehicleType").addEventListener("change", () => {
+    populateBrands("mechVehicleType", "mechBrand");
   });
 });
