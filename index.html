@@ -60,35 +60,42 @@
   </section>
   <section class="mechanic-register">
   <h2>Mechanic Registration</h2>
-  <form id="mechanicForm">
-    <input type="text" id="mechName" placeholder="Full Name" required />
-    <input type="text" id="mechLocation" placeholder="Location" required />
-    <input type="text" id="mechService" placeholder="Service (e.g., Bike Repair)" required />
-    <input type="number" id="mechPrice" placeholder="Estimated Price (₹)" required />
-    <input type="text" id="mechContact" placeholder="Phone / Email" required />
-    
-    <select id="mechVehicleType" required>
-      <option value="">Select Vehicle Type</option>
-      <option value="Bike">Bike</option>
-      <option value="Car">Car</option>
-      <option value="Truck">Truck</option>
-      <option value="Other">Other</option>
-    </select>
+    // ✅ Google Sheets Registration Code – placed in middle
+document.getElementById("mechanicForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    <select id="mechBrand" required>
-      <option value="">Select Brand</option>
-      <option value="Honda">Honda</option>
-      <option value="TVS">TVS</option>
-      <option value="Tata">Tata</option>
-      <option value="Hyundai">Hyundai</option>
-      <option value="Other">Other</option>
-    </select>
+  const data = {
+    name: document.getElementById("mechName").value,
+    phone: document.getElementById("mechContact").value,
+    email: document.getElementById("mechEmail").value,
+    aadhar: document.getElementById("mechAadhar").value,
+    garage: document.getElementById("mechGarage").value,
+    experience: document.getElementById("mechExperience").value,
+    location: document.getElementById("mechLocation").value,
+    vehicleType: document.getElementById("mechVehicleType").value,
+    brand: document.getElementById("mechBrand").value,
+    service: document.getElementById("mechService").value,
+    price: document.getElementById("mechPrice").value
+  };
 
-    <label>
-      <input type="checkbox" id="agreeTerms" required />
-      I agree to provide honest service. If found cheating, I may be removed.
-    </label>
-
+  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => res.json())
+    .then(response => {
+      alert("✅ Mechanic registered successfully!");
+      document.getElementById("mechanicForm").reset();
+    })
+    .catch(err => {
+      alert("❌ Error submitting form.");
+      console.error(err);
+    });
+});
+  
     <button type="submit">Register</button>
   </form>
 </section>
