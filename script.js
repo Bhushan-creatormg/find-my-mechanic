@@ -25,40 +25,7 @@ function populateBrands(type) {
 }
 
 function filterMechanics() {
-  document.getElementById("mechanicForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const data = {
-    name: document.getElementById("mechName").value,
-    phone: document.getElementById("mechContact").value,
-    email: document.getElementById("mechEmail").value,
-    aadhar: document.getElementById("mechAadhar").value,
-    garage: document.getElementById("mechGarage").value,
-    experience: document.getElementById("mechExperience").value,
-    location: document.getElementById("mechLocation").value,
-    vehicleType: document.getElementById("mechVehicleType").value,
-    brand: document.getElementById("mechBrand").value,
-    service: document.getElementById("mechService").value,
-    price: document.getElementById("mechPrice").value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(res => res.json())
-    .then(response => {
-      alert("✅ Mechanic registered successfully!");
-      document.getElementById("mechanicForm").reset();
-    })
-    .catch(err => {
-      alert("❌ Error submitting form.");
-      console.error(err);
-    });
-});
+  
 
   document.getElementById("mechanicForm").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -176,4 +143,39 @@ function sendChat() {
   input.value = "";
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
+document.getElementById("mechanicForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const data = {
+    name: document.getElementById("mechName").value,
+    phone: document.getElementById("mechContact").value,
+    email: document.getElementById("mechEmail").value,
+    aadhar: document.getElementById("mechAadhar").value,
+    garage: document.getElementById("mechGarage").value,
+    experience: document.getElementById("mechExperience").value,
+    location: document.getElementById("mechLocation").value,
+    vehicleType: document.getElementById("mechVehicleType").value,
+    brand: document.getElementById("mechBrand").value,
+    service: document.getElementById("mechService").value,
+    price: document.getElementById("mechPrice").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => res.json())
+    .then(response => {
+      alert("✅ Mechanic registered successfully!");
+      document.getElementById("mechanicForm").reset();
+    })
+    .catch(err => {
+      alert("❌ Error submitting form.");
+      console.error(err);
+    });
+});
+
 
