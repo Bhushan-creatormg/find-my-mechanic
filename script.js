@@ -14,7 +14,7 @@ function populateBrands(type) {
   const brandSelect = document.getElementById("brand");
   brandSelect.innerHTML = "<option value=''>Select Brand</option>";
 
-  if (type && brandOptions[type]) {
+  if (brandOptions[type]) {
     brandOptions[type].forEach(brand => {
       const option = document.createElement("option");
       option.value = brand;
@@ -40,18 +40,18 @@ function filterMechanics() {
     mechanic.location.toLowerCase().includes(location)
   );
 
-  filtered.forEach(mechanic => {
-    const row = `<tr>
-      <td>${mechanic.name}</td>
-      <td>${mechanic.location}</td>
-      <td>${mechanic.service}</td>
-      <td>${mechanic.price}</td>
-      <td>${mechanic.contact}</td>
-    </tr>`;
-    table.innerHTML += row;
-  });
-
-  if (filtered.length === 0) {
+  if (filtered.length > 0) {
+    filtered.forEach(mechanic => {
+      const row = `<tr>
+        <td>${mechanic.name}</td>
+        <td>${mechanic.location}</td>
+        <td>${mechanic.service}</td>
+        <td>${mechanic.price}</td>
+        <td>${mechanic.contact}</td>
+      </tr>`;
+      table.innerHTML += row;
+    });
+  } else {
     table.innerHTML += <tr><td colspan="5">No mechanics found in this location.</td></tr>;
   }
 }
@@ -78,12 +78,11 @@ function loadMechanics() {
   });
 }
 
-window.onload = function () {
+window.addEventListener("DOMContentLoaded", () => {
   loadMechanics();
-  const vehicleTypeSelect = document.getElementById("vehicleType");
 
-  vehicleTypeSelect.addEventListener("change", function () {
+  document.getElementById("vehicleType").addEventListener("change", function () {
     const selectedType = this.value;
     populateBrands(selectedType);
   });
-};
+});
