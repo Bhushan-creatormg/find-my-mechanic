@@ -25,6 +25,30 @@ function populateBrands(type) {
 }
 
 function filterMechanics() {
+  document.getElementById("mechanicForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("mechName").value;
+  const location = document.getElementById("mechLocation").value;
+  const service = document.getElementById("mechService").value;
+  const price = document.getElementById("mechPrice").value;
+  const contact = document.getElementById("mechContact").value;
+  const vehicle = document.getElementById("mechVehicleType").value;
+  const brand = document.getElementById("mechBrand").value;
+
+  const table = document.getElementById("mechanicTable");
+  const row = table.insertRow();
+
+  row.innerHTML = `
+    <td>${name} <span class="unverified">Pending Verification</span></td>
+    <td>${location}</td>
+    <td>${service} (${vehicle}, ${brand})</td>
+    <td>₹${price}</td>
+    <td>${contact}</td>
+  `;
+
+  document.getElementById("mechanicForm").reset();
+});
   const location = document.getElementById("locationInput").value.toLowerCase();
   const table = document.getElementById("mechanicTable");
 
