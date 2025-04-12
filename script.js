@@ -1,9 +1,3 @@
-const mechanics = [
-  { name: "Rahul's Garage", location: "Kalyan", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
-  { name: "AutoFix", location: "Thane", service: "Oil Change", price: "₹500", contact: "8765432109" },
-  { name: "Speedy Repairs", location: "Navi Mumbai", service: "Tire Replacement", price: "₹1500", contact: "7654321098" }
-];
-
 const brandOptions = {
   Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
   Car: ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra", "Others"],
@@ -24,125 +18,7 @@ function populateBrands(type) {
   }
 }
 
-function filterMechanics() {
-  
-
-  document.getElementById("mechanicForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-    
-
-  const name = document.getElementById("mechName").value;
-  const location = document.getElementById("mechLocation").value;
-  const service = document.getElementById("mechService").value;
-  const price = document.getElementById("mechPrice").value;
-  const contact = document.getElementById("mechContact").value;
-  const vehicle = document.getElementById("mechVehicleType").value;
-  const brand = document.getElementById("mechBrand").value;
-
-  const table = document.getElementById("mechanicTable");
-  const row = table.insertRow();
-
-  row.innerHTML = `
-    <td>${name} <span class="unverified">Pending Verification</span></td>
-    <td>${location}</td>
-    <td>${service} (${vehicle}, ${brand})</td>
-    <td>₹${price}</td>
-    <td>${contact}</td>
-  `;
-
-  document.getElementById("mechanicForm").reset();
-});
-  const location = document.getElementById("locationInput").value.toLowerCase();
-  const table = document.getElementById("mechanicTable");
-
-  table.innerHTML = `<tr>
-    <th>Name</th>
-    <th>Location</th>
-    <th>Service</th>
-    <th>Price</th>
-    <th>Contact</th>
-  </tr>`;
-
-  const filtered = mechanics.filter(mechanic =>
-    mechanic.location.toLowerCase().includes(location)
-  );
-
-  if (filtered.length > 0) {
-    filtered.forEach(mechanic => {
-      const row = `<tr>
-        <td>${mechanic.name}</td>
-        <td>${mechanic.location}</td>
-        <td>${mechanic.service}</td>
-        <td>${mechanic.price}</td>
-        <td>${mechanic.contact}</td>
-      </tr>`;
-      table.innerHTML += row;
-    });
-  } else {
-    table.innerHTML += `<tr><td colspan="5">No mechanics found in this location.</td></tr>`;
-  }
-}
-
-function loadMechanics() {
-  const table = document.getElementById("mechanicTable");
-  table.innerHTML = `<tr>
-    <th>Name</th>
-    <th>Location</th>
-    <th>Service</th>
-    <th>Price</th>
-    <th>Contact</th>
-  </tr>`;
-
-  mechanics.forEach(mechanic => {
-    const row = `<tr>
-      <td>${mechanic.name}</td>
-      <td>${mechanic.location}</td>
-      <td>${mechanic.service}</td>
-      <td>${mechanic.price}</td>
-      <td>${mechanic.contact}</td>
-    </tr>`;
-    table.innerHTML += row;
-  });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  loadMechanics();
-
-  document.getElementById("vehicleType").addEventListener("change", function () {
-    const selectedType = this.value;
-    populateBrands(selectedType);
-  });
-});
-function toggleChatbot() {
-  const box = document.getElementById("chatbot-box");
-  box.style.display = box.style.display === "flex" ? "none" : "flex";
-}
-
-function sendChat() {
-  const input = document.getElementById("chatbot-input");
-  const msg = input.value.trim();
-  if (!msg) return;
-
-  const msgContainer = document.getElementById("chatbot-messages");
-
-  // Add user message
-  const userMsg = document.createElement("div");
-  userMsg.className = "user-message";
-  userMsg.textContent = msg;
-  msgContainer.appendChild(userMsg);
-
-  // Dummy bot response
-  setTimeout(() => {
-    const botReply = document.createElement("div");
-    botReply.className = "bot-message";
-    botReply.textContent = "Thanks! We’ll get back to you soon 🚗";
-    msgContainer.appendChild(botReply);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-  }, 600);
-
-  input.value = "";
-  msgContainer.scrollTop = msgContainer.scrollHeight;
-}
+// ✅ Google Sheets Registration Code – placed in middle
 document.getElementById("mechanicForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -178,4 +54,40 @@ document.getElementById("mechanicForm").addEventListener("submit", function (e) 
     });
 });
 
+function toggleChatbot() {
+  const box = document.getElementById("chatbot-box");
+  box.style.display = box.style.display === "flex" ? "none" : "flex";
+}
 
+function sendChat() {
+  const input = document.getElementById("chatbot-input");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const msgContainer = document.getElementById("chatbot-messages");
+
+  // Add user message
+  const userMsg = document.createElement("div");
+  userMsg.className = "user-message";
+  userMsg.textContent = msg;
+  msgContainer.appendChild(userMsg);
+
+  // Dummy bot response
+  setTimeout(() => {
+    const botReply = document.createElement("div");
+    botReply.className = "bot-message";
+    botReply.textContent = "Thanks! We’ll get back to you soon 🚗";
+    msgContainer.appendChild(botReply);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }, 600);
+
+  input.value = "";
+  msgContainer.scrollTop = msgContainer.scrollHeight;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("vehicleType").addEventListener("change", function () {
+    const selectedType = this.value;
+    populateBrands(selectedType);
+  });
+});
