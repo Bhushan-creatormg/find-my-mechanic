@@ -5,7 +5,7 @@ const brandOptions = {
 };
 
 function populateBrands(type) {
-  const brandSelect = document.getElementById("brand");
+  const brandSelect = document.getElementById("mechBrand"); // updated to correct ID
   brandSelect.innerHTML = "<option value=''>Select Brand</option>";
 
   if (brandOptions[type]) {
@@ -17,8 +17,6 @@ function populateBrands(type) {
     });
   }
 }
-
-
 
 function toggleChatbot() {
   const box = document.getElementById("chatbot-box");
@@ -32,13 +30,11 @@ function sendChat() {
 
   const msgContainer = document.getElementById("chatbot-messages");
 
-  // Add user message
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
   userMsg.textContent = msg;
   msgContainer.appendChild(userMsg);
 
-  // Dummy bot response
   setTimeout(() => {
     const botReply = document.createElement("div");
     botReply.className = "bot-message";
@@ -52,7 +48,7 @@ function sendChat() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("vehicleType").addEventListener("change", function () {
+  document.getElementById("mechVehicleType").addEventListener("change", function () {
     const selectedType = this.value;
     populateBrands(selectedType);
   });
