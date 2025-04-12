@@ -153,6 +153,51 @@
     </div>
   </div>
 </div>
+  <section class="container my-5">
+  <h2 class="mb-4">Mechanic Registration</h2>
+  <form id="mechanicForm">
+    <div class="mb-3"><input type="text" class="form-control" id="mechName" placeholder="Full Name" required /></div>
+    <div class="mb-3"><input type="tel" class="form-control" id="mechContact" placeholder="Phone Number" required /></div>
+    <div class="mb-3"><input type="email" class="form-control" id="mechEmail" placeholder="Email ID" required /></div>
+    <div class="mb-3"><input type="text" class="form-control" id="mechAadhar" placeholder="Aadhar Card Number" required /></div>
+    <div class="mb-3"><input type="text" class="form-control" id="mechGarage" placeholder="Garage Name" required /></div>
+    <div class="mb-3"><input type="number" class="form-control" id="mechExperience" placeholder="Experience (in years)" required /></div>
+    <div class="mb-3"><input type="text" class="form-control" id="mechLocation" placeholder="Location" required /></div>
+
+    <div class="mb-3">
+      <select class="form-select" id="mechVehicleType" required>
+        <option value="">Select Vehicle Type</option>
+        <option value="Bike">Bike</option>
+        <option value="Car">Car</option>
+        <option value="Truck">Truck</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <select class="form-select" id="mechBrand" required>
+        <option value="">Select Brand</option>
+        <option value="Honda">Honda</option>
+        <option value="Hero">Hero</option>
+        <option value="TVS">TVS</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Tata">Tata</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="mb-3"><input type="text" class="form-control" id="mechService" placeholder="Services (e.g., Oil Change)" required /></div>
+    <div class="mb-3"><input type="number" class="form-control" id="mechPrice" placeholder="Estimated Price (₹)" required /></div>
+
+    <div class="form-check mb-3">
+      <input type="checkbox" class="form-check-input" id="agreeTerms" required />
+      <label class="form-check-label">I agree to provide honest service. If found cheating, I may be removed.</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+</section>
+
 
 </body>
 </html>
