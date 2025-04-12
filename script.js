@@ -18,13 +18,13 @@ function populateBrands(type) {
   }
 }
 
-
-
+// Chatbot toggle
 function toggleChatbot() {
   const box = document.getElementById("chatbot-box");
   box.style.display = box.style.display === "flex" ? "none" : "flex";
 }
 
+// Chatbot messaging
 function sendChat() {
   const input = document.getElementById("chatbot-input");
   const msg = input.value.trim();
@@ -32,13 +32,11 @@ function sendChat() {
 
   const msgContainer = document.getElementById("chatbot-messages");
 
-  // Add user message
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
   userMsg.textContent = msg;
   msgContainer.appendChild(userMsg);
 
-  // Dummy bot response
   setTimeout(() => {
     const botReply = document.createElement("div");
     botReply.className = "bot-message";
@@ -51,9 +49,21 @@ function sendChat() {
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
+// Setup event listeners
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("vehicleType").addEventListener("change", function () {
-    const selectedType = this.value;
-    populateBrands(selectedType);
-  });
+  // Top search section
+  const vehicleSelect = document.getElementById("vehicleType");
+  if (vehicleSelect) {
+    vehicleSelect.addEventListener("change", () => {
+      populateBrands("vehicleType", "brand");
+    });
+  }
+
+  // Mechanic registration form
+  const mechVehicleSelect = document.getElementById("mechVehicleType");
+  if (mechVehicleSelect) {
+    mechVehicleSelect.addEventListener("change", () => {
+      populateBrands("mechVehicleType", "mechBrand");
+    });
+  }
 });
