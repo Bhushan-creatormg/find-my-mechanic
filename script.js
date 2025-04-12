@@ -52,7 +52,7 @@ function filterMechanics() {
       table.innerHTML += row;
     });
   } else {
-    table.innerHTML += <tr><td colspan="5">No mechanics found in this location.</td></tr>;
+    table.innerHTML += `<tr><td colspan="5">No mechanics found in this location.</td></tr>`;
   }
 }
 
