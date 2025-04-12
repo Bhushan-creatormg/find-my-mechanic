@@ -7,16 +7,16 @@ const mechanics = [
 const brandOptions = {
   Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
   Car: ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra", "Others"],
-  Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"],
-  Others: ["Generic", "Unknown", "Others"]
+  Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"]
 };
 
 function populateBrands(type) {
   const brandSelect = document.getElementById("brand");
   brandSelect.innerHTML = "<option value=''>Select Brand</option>";
+
   if (type && brandOptions[type]) {
     brandOptions[type].forEach(brand => {
-      let option = document.createElement("option");
+      const option = document.createElement("option");
       option.value = brand;
       option.textContent = brand;
       brandSelect.appendChild(option);
@@ -41,7 +41,7 @@ function filterMechanics() {
   );
 
   filtered.forEach(mechanic => {
-    let row = `<tr>
+    const row = `<tr>
       <td>${mechanic.name}</td>
       <td>${mechanic.location}</td>
       <td>${mechanic.service}</td>
@@ -65,8 +65,9 @@ function loadMechanics() {
     <th>Price</th>
     <th>Contact</th>
   </tr>`;
+
   mechanics.forEach(mechanic => {
-    let row = `<tr>
+    const row = `<tr>
       <td>${mechanic.name}</td>
       <td>${mechanic.location}</td>
       <td>${mechanic.service}</td>
@@ -79,7 +80,10 @@ function loadMechanics() {
 
 window.onload = function () {
   loadMechanics();
-  document.getElementById("vehicleType").addEventListener("change", function () {
-    populateBrands(this.value);  // No formatting needed here
+  const vehicleTypeSelect = document.getElementById("vehicleType");
+
+  vehicleTypeSelect.addEventListener("change", function () {
+    const selectedType = this.value;
+    populateBrands(selectedType);
   });
 };
