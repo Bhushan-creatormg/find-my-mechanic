@@ -80,8 +80,6 @@ function loadMechanics() {
 window.onload = function () {
   loadMechanics();
   document.getElementById("vehicleType").addEventListener("change", function () {
-    const selectedType = this.value;
-    const formattedType = selectedType.charAt(0).toUpperCase() + selectedType.slice(1).toLowerCase();
-    populateBrands(formattedType);
+    populateBrands(this.value);  // No formatting needed here
   });
 };
