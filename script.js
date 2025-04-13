@@ -1,4 +1,3 @@
-
 // Brand options
 const brandOptions = {
   Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
@@ -25,18 +24,13 @@ function setupBrandDropdown(vehicleTypeId, brandSelectId) {
       }
     });
 
-    // Optional: trigger once on page load if a value is pre-selected
+    // Trigger on load (optional)
     if (vehicleDropdown.value) {
       vehicleDropdown.dispatchEvent(new Event("change"));
     }
   }
 }
 
-// When page is ready, apply it to both sets
-window.addEventListener("DOMContentLoaded", () => {
-  setupBrandDropdown("vehicleType", "brand");               // Top section
-  setupBrandDropdown("mechVehicleType", "mechBrand");       // Mechanic form
-});
 // Chatbot toggle
 function toggleChatbot() {
   const box = document.getElementById("chatbot-box");
@@ -68,21 +62,8 @@ function sendChat() {
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
-// Setup event listeners
+// Apply everything when DOM is loaded
 window.addEventListener("DOMContentLoaded", () => {
-  // Top search section
-  const vehicleSelect = document.getElementById("vehicleType");
-  if (vehicleSelect) {
-    vehicleSelect.addEventListener("change", () => {
-      populateBrands("vehicleType", "brand");
-    });
-  }
-
-  // Mechanic registration form
-  const mechVehicleSelect = document.getElementById("mechVehicleType");
-  if (mechVehicleSelect) {
-    mechVehicleSelect.addEventListener("change", () => {
-      populateBrands("mechVehicleType", "mechBrand");
-    });
-  }
+  setupBrandDropdown("vehicleType", "brand");         // For top search section
+  setupBrandDropdown("mechVehicleType", "mechBrand"); // For registration form
 });
