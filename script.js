@@ -31,10 +31,10 @@ function toggleChatbot() {
 
 function sendChat() {
   const input = document.getElementById("chatbot-input");
-  const msg = input.value.trim();
-  if (!msg) return;
-
+  const msg = input.value.trim().toLowerCase();
   const msgContainer = document.getElementById("chatbot-messages");
+
+  if (!msg) return;
 
   const userMsg = document.createElement("div");
   userMsg.className = "user-message";
@@ -44,7 +44,17 @@ function sendChat() {
   setTimeout(() => {
     const botReply = document.createElement("div");
     botReply.className = "bot-message";
-    botReply.textContent = "Thanks! We’ll get back to you soon 🚗";
+
+    if (msg.includes("register")) {
+      botReply.textContent = "To register, fill out the form in the 'Mechanic Registration' section.";
+    } else if (msg.includes("price") || msg.includes("cost")) {
+      botReply.textContent = "Prices depend on the service. Compare mechanics on the homepage.";
+    } else if (msg.includes("nearby") || msg.includes("mechanic")) {
+      botReply.textContent = "Enter your location to find nearby mechanics.";
+    } else {
+      botReply.textContent = "Thanks! We'll get back to you soon.";
+    }
+
     msgContainer.appendChild(botReply);
     msgContainer.scrollTop = msgContainer.scrollHeight;
   }, 600);
@@ -53,41 +63,43 @@ function sendChat() {
   msgContainer.scrollTop = msgContainer.scrollHeight;
 }
 
-document.getElementById("mechanicForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const data = {
-    name: document.getElementById("mechName").value,
-    phone: document.getElementById("mechContact").value,
-    email: document.getElementById("mechEmail").value,
-    aadhar: document.getElementById("mechAadhar").value,
-    garage: document.getElementById("mechGarage").value,
-    experience: document.getElementById("mechExperience").value,
-    location: document.getElementById("mechLocation").value,
-    vehicleType: document.getElementById("mechVehicleType").value,
-    brand: document.getElementById("mechBrand").value,
-    service: document.getElementById("mechService").value,
-    price: document.getElementById("mechPrice").value
-  };
+function registerMechanic() {
+  document.getElementById("mechanicForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(res => res.json())
-    .then(response => {
-      alert("✅ Mechanic registered successfully!");
-      document.getElementById("mechanicForm").reset();
+    const data = {
+      name: document.getElementById("mechName").value,
+      phone: document.getElementById("mechContact").value,
+      email: document.getElementById("mechEmail").value,
+      aadhar: document.getElementById("mechAadhar").value,
+      garage: document.getElementById("mechGarage").value,
+      experience: document.getElementById("mechExperience").value,
+      location: document.getElementById("mechLocation").value,
+      vehicleType: document.getElementById("mechVehicleType").value,
+      brand: document.getElementById("mechBrand").value,
+      service: document.getElementById("mechService").value,
+      price: document.getElementById("mechPrice").value
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" }
     })
-    .catch(err => {
-      alert("❌ Error submitting form.");
-      console.error(err);
-    });
-});
+      .then(res => res.json())
+      .then(response => {
+        alert("✅ Mechanic registered successfully!");
+        document.getElementById("mechanicForm").reset();
+      })
+      .catch(err => {
+        alert("❌ Error submitting form.");
+        console.error(err);
+      });
+  });
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   setupBrandDropdown("vehicleType", "brand");
   setupBrandDropdown("mechVehicleType", "mechBrand");
+  registerMechanic();
 });
