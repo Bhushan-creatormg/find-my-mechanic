@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find My Mechanic</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <header class="bg-dark text-white py-3 text-center">
+    <h1>Find My Mechanic</h1>
+    <p>Your one-stop solution for vehicle issues</p>
+    <nav class="mt-3">
+      <a href="index.html" class="btn btn-light btn-sm">Home</a>
+      <a href="mechanics.html" class="btn btn-light btn-sm">View Mechanics</a>
+    </nav>
+  </header>
+  <section class="search-section text-center p-4">
+    <input type="text" id="locationInput" placeholder="Enter your location..." class="form-control mb-2" />
+    <button onclick="filterMechanics()" class="btn btn-primary mb-3">Search</button>
+    <select id="vehicleType" class="form-select mb-2">
+      <option value="">Select Vehicle Type</option>
+      <option value="Bike">Bike</option>
+      <option value="Car">Car</option>
+      <option value="Truck">Truck</option>
+    </select>
+    <select id="brand" class="form-select mb-2">
+      <option value="">Select Brand</option>
+    </select>
+    <input type="text" id="problemInput" class="form-control" placeholder="What's the problem with your vehicle?" />
+  </section>
+  <section class="container">
+    <h2>Available Mechanics</h2>
+    <table id="mechanicTable" class="table table-bordered">
+      <tr><th>Name</th><th>Location</th><th>Service</th><th>Price</th><th>Contact</th></tr>
+    </table>
+  </section>
+  <section class="tips-section container my-5">
+    <h2>Auto Tips & DIY Help</h2>
+    <ul>
+      <li>Check tire pressure monthly for better mileage.</li>
+      <li>Change your oil every 5,000 km to keep the engine healthy.</li>
+      <li>Use quality fuel to maintain engine performance.</li>
+      <li>Inspect your brakes regularly for safety.</li>
+      <li>Clean your air filter every 10,000 km for smooth functioning.</li>
+    </ul>
+  </section>
+  <footer class="bg-dark text-white text-center py-3">
+    <p>© 2025 Find My Mechanic. All rights reserved.</p>
+  </footer>
+</body>
+</html>
