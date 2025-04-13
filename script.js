@@ -1,23 +1,42 @@
+
+// Brand options
 const brandOptions = {
   Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
   Car: ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra", "Others"],
   Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"]
 };
 
-function populateBrands(type) {
-  const brandSelect = document.getElementById("brand");
-  brandSelect.innerHTML = "<option value=''>Select Brand</option>";
+// Universal brand population function
+function setupBrandDropdown(vehicleTypeId, brandSelectId) {
+  const vehicleDropdown = document.getElementById(vehicleTypeId);
+  const brandDropdown = document.getElementById(brandSelectId);
 
-  if (brandOptions[type]) {
-    brandOptions[type].forEach(brand => {
-      const option = document.createElement("option");
-      option.value = brand;
-      option.textContent = brand;
-      brandSelect.appendChild(option);
+  if (vehicleDropdown && brandDropdown) {
+    vehicleDropdown.addEventListener("change", () => {
+      const selected = vehicleDropdown.value;
+      brandDropdown.innerHTML = "<option value=''>Select Brand</option>";
+      if (brandOptions[selected]) {
+        brandOptions[selected].forEach(brand => {
+          const option = document.createElement("option");
+          option.value = brand;
+          option.textContent = brand;
+          brandDropdown.appendChild(option);
+        });
+      }
     });
+
+    // Optional: trigger once on page load if a value is pre-selected
+    if (vehicleDropdown.value) {
+      vehicleDropdown.dispatchEvent(new Event("change"));
+    }
   }
 }
 
+// When page is ready, apply it to both sets
+window.addEventListener("DOMContentLoaded", () => {
+  setupBrandDropdown("vehicleType", "brand");               // Top section
+  setupBrandDropdown("mechVehicleType", "mechBrand");       // Mechanic form
+});
 // Chatbot toggle
 function toggleChatbot() {
   const box = document.getElementById("chatbot-box");
