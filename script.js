@@ -7,6 +7,7 @@ const brandOptions = {
 function setupBrandDropdown(vehicleTypeId, brandSelectId) {
   const vehicleDropdown = document.getElementById(vehicleTypeId);
   const brandDropdown = document.getElementById(brandSelectId);
+
   if (vehicleDropdown && brandDropdown) {
     vehicleDropdown.addEventListener("change", () => {
       const selected = vehicleDropdown.value;
@@ -23,55 +24,70 @@ function setupBrandDropdown(vehicleTypeId, brandSelectId) {
   }
 }
 
-function loadMechanicCards() {
-  const mechanics = [
-    { name: "Rahul's Garage", location: "Kalyan", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
-    { name: "AutoFix", location: "Thane", service: "Oil Change", price: "₹500", contact: "8765432109" },
-    { name: "Speedy Repairs", location: "Navi Mumbai", service: "Tire Replacement", price: "₹1500", contact: "7654321098" }
-  ];
-  const container = document.getElementById("mechanicCardContainer");
-  if (!container) return;
-  mechanics.forEach(mech => {
-    const card = document.createElement("div");
-    card.className = "col-md-4 mb-4";
-    card.innerHTML = `
-      <div class="card h-100 shadow-sm border-0">
-        <div class="card-body">
-          <h5 class="card-title d-flex justify-content-between">${mech.name} <span class="badge bg-success">Verified</span></h5>
-          <p><strong>Location:</strong> ${mech.location}</p>
-          <p><strong>Service:</strong> ${mech.service}</p>
-          <p><strong>Price:</strong> ${mech.price}</p>
-          <p><strong>Contact:</strong> ${mech.contact}</p>
-          <a href="profile.html" class="btn btn-outline-primary btn-sm mt-2">View Profile</a>
-        </div>
-      </div>`;
-    container.appendChild(card);
-  });
+function toggleChatbot() {
+  const box = document.getElementById("chatbot-box");
+  box.style.display = box.style.display === "flex" ? "none" : "flex";
 }
 
-function filterMechanics() {
-  const location = document.getElementById("locationInput").value.toLowerCase();
-  const table = document.getElementById("mechanicTable");
-  const allMechanics = [
-    { name: "Rahul's Garage", location: "Kalyan", service: "Puncture Repair", price: "₹200", contact: "9876543210" },
-    { name: "AutoFix", location: "Thane", service: "Oil Change", price: "₹500", contact: "8765432109" },
-    { name: "Speedy Repairs", location: "Navi Mumbai", service: "Tire Replacement", price: "₹1500", contact: "7654321098" }
-  ];
-  table.innerHTML = `<tr>
-    <th>Name</th><th>Location</th><th>Service</th><th>Price</th><th>Contact</th>
-  </tr>`;
-  const filtered = allMechanics.filter(mech => mech.location.toLowerCase().includes(location));
-  if (filtered.length > 0) {
-    filtered.forEach(mech => {
-      table.innerHTML += `<tr><td>${mech.name}</td><td>${mech.location}</td><td>${mech.service}</td><td>${mech.price}</td><td>${mech.contact}</td></tr>`;
-    });
-  } else {
-    table.innerHTML += `<tr><td colspan="5">No mechanics found in this location.</td></tr>`;
-  }
+function sendChat() {
+  const input = document.getElementById("chatbot-input");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const msgContainer = document.getElementById("chatbot-messages");
+
+  const userMsg = document.createElement("div");
+  userMsg.className = "user-message";
+  userMsg.textContent = msg;
+  msgContainer.appendChild(userMsg);
+
+  setTimeout(() => {
+    const botReply = document.createElement("div");
+    botReply.className = "bot-message";
+    botReply.textContent = "Thanks! We’ll get back to you soon 🚗";
+    msgContainer.appendChild(botReply);
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+  }, 600);
+
+  input.value = "";
+  msgContainer.scrollTop = msgContainer.scrollHeight;
 }
+
+document.getElementById("mechanicForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("mechName").value,
+    phone: document.getElementById("mechContact").value,
+    email: document.getElementById("mechEmail").value,
+    aadhar: document.getElementById("mechAadhar").value,
+    garage: document.getElementById("mechGarage").value,
+    experience: document.getElementById("mechExperience").value,
+    location: document.getElementById("mechLocation").value,
+    vehicleType: document.getElementById("mechVehicleType").value,
+    brand: document.getElementById("mechBrand").value,
+    service: document.getElementById("mechService").value,
+    price: document.getElementById("mechPrice").value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(res => res.json())
+    .then(response => {
+      alert("✅ Mechanic registered successfully!");
+      document.getElementById("mechanicForm").reset();
+    })
+    .catch(err => {
+      alert("❌ Error submitting form.");
+      console.error(err);
+    });
+});
 
 window.addEventListener("DOMContentLoaded", () => {
   setupBrandDropdown("vehicleType", "brand");
   setupBrandDropdown("mechVehicleType", "mechBrand");
-  if (document.getElementById("mechanicCardContainer")) loadMechanicCards();
 });
