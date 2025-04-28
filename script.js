@@ -1,57 +1,110 @@
-// Mechanic registration logic
-const mechanicForm = document.getElementById('mechanicForm');
-const mechanicList = document.getElementById('mechanicListContainer');
-const vehicleTypeSelect = document.getElementById('vehicleType');
+// Fetch brand options
+function populateBrands() {
+  const vehicleType = document.getElementById('vehicleType').value;
+  const brandSelect = document.getElementById('brandSelect');
+  brandSelect.innerHTML = "<option value=''>Select Brand</option>";
 
-// Dynamically update brand options based on vehicle type
-vehicleTypeSelect.addEventListener('change', function() {
-  const vehicleType = vehicleTypeSelect.value;
-  updateBrandOptions(vehicleType); // Call the function from brandData.js
-});
+  if (vehicleType && brandData[vehicleType]) {
+    brandData[vehicleType].forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand.name;
+      option.text = brand.name;
+      brandSelect.appendChild(option);
+    });
+  }
+}
 
-// Register mechanic
-mechanicForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  
+// Mechanic registration
+document.getElementById('mechanicForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
   const name = document.getElementById('name').value;
   const email = document.getElementById('email').value;
-  const vehicleType = vehicleTypeSelect.value;
-  const brand = document.getElementById('brand').value;
-  const service = document.getElementById('service').value;
-  const photo = document.getElementById('profilePhoto').files[0];
-  
-  const mechanic = {
-    name,
-    email,
-    vehicleType,
-    brand,
-    service,
-    photo,
-    verified: true // Assume verification for now
-  };
+  const location = document.getElementById('location').value;
+  const vehicleSpecialty = document.getElementById('vehicleSpecialty').value;
+  const photo = document.getElementById('photo').files[0];
 
-  addMechanicToList(mechanic);
+  const reader = new FileReader();
+  reader.onload = function() {
+    const mechanic = {
+      name: name,
+      email: email,
+      location: location,
+      vehicleSpecialty: vehicleSpecialty,
+      photo: reader.result
+    };
+
+    saveMechanic(mechanic);
+    alert("Mechanic Registered Successfully!");
+    document.getElementById('mechanicForm').reset();
+  };
+  reader.readAsDataURL(photo);
 });
 
-function addMechanicToList(mechanic) {
-  const mechanicCard = document.createElement('div');
-  mechanicCard.classList.add('mechanic-card');
-  
-  const photoURL = URL.createObjectURL(mechanic.photo);
-  mechanicCard.innerHTML = `
-    <img src="${photoURL}" alt="${mechanic.name}">
-    <div class="mechanic-info">
-      <h3>${mechanic.name}</h3>
-      <p>${mechanic.service}</p>
-      <p>${mechanic.brand}</p>
-    </div>
-    <div class="verify">${mechanic.verified ? 'Verified' : 'Not Verified'}</div>
-  `;
-  
-  mechanicCard.onclick = () => viewMechanicProfile(mechanic);
-  mechanicList.appendChild(mechanicCard);
+function saveMechanic(mechanic) {
+  let mechanics = JSON.parse(localStorage.getItem('mechanics')) || [];
+  mechanics.push(mechanic);
+  localStorage.setItem('mechanics', JSON.stringify(mechanics));
+  displayMechanics();
 }
 
-function viewMechanicProfile(mechanic) {
-  alert('View profile: ' + mechanic.name);
+function displayMechanics() {
+  const mechanics = JSON.parse(localStorage.getItem('mechanics')) || [];
+  const container = document.getElementById('mechanicsContainer');
+  container.innerHTML = "";
+
+  mechanics.forEach((m, index) => {
+    const card = document.createElement('div');
+    card.className = 'mechanic-card';
+    card.onclick = function() {
+      openMechanicProfile(index);
+    };
+    card.innerHTML = `
+      <img src="${m.photo}" alt="Mechanic Photo">
+      <div class="mechanic-info">
+        <h3>${m.name} <span class="verified-badge">✔ Verified</span></h3>
+        <p>${m.location}</p>
+        <p>Specializes in: ${m.vehicleSpecialty}</p>
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
+
+function openMechanicProfile(index) {
+  localStorage.setItem('selectedMechanic', index);
+  window.location.href = "mechanic.html";
+}
+
+// Chatbot basic responses
+function sendMessage() {
+  const userInput = document.getElementById('userInput').value;
+  const chatBody = document.getElementById('chat-body');
+
+  const userMessage = document.createElement('div');
+  userMessage.textContent = "You: " + userInput;
+  chatBody.appendChild(userMessage);
+
+  const botMessage = document.createElement('div');
+  botMessage.textContent = "Bot: " + getBotResponse(userInput);
+  chatBody.appendChild(botMessage);
+
+  document.getElementById('userInput').value = "";
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function getBotResponse(input) {
+  input = input.toLowerCase();
+  if (input.includes("hello") || input.includes("hi")) return "Hello! How can I assist you?";
+  if (input.includes("book")) return "You can search and click on a mechanic to book!";
+  if (input.includes("register")) return "You can register by filling the form below.";
+  if (input.includes("help")) return "Sure! You can search, view profiles and book mechanics.";
+  return "I'm sorry, I didn't understand. Please try asking something else!";
+}
+
+// On page load
+window.onload = function() {
+  if (document.getElementById('mechanicsContainer')) {
+    displayMechanics();
+  }
+};
