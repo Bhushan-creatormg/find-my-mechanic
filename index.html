@@ -2,76 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Find My Mechanic</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Link to brandData.js -->
-  <script src="brandData.js" defer></script>
-  <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>Find Your Mechanic</h1>
-  </header>
 
-  <section>
-    <!-- Search section -->
-    <div class="search-section">
-      <h2>Find Mechanic</h2>
-      <label for="vehicleType">Select Vehicle Type:</label>
-      <select id="vehicleType">
-        <option value="">Select Vehicle</option>
-        <option value="bike">Bike</option>
-        <option value="car">Car</option>
-        <option value="others">Others</option>
-      </select>
+<!-- Hero Section -->
+<header class="hero">
+  <h1>Find My Mechanic</h1>
+  <p>Connecting you with trusted mechanics nearby!</p>
+</header>
 
-      <label for="brand">Select Brand:</label>
-      <select id="brand">
-        <option value="">Select Brand</option>
-      </select>
-      <button onclick="searchMechanics()">Search Mechanics</button>
-    </div>
+<!-- Search Section -->
+<section class="search-section">
+  <h2>Find a Mechanic</h2>
+  <div class="search-form">
+    <input type="text" id="locationInput" placeholder="Enter your city">
+    <select id="vehicleType" onchange="populateBrands()">
+      <option value="">Select Vehicle Type</option>
+      <option value="bike">Bike</option>
+      <option value="car">Car</option>
+      <option value="others">Others</option>
+    </select>
+    <select id="brandSelect">
+      <option value="">Select Brand</option>
+    </select>
+    <button onclick="searchMechanics()">Search</button>
+  </div>
+</section>
 
-    <!-- Mechanic registration section -->
-    <div class="mechanic-register">
-      <h2>Register Mechanic</h2>
-      <form id="mechanicForm">
-        <label for="name">Name:</label>
-        <input type="text" id="name" required><br>
+<!-- Mechanic List -->
+<section class="mechanic-list" id="mechanicList">
+  <h2>Available Mechanics</h2>
+  <div id="mechanicsContainer"></div>
+</section>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" required><br>
+<!-- Tips Section -->
+<section class="tips-section">
+  <h2>How It Works</h2>
+  <p>1. Search by your location and vehicle type.</p>
+  <p>2. View verified mechanics nearby.</p>
+  <p>3. Book your mechanic easily!</p>
+</section>
 
-        <label for="vehicleType">Vehicle Type:</label>
-        <select id="vehicleType">
-          <option value="">Select Vehicle</option>
-          <option value="bike">Bike</option>
-          <option value="car">Car</option>
-          <option value="others">Others</option>
-        </select><br>
+<!-- Registration Section -->
+<section class="register-section">
+  <h2>Register as a Mechanic</h2>
+  <form id="mechanicForm">
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="text" id="location" placeholder="City" required>
+    <select id="vehicleSpecialty" required>
+      <option value="">Specializes In</option>
+      <option value="bike">Bike</option>
+      <option value="car">Car</option>
+      <option value="rickshaw">Rickshaw</option>
+      <option value="truck">Truck</option>
+    </select>
+    <input type="file" id="photo" accept="image/*" required>
+    <button type="submit">Register</button>
+  </form>
+</section>
 
-        <label for="brand">Brand:</label>
-        <select id="brand"></select><br>
+<!-- Smart Chatbot -->
+<div id="chatbot">
+  <div id="chat-header">Ask Me Anything 🤖</div>
+  <div id="chat-body"></div>
+  <div id="chat-input">
+    <input type="text" id="userInput" placeholder="Ask a question...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
 
-        <label for="service">Service Type:</label>
-        <input type="text" id="service" required><br>
+<script src="brandData.js"></script>
+<script src="script.js"></script>
 
-        <label for="profilePhoto">Upload Photo:</label>
-        <input type="file" id="profilePhoto"><br>
-
-        <button type="submit">Register Mechanic</button>
-      </form>
-    </div>
-  </section>
-
-  <section id="mechanicList">
-    <h2>Registered Mechanics</h2>
-    <div id="mechanicListContainer"></div>
-  </section>
-
-  <footer>
-    <p>&copy; 2025 Find My Mechanic. All rights reserved.</p>
-  </footer>
 </body>
 </html>
