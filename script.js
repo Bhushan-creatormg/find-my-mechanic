@@ -1,140 +1,87 @@
-// Brand options
-const brandOptions = {
-  Bike: ["Hero", "Honda", "Bajaj", "Royal Enfield", "TVS", "Others"],
-  Car: ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra", "Others"],
-  Truck: ["Ashok Leyland", "Tata", "Eicher", "Mahindra", "Bharat Benz", "Others"]
-};
-
-// Brand dropdown handler
-function setupBrandDropdown(vehicleTypeId, brandSelectId) {
-  const vehicleDropdown = document.getElementById(vehicleTypeId);
-  const brandDropdown = document.getElementById(brandSelectId);
-
-  if (vehicleDropdown && brandDropdown) {
-    vehicleDropdown.addEventListener("change", () => {
-      const selected = vehicleDropdown.value;
-      brandDropdown.innerHTML = "<option value=''>Select Brand</option>";
-      if (brandOptions[selected]) {
-        brandOptions[selected].forEach(brand => {
-          const option = document.createElement("option");
-          option.value = brand;
-          option.textContent = brand;
-          brandDropdown.appendChild(option);
-        });
-      }
-    });
-
-    if (vehicleDropdown.value) {
-      vehicleDropdown.dispatchEvent(new Event("change"));
-    }
+// Mechanic Profile
+const mechanics = [
+  {
+    name: 'John Doe',
+    location: 'New York',
+    service: 'Engine Repair, Oil Change',
+    price: '$50/hour',
+    contact: '123-456-7890',
+    verified: true,
+    avatar: 'mechanic-avatar.jpg'
+  },
+  {
+    name: 'Jane Smith',
+    location: 'California',
+    service: 'Tire Replacement',
+    price: '$40/hour',
+    contact: '987-654-3210',
+    verified: false,
+    avatar: 'mechanic-avatar2.jpg'
   }
-}
+];
 
-// Mechanic display
-function filterMechanics() {
-  const location = document.getElementById("locationInput").value.toLowerCase();
-  const table = document.getElementById("mechanicTable");
-
-  table.innerHTML = `<tr>
-    <th>Name</th><th>Location</th><th>Service</th><th>Price</th><th>Contact</th>
-  </tr>`;
-
-  const mechanics = JSON.parse(localStorage.getItem("registeredMechanics")) || [];
-
-  const filtered = mechanics.filter(m =>
-    m.location.toLowerCase().includes(location)
-  );
-
-  filtered.forEach(m => {
-    table.innerHTML += `
-      <tr>
-        <td>${m.name}</td>
-        <td>${m.location}</td>
-        <td>${m.service}</td>
-        <td>${m.price}</td>
-        <td>${m.phone}</td>
-      </tr>`;
+// Function to display mechanics
+function displayMechanics() {
+  const mechanicTable = document.getElementById('mechanicTable');
+  mechanics.forEach(mechanic => {
+    const row = mechanicTable.insertRow();
+    row.innerHTML = `
+      <td>${mechanic.name}</td>
+      <td>${mechanic.location}</td>
+      <td>${mechanic.service}</td>
+      <td>${mechanic.price}</td>
+      <td>${mechanic.contact}</td>
+      <td>${mechanic.verified ? '✔️ Verified' : '❌ Not Verified'}</td>
+    `;
   });
-
-  if (filtered.length === 0) {
-    table.innerHTML += `<tr><td colspan="5">No mechanics found.</td></tr>`;
-  }
 }
 
-// Form submission to Google Sheets
-document.addEventListener("DOMContentLoaded", () => {
-  setupBrandDropdown("vehicleType", "brand");
-  setupBrandDropdown("mechVehicleType", "mechBrand");
+window.onload = displayMechanics;
 
-  const form = document.getElementById("mechanicForm");
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const data = {
-        name: document.getElementById("mechName").value,
-        phone: document.getElementById("mechContact").value,
-        email: document.getElementById("mechEmail").value,
-        aadhar: document.getElementById("mechAadhar").value,
-        garage: document.getElementById("mechGarage").value,
-        experience: document.getElementById("mechExperience").value,
-        location: document.getElementById("mechLocation").value,
-        vehicleType: document.getElementById("mechVehicleType").value,
-        brand: document.getElementById("mechBrand").value,
-        service: document.getElementById("mechService").value,
-        price: document.getElementById("mechPrice").value
-      };
-
-      // Save to localStorage (optional)
-      const existing = JSON.parse(localStorage.getItem("registeredMechanics")) || [];
-      existing.push(data);
-      localStorage.setItem("registeredMechanics", JSON.stringify(existing));
-
-      fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: { "Content-Type": "application/json" }
-      })
-      .then(res => res.json())
-      .then(() => {
-        alert("✅ Mechanic registered!");
-        form.reset();
-        filterMechanics();
-      })
-      .catch(() => {
-        alert("❌ Error submitting form.");
-      });
-    });
-  }
-
-  filterMechanics(); // load default
-});
-
-// Chatbot
-function toggleChatbot() {
-  const box = document.getElementById("chatbot-box");
-  box.style.display = box.style.display === "flex" ? "none" : "flex";
-}
+// Chatbot logic
+const chatbotMessages = document.getElementById('chatbot-messages');
+const chatbotInput = document.getElementById('chatbot-input');
 
 function sendChat() {
-  const input = document.getElementById("chatbot-input");
-  const msg = input.value.trim();
-  if (!msg) return;
+  const userMessage = chatbotInput.value.trim();
+  if (!userMessage) return;
 
-  const msgContainer = document.getElementById("chatbot-messages");
+  // Display user message
+  const userMessageDiv = document.createElement('div');
+  userMessageDiv.classList.add('user-message');
+  userMessageDiv.textContent = userMessage;
+  chatbotMessages.appendChild(userMessageDiv);
 
-  const userMsg = document.createElement("div");
-  userMsg.className = "user-message";
-  userMsg.textContent = msg;
-  msgContainer.appendChild(userMsg);
+  // Clear input field
+  chatbotInput.value = '';
 
+  // Get chatbot response
   setTimeout(() => {
-    const botReply = document.createElement("div");
-    botReply.className = "bot-message";
-    botReply.textContent = "Thanks! We'll get back to you soon.";
-    msgContainer.appendChild(botReply);
-    msgContainer.scrollTop = msgContainer.scrollHeight;
-  }, 500);
+    const botMessage = getChatbotResponse(userMessage);
+    const botMessageDiv = document.createElement('div');
+    botMessageDiv.classList.add('bot-message');
+    botMessageDiv.textContent = botMessage;
+    chatbotMessages.appendChild(botMessageDiv);
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+  }, 1000);
+}
 
-  input.value = "";
+function getChatbotResponse(userMessage) {
+  userMessage = userMessage.toLowerCase();
+
+  if (userMessage.includes('mechanic') || userMessage.includes('repair')) {
+    return 'You can search for nearby mechanics based on your location and service required!';
+  } else if (userMessage.includes('price') || userMessage.includes('cost')) {
+    return 'Prices vary based on the mechanic and service. Check the mechanic\'s profile for details.';
+  } else if (userMessage.includes('hello') || userMessage.includes('hi')) {
+    return 'Hello! How can I assist you today?';
+  } else {
+    return 'Sorry, I didn\'t understand. Could you please rephrase your query?';
+  }
+}
+
+// Toggle chatbot
+function toggleChatbot() {
+  const chatbotBox = document.getElementById('chatbot-box');
+  chatbotBox.style.display = chatbotBox.style.display === 'none' ? 'flex' : 'none';
 }
