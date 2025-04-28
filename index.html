@@ -1,92 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Find My Mechanic</title>
-  <link rel="stylesheet" href="css.style">
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
-<header>
-  <h1>Find My Mechanic</h1>
-</header>
+  <header>
+    <h1>Find My Mechanic</h1>
+    <p>Your one-stop solution for vehicle issues</p>
+  </header>
 
-<section class="search-section">
-  <h2>Search for a Mechanic</h2>
-  <input type="text" id="locationSearch" placeholder="Enter Your Location">
-  <select id="vehicleType">
-    <option value="">Select Vehicle Type</option>
-    <option value="Car">Car</option>
-    <option value="Bike">Bike</option>
-    <option value="Truck">Truck</option>
-    <option value="Other">Other</option>
-  </select>
-  <select id="brandSelect">
-    <option value="">Select Brand</option>
-    <!-- (your brand options are filled dynamically, untouched) -->
-  </select>
-  <button onclick="searchMechanic()">Search</button>
-</section>
+  <!-- Search -->
+  <section class="search-section">
+    <input type="text" id="locationInput" placeholder="Enter your location..." />
+    <button onclick="filterMechanics()">Search</button>
 
-<section class="mechanic-register">
-  <h2>Register as a Mechanic</h2>
-  <input type="text" id="mechanicName" placeholder="Full Name" required>
-  <input type="text" id="mechanicLocation" placeholder="Location" required>
-  <select id="mechanicVehicleType">
-    <option value="">Select Vehicle Type</option>
-    <option value="Car">Car</option>
-    <option value="Bike">Bike</option>
-    <option value="Truck">Truck</option>
-    <option value="Other">Other</option>
-  </select>
-  <select id="mechanicBrand">
-    <option value="">Select Brand</option>
-    <!-- (brand options auto filled by your js, untouched) -->
-  </select>
-  <button onclick="registerMechanic()">Register Mechanic</button>
+    <select id="vehicleType">
+      <option value="">Select Vehicle Type</option>
+      <option value="Bike">Bike</option>
+      <option value="Car">Car</option>
+      <option value="Truck">Truck</option>
+    </select>
 
-  <table id="mechanicTable">
-    <thead>
+    <select id="brand">
+      <option value="">Select Brand</option>
+    </select>
+
+    <input type="text" id="problemInput" placeholder="What's the problem with your vehicle?" />
+  </section>
+
+  <!-- Mechanic List -->
+  <section>
+    <h2>Available Mechanics</h2>
+    <table id="mechanicTable">
       <tr>
         <th>Name</th>
         <th>Location</th>
-        <th>Vehicle Type</th>
-        <th>Brand</th>
+        <th>Service</th>
+        <th>Price</th>
+        <th>Contact</th>
+        <th>Verified</th>
       </tr>
-    </thead>
-    <tbody id="mechanicTableBody">
-      <!-- Dynamic mechanic data here -->
-    </tbody>
-  </table>
+      <!-- Mechanic rows will go here dynamically -->
+    </table>
+  </section>
 
-  <!-- 🔥 Mechanic Profile Cards Below -->
-  <div id="mechanicProfiles">
-    <h2 style="margin-top:40px;">Our Verified Mechanics</h2>
-    <div id="profileCardContainer">
-      <!-- Profile cards added dynamically -->
+  <!-- Mechanic Profile (Sample) -->
+  <section class="profile-section">
+    <h2>Mechanic Profile</h2>
+    <div class="profile-card">
+      <img src="mechanic-avatar.jpg" alt="Mechanic Avatar" />
+      <h3>John Doe</h3>
+      <p><strong>Garage:</strong> John's Garage</p>
+      <p><strong>Location:</strong> New York</p>
+      <p><strong>Experience:</strong> 5 Years</p>
+      <p><strong>Services:</strong> Engine Repair, Oil Change, Tire Replacement</p>
+      <p><strong>Price:</strong> $50 per hour</p>
+      <span class="verified">&#10004; Verified</span>
+    </div>
+  </section>
+
+  <!-- Tips -->
+  <section class="tips-section">
+    <h2>Auto Tips & DIY Help</h2>
+    <ul>
+      <li>Check tire pressure monthly for better mileage.</li>
+      <li>Change your oil every 5,000 km to keep the engine healthy.</li>
+      <li>Use quality fuel to maintain engine performance.</li>
+      <li>Inspect your brakes regularly for safety.</li>
+      <li>Clean your air filter every 10,000 km for smooth functioning.</li>
+    </ul>
+  </section>
+
+  <!-- Mechanic Registration -->
+  <section class="mechanic-register">
+    <h2>Mechanic Registration</h2>
+    <form id="mechanicForm">
+      <input type="text" id="mechName" placeholder="Full Name" required>
+      <input type="tel" id="mechContact" placeholder="Phone Number" required>
+      <input type="email" id="mechEmail" placeholder="Email ID" required>
+      <input type="text" id="mechAadhar" placeholder="Aadhar Card Number" required>
+      <input type="text" id="mechGarage" placeholder="Garage Name" required>
+      <input type="text" id="mechExperience" placeholder="Experience (in years)" required>
+      <input type="text" id="mechLocation" placeholder="Location" required>
+
+      <select id="mechVehicleType" required>
+        <option value="">Select Vehicle Type</option>
+        <option value="Bike">Bike</option>
+        <option value="Car">Car</option>
+        <option value="Truck">Truck</option>
+      </select>
+
+      <select id="mechBrand" required>
+        <option value="">Select Brand</option>
+      </select>
+
+      <input type="text" id="mechService" placeholder="Services (e.g., Oil Change)" required>
+      <input type="text" id="mechPrice" placeholder="Estimated Price" required>
+
+      <button type="submit">Register</button>
+    </form>
+  </section>
+
+  <!-- Chatbot -->
+  <div id="chatbot-container">
+    <div id="chatbot-icon" onclick="toggleChatbot()">💬</div>
+    <div id="chatbot-box">
+      <div id="chatbot-header">Chat with us</div>
+      <div id="chatbot-messages">
+        <div class="bot-message">Hi! Need help finding a mechanic?</div>
+      </div>
+      <div id="chatbot-input-container">
+        <input type="text" id="chatbot-input" placeholder="Type your message..." />
+        <button onclick="sendChat()">Send</button>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- Chatbot -->
-<div id="chatbot-container">
-  <div id="chatbot-icon" onclick="toggleChatbot()">💬</div>
-  <div id="chatbot-box">
-    <div id="chatbot-header">Smart FAQ Chatbot</div>
-    <div id="chatbot-messages"></div>
-    <div id="chatbot-input-container">
-      <input type="text" id="chatbot-input" placeholder="Ask something...">
-      <button onclick="sendChatbotMessage()">Send</button>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <p>&copy; 2025 Find My Mechanic. All rights reserved.</p>
-</footer>
-
-<script src="js.script"></script>
+  <footer>
+    <p>© 2025 Find My Mechanic. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
