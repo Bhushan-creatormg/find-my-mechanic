@@ -58,111 +58,37 @@ button:hover {
   background-color: #005f8e;
 }
 
-#mechanicTable {
-  width: 100%;
-  border-collapse: collapse;
+#mechanicListContainer {
   margin-top: 20px;
 }
-#mechanicTable th,
-#mechanicTable td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-}
-#mechanicTable th {
-  background-color: #0077b6;
-  color: white;
-}
 
-/* Mechanic Profile */
-.profile-card {
-  background: #fff;
+.mechanic-card {
+  background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   padding: 20px;
-  max-width: 350px;
-  text-align: center;
-}
-.profile-card img {
-  width: 100px;
-  border-radius: 50%;
   margin-bottom: 20px;
 }
-.verified {
-  color: green;
-  font-size: 18px;
-  margin-top: 10px;
+
+.mechanic-card img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }
 
-/* Chatbot */
-#chatbot-container {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  font-family: inherit;
-  z-index: 999;
+.mechanic-card h3 {
+  margin: 10px 0;
 }
-#chatbot-icon {
-  background-color: #0077b6;
-  color: white;
-  width: 60px;
-  height: 60px;
-  font-size: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0,0,0,0.2);
-}
-#chatbot-box {
-  display: none;
-  flex-direction: column;
-  width: 320px;
-  height: 400px;
-  background: #fff;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  margin-bottom: 10px;
-}
-#chatbot-header {
-  background: #0077b6;
-  color: white;
-  padding: 10px;
-  text-align: center;
+
+.verify {
+  color: green;
   font-weight: bold;
 }
-#chatbot-messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-}
-.bot-message,
-.user-message {
-  margin: 8px 0;
-  padding: 8px 12px;
-  border-radius: 12px;
-  max-width: 80%;
-}
-.bot-message {
-  background-color: #f0f0f0;
-  align-self: flex-start;
-}
-.user-message {
-  background-color: #0077b6;
+
+footer {
+  background: #0077b6;
   color: white;
-  align-self: flex-end;
-}
-#chatbot-input-container {
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-#chatbot-input {
-  flex: 1;
-  padding: 8px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: 40px;
 }
