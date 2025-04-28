@@ -21,7 +21,7 @@
     <input type="text" id="locationInput" placeholder="Enter your location..." />
     <button onclick="filterMechanics()">Search</button>
 
-    <select id="vehicleType">
+    <select id="vehicleType" onchange="updateBrandOptions()">
       <option value="">Select Vehicle Type</option>
       <option value="Bike">Bike</option>
       <option value="Car">Car</option>
@@ -45,24 +45,33 @@
         <th>Service</th>
         <th>Price</th>
         <th>Contact</th>
-        <th>Verified</th>
       </tr>
-      <!-- Mechanic rows will go here dynamically -->
+      <!-- Example Mechanic Row (Replace with dynamic data) -->
+      <tr onclick="openMechanicProfile('mechanic1')">
+        <td>John Doe <span class="verified">&#10004;</span></td>
+        <td>New York</td>
+        <td>Oil Change</td>
+        <td>$50</td>
+        <td><a href="tel:+123456789">Call</a></td>
+      </tr>
+      <tr onclick="openMechanicProfile('mechanic2')">
+        <td>Jane Smith <span class="verified">&#10004;</span></td>
+        <td>Los Angeles</td>
+        <td>Tire Change</td>
+        <td>$30</td>
+        <td><a href="tel:+987654321">Call</a></td>
+      </tr>
     </table>
   </section>
 
-  <!-- Mechanic Profile (Sample) -->
-  <section class="profile-section">
-    <h2>Mechanic Profile</h2>
-    <div class="profile-card">
-      <img src="mechanic-avatar.jpg" alt="Mechanic Avatar" />
-      <h3>John Doe</h3>
-      <p><strong>Garage:</strong> John's Garage</p>
-      <p><strong>Location:</strong> New York</p>
-      <p><strong>Experience:</strong> 5 Years</p>
-      <p><strong>Services:</strong> Engine Repair, Oil Change, Tire Replacement</p>
-      <p><strong>Price:</strong> $50 per hour</p>
-      <span class="verified">&#10004; Verified</span>
+  <!-- Mechanic Profile Page (hidden initially) -->
+  <section id="mechanicProfile" style="display: none;">
+    <div>
+      <h2>Mechanic Profile</h2>
+      <div id="profileDetails">
+        <!-- Dynamic content will be inserted here -->
+      </div>
+      <button onclick="goBack()">Back to Mechanics List</button>
     </div>
   </section>
 
@@ -106,6 +115,46 @@
 
       <button type="submit">Register</button>
     </form>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-5 bg-light" id="how-it-works">
+    <div class="container">
+      <h2 class="text-center mb-5 fw-bold">How Find My Mechanic Works</h2>
+      <div class="row g-4 text-center">
+        <div class="col-md-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/484/484167.png" class="mb-3" width="70">
+          <h5 class="fw-bold">Enter Your Location</h5>
+          <p>Search by your current area to discover mechanics nearby.</p>
+        </div>
+        <div class="col-md-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" class="mb-3" width="70">
+          <h5 class="fw-bold">Select Vehicle & Brand</h5>
+          <p>Choose your vehicle type and brand to get best matches.</p>
+        </div>
+        <div class="col-md-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/4334/4334408.png" class="mb-3" width="70">
+          <h5 class="fw-bold">Compare Services & Prices</h5>
+          <p>See ratings, prices & services to find your perfect mechanic.</p>
+        </div>
+        <div class="col-md-3">
+          <img src="https://cdn-icons-png.flaticon.com/512/3050/3050525.png" class="mb-3" width="70">
+          <h5 class="fw-bold">Book Instantly</h5>
+          <p>Pick a time slot and book your mechanic with ease.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 bg-white p-4 rounded shadow-sm">
+        <h4 class="fw-bold mb-3">About the Website</h4>
+        <p>
+          Find My Mechanic helps users discover local mechanics when facing vehicle issues in unknown locations. 
+          Users enter their location, vehicle type, and brand, compare mechanic services and pricing, and book instantly.
+        </p>
+        <p>
+          Revenue is earned through subscriptions, commissions, and featured listings — building trust between mechanics and customers.
+        </p>
+      </div>
+    </div>
   </section>
 
   <!-- Chatbot -->
