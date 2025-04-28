@@ -143,4 +143,26 @@ button:hover {
   margin: 8px 0;
   padding: 8px 12px;
   border-radius: 12px;
-  max-width
+  max-width: 80%;
+}
+.bot-message {
+  background-color: #f0f0f0;
+  align-self: flex-start;
+}
+.user-message {
+  background-color: #0077b6;
+  color: white;
+  align-self: flex-end;
+}
+#chatbot-input-container {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+#chatbot-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
