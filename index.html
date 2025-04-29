@@ -1,148 +1,94 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Find My Mechanic</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Mechanic</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header class="bg-gold text-white text-center p-4">
+        <h1>Find My Mechanic</h1>
+    </header>
 
-<header>
-  <h1>Find My Mechanic</h1>
-  <p>Your one-stop solution for vehicle issues</p>
-</header>
+    <main class="container my-5">
+        <section id="search" class="mb-5">
+            <h2>Search for a Mechanic</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" placeholder="Enter your location">
+                </div>
+                <div class="mb-3">
+                    <label for="vehicleType" class="form-label">Vehicle Type</label>
+                    <select class="form-select" id="vehicleType">
+                        <option selected>Select Vehicle Type</option>
+                        <option value="car">Car</option>
+                        <option value="bike">Bike</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="brand" class="form-label">Brand</label>
+                    <select class="form-select" id="brand">
+                        <option selected>Select Brand</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-gold">Search</button>
+            </form>
+        </section>
 
-<!-- Search Section -->
-<section class="search-section">
-  <input type="text" id="locationInput" placeholder="Enter your location..." />
-  <button onclick="filterMechanics()">Search</button>
+        <section id="mechanic-registration" class="mb-5">
+            <h2>Mechanic Registration</h2>
+            <form>
+                <div class="mb-3">
+                    <label for="mechanicName" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="mechanicName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mechanicEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="mechanicEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label for="mechanicPhone" class="form-label">Phone</label>
+                    <input type="tel" class="form-control" id="mechanicPhone" required>
+                </div>
+                <button type="submit" class="btn btn-gold">Register</button>
+                <p class="mt-2">Status: <span class="text-warning">Pending Verification</span></p>
+            </form>
+        </section>
 
-  <select id="vehicleType">
-    <option value="">Select Vehicle Type</option>
-    <option value="Bike">Bike</option>
-    <option value="Car">Car</option>
-    <option value="Truck">Truck</option>
-  </select>
+        <section id="how-it-works" class="mb-5">
+            <h2>How It Works</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="icon1.png" alt="Step 1" class="img-fluid">
+                    <p>Step 1: Search for a mechanic</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img src="icon2.png" alt="Step 2" class="img-fluid">
+                    <p>Step 2: Choose your mechanic</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img src="icon3.png" alt="Step 3" class="img-fluid">
+                    <p>Step 3: Get your vehicle serviced</p>
+                </div>
+            </div>
+        </section>
 
-  <select id="brand">
-    <option value="">Select Brand</option>
-  </select>
+        <section id="about" class="mb-5">
+            <h2>About Us</h2>
+            <p>Find My Mechanic is a platform that connects vehicle owners with trusted mechanics in their area.</p>
+        </section>
 
-  <input type="text" id="problemInput" placeholder="What's the problem with your vehicle?" />
-</section>
+        <section id="auto-tips" class="mb-5">
+            <h2>Auto Tips</h2>
+            <p>Stay tuned for the latest tips on vehicle maintenance and care.</p>
+        </section>
 
-<!-- Mechanic Table -->
-<section>
-  <h2>Available Mechanics</h2>
-  <table id="mechanicTable">
-    <tr>
-      <th>Name</th>
-      <th>Location</th>
-      <th>Service</th>
-      <th>Price</th>
-      <th>Contact</th>
-    </tr>
-  </table>
-</section>
-
-<!-- Auto Tips -->
-<section class="tips-section">
-  <h2>Auto Tips & DIY Help</h2>
-  <ul>
-    <li>Check tire pressure monthly for better mileage.</li>
-    <li>Change your oil every 5,000 km to keep the engine healthy.</li>
-    <li>Use quality fuel to maintain engine performance.</li>
-    <li>Inspect your brakes regularly for safety.</li>
-    <li>Clean your air filter every 10,000 km for smooth functioning.</li>
-  </ul>
-</section>
-
-<!-- Mechanic Registration -->
-<section class="mechanic-register">
-  <h2>Mechanic Registration</h2>
-  <form id="mechanicForm">
-    <input type="text" id="mechName" placeholder="Full Name" required>
-    <input type="tel" id="mechContact" placeholder="Phone Number" required>
-    <input type="email" id="mechEmail" placeholder="Email ID" required>
-    <input type="text" id="mechAadhar" placeholder="Aadhar Card Number" required>
-    <input type="text" id="mechGarage" placeholder="Garage Name" required>
-    <input type="text" id="mechExperience" placeholder="Experience (in years)" required>
-    <input type="text" id="mechLocation" placeholder="Location" required>
-
-    <select id="mechVehicleType" required>
-      <option value="">Select Vehicle Type</option>
-      <option value="Bike">Bike</option>
-      <option value="Car">Car</option>
-      <option value="Truck">Truck</option>
-    </select>
-
-    <select id="mechBrand" required>
-      <option value="">Select Brand</option>
-    </select>
-
-    <input type="text" id="mechService" placeholder="Services (e.g., Oil Change)" required>
-    <input type="text" id="mechPrice" placeholder="Estimated Price" required>
-
-    <button type="submit">Register</button>
-  </form>
-</section>
-
-<!-- How It Works -->
-<section class="py-5 bg-light" id="how-it-works">
-  <div class="container">
-    <h2 class="text-center mb-5 fw-bold">How Find My Mechanic Works</h2>
-    <div class="row g-4 text-center">
-      <div class="col-md-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/484/484167.png" class="mb-3" width="70">
-        <h5 class="fw-bold">Enter Your Location</h5>
-        <p>Search by your area to discover mechanics nearby.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" class="mb-3" width="70">
-        <h5 class="fw-bold">Select Vehicle & Brand</h5>
-        <p>Choose your vehicle type and brand easily.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/4334/4334408.png" class="mb-3" width="70">
-        <h5 class="fw-bold">Compare & Choose</h5>
-        <p>Compare services and prices to find the best mechanic.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://cdn-icons-png.flaticon.com/512/3050/3050525.png" class="mb-3" width="70">
-        <h5 class="fw-bold">Book Instantly</h5>
-        <p>Book your mechanic directly and get instant help.</p>
-      </div>
-    </div>
-
-    <div class="mt-5 bg-white p-4 rounded shadow-sm">
-      <h4 class="fw-bold mb-3">About the Website</h4>
-      <p>Find My Mechanic helps users locate trusted local mechanics based on vehicle type and brand. Built for ease and reliability, the platform connects customers with verified professionals instantly.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Chatbot -->
-<div id="chatbot-container">
-  <div id="chatbot-icon" onclick="toggleChatbot()">💬</div>
-  <div id="chatbot-box">
-    <div id="chatbot-header">Chat with us</div>
-    <div id="chatbot-messages">
-      <div class="bot-message">Hi! Need help finding a mechanic?</div>
-    </div>
-    <div id="chatbot-input-container">
-      <input type="text" id="chatbot-input" placeholder="Type your message..." />
-      <button onclick="sendChat()">Send</button>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <p>© 2025 Find My Mechanic. All rights reserved.</p>
-</footer>
-
-</body>
-</html>
+        <section id="chatbot" class="mb-5">
+            <h2>Chat with Us</h2>
+            <div id="chatbot-container">
+                <p>Chatbot: How can I assist you today?</p
