@@ -1,0 +1,236 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Header */
+header {
+  background-color: #007bff;
+  padding: 20px;
+  text-align: center;
+  color: white;
+}
+
+/* Search Section */
+.search-section {
+  background-color: #fff;
+  padding: 30px;
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: grid;
+  gap: 15px;
+}
+
+.search-section input,
+.search-section select,
+.search-section button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.search-section button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-section button:hover {
+  background-color: #0056b3;
+}
+
+/* Mechanics Table */
+#mechanicTable {
+  width: 90%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#mechanicTable th, #mechanicTable td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+#mechanicTable th {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Auto Tips Section */
+.tips-section {
+  background-color: #fff;
+  margin: 30px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.tips-section ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.tips-section li {
+  margin-bottom: 10px;
+}
+
+/* Mechanic Registration */
+.mechanic-register {
+  background-color: #e9f7ef;
+  margin: 30px;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.mechanic-register form {
+  display: grid;
+  gap: 15px;
+}
+
+.mechanic-register input, 
+.mechanic-register select, 
+.mechanic-register button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #aaa;
+}
+
+.mechanic-register button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  transition: 0.3s;
+}
+
+.mechanic-register button:hover {
+  background-color: #218838;
+}
+
+/* Verification Badges */
+.verified {
+  color: green;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.pending {
+  color: orange;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+/* Chatbot */
+#chatbot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+#chatbot-icon {
+  background: #007bff;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#chatbot-box {
+  display: none;
+  flex-direction: column;
+  width: 300px;
+  height: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+}
+
+#chatbot-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+#chatbot-messages {
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#chatbot-input-container {
+  padding: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+#chatbot-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+#chatbot-input-container button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+/* Chatbot Messages */
+.user-message {
+  background-color: #dcf8c6;
+  padding: 10px;
+  border-radius: 10px;
+  align-self: flex-end;
+  max-width: 80%;
+}
+
+.bot-message {
+  background-color: #f1f0f0;
+  padding: 10px;
+  border-radius: 10px;
+  align-self: flex-start;
+  max-width: 80%;
+}
+
+/* Footer */
+footer {
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+}
