@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Find My Mechanic</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>Admin Dashboard</h1>
+    <p>Manage mechanic registrations</p>
+  </header>
+
+  <section class="container my-5">
+    <h2 class="text-center mb-4">Registered Mechanics</h2>
+    <div style="overflow-x:auto;">
+      <table id="adminMechanicTable" class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Location</th>
+            <th>Service</th>
+            <th>Experience</th>
+            <th>Garage</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Registered mechanics will load here dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Find My Mechanic. Admin Portal.</p>
+  </footer>
+
+  <script src="admin.js"></script>
+</body>
+</html>
