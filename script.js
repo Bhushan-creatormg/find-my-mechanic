@@ -136,7 +136,7 @@ document.getElementById("mechanicForm").addEventListener("submit", function(e) {
     verified: "Pending"
   };
 
-  fetch("YOUR_GOOGLE_SHEET_SCRIPT_URL_HERE", {
+  fetch("https://script.google.com/macros/s/AKfycbz8LXQ34616E9IaIWy9bU8_FGeJZY_eaBy83z7c3v-u7pg1ZVo6f6gk_FShIvHJw_s3pw/exec", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
