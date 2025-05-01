@@ -1,47 +1,48 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mechanic Registration - Find My Mechanic</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Mechanic</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background-color: #fff8e1;
-      font-family: 'Segoe UI', sans-serif;
+      background-color: #fff;
+      color: #333;
     }
-    .container {
-      margin-top: 50px;
-    }
-    .form-control {
-      border-radius: 10px;
+    .gold {
+      color: #d4af37;
     }
     .btn-gold {
       background-color: #d4af37;
-      color: #fff;
-      border-radius: 10px;
-    }
-    .btn-gold:hover {
-      background-color: #c9a22f;
+      color: white;
     }
   </style>
-</head><body>
-  <div class="container">
-    <h2 class="text-center mb-4 text-dark">Mechanic Registration</h2>
-    <form id="mechanicForm">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center gold">Mechanic Registration</h2>
+    <form id="mechanicForm" class="mt-4">
       <div class="mb-3">
         <label for="name" class="form-label">Full Name</label>
-        <input type="text" class="form-control" id="name" required>
+        <input type="text" class="form-control" id="name" required />
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" required />
       </div>
       <div class="mb-3">
         <label for="experience" class="form-label">Experience (in years)</label>
-        <input type="number" class="form-control" id="experience" required>
+        <input type="number" class="form-control" id="experience" required />
       </div>
       <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" id="location" required>
+        <label for="location" class="form-label">City/Location</label>
+        <input type="text" class="form-control" id="location" required />
       </div>
       <div class="mb-3">
-        <label for="vehicleTypes" class="form-label">Vehicle Types Serviced</label>
-        <select multiple class="form-control" id="vehicleTypes">
+        <label for="vehicleType" class="form-label">Vehicle Type</label>
+        <select class="form-select" id="vehicleType" required>
+          <option value="">Select Vehicle Type</option>
           <option>Bike</option>
           <option>Car</option>
           <option>Truck</option>
@@ -49,25 +50,26 @@
         </select>
       </div>
       <div class="mb-3">
-        <label for="phone" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phone" required>
+        <label for="brand" class="form-label">Brand (or specialization)</label>
+        <input type="text" class="form-control" id="brand" placeholder="e.g. Bajaj, Tata, Maruti etc." required />
       </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="email" required>
-      </div>
-      <button type="submit" class="btn btn-gold w-100">Register</button>
+      <button type="submit" class="btn btn-gold">Submit</button>
     </form>
-  </div>  <script type="module">
-    // Firebase setup
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    <div id="successMsg" class="alert alert-success mt-3 d-none">
+      Registration successful! Wait for admin approval.
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
       authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
       projectId: "find-my-mechanic-ee65d",
-      storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
+      storageBucket: "find-my-mechanic-ee65d.appspot.com",
       messagingSenderId: "1044407480698",
       appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
     };
@@ -75,27 +77,30 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const form = document.getElementById("mechanicForm");
+    const form = document.getElementById('mechanicForm');
+    const successMsg = document.getElementById('successMsg');
 
-    form.addEventListener("submit", async (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
       const mechanicData = {
-        name: document.getElementById("name").value,
-        experience: document.getElementById("experience").value,
-        location: document.getElementById("location").value,
-        vehicleTypes: Array.from(document.getElementById("vehicleTypes").selectedOptions).map(opt => opt.value),
-        phone: document.getElementById("phone").value,
-        email: document.getElementById("email").value,
-        approved: false // Default until admin approval
+        name: form.name.value,
+        phone: form.phone.value,
+        experience: form.experience.value,
+        location: form.location.value,
+        vehicleType: form.vehicleType.value,
+        brand: form.brand.value,
+        approved: false // Admin will approve manually
       };
 
       try {
         await addDoc(collection(db, "mechanics"), mechanicData);
-        alert("Registration submitted successfully. You will be notified once approved.");
         form.reset();
+        successMsg.classList.remove('d-none');
       } catch (error) {
-        alert("Error registering: " + error);
+        alert("Error saving data: " + error.message);
       }
     });
-  </script></body>
+  </script>
+</body>
 </html>
