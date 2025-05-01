@@ -1,116 +1,80 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Find My Mechanic</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: white;
-      color: #333;
-    }.navbar {
-  background-color: gold;
-}
-
-.navbar-brand, .nav-link {
-  color: white !important;
-}
-
-.card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.verified-badge {
-  color: green;
-  font-weight: bold;
-}
-
-  </style>
-</head><body>
-  <nav class="navbar navbar-expand-lg">
+  <link rel="stylesheet" href="style.css" />
+  <script src="firebase.js"></script>
+</head>
+<body class="bg-white text-dark">
+  <!-- Header -->
+  <header class="bg-gold py-3 mb-4">
+    <div class="container d-flex justify-content-between align-items-center">
+      <h1 class="h3">Find My Mechanic</h1>
+      <a href="mechanic.html" class="btn btn-dark">Register as Mechanic</a>
+    </div>
+  </header>  <!-- Main Search Section -->  <section class="container mb-5">
+    <h2 class="text-center mb-4">Need a Mechanic Fast?</h2>
+    <form id="searchForm" class="row g-3">
+      <div class="col-md-4">
+        <label for="location" class="form-label">Enter Location</label>
+        <input type="text" class="form-control" id="location" placeholder="e.g. Mumbai" required />
+      </div>
+      <div class="col-md-4">
+        <label for="vehicleType" class="form-label">Vehicle Type</label>
+        <select id="vehicleType" class="form-select" required>
+          <option value="">Choose...</option>
+          <option value="bike">Bike</option>
+          <option value="car">Car</option>
+          <option value="truck">Others</option>
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label for="brand" class="form-label">Brand</label>
+        <select id="brand" class="form-select" required>
+          <option value="">Select Vehicle Type First</option>
+        </select>
+      </div>
+      <div class="col-12 text-center">
+        <button type="submit" class="btn btn-gold px-4">Find Mechanic</button>
+      </div>
+    </form>
+  </section>  <!-- Tips and How-To Section -->  <section class="bg-light py-5">
     <div class="container">
-      <a class="navbar-brand" href="#">Find My Mechanic</a>
-    </div>
-  </nav>  <div class="container my-5">
-    <h2 class="mb-4">Search for a Mechanic</h2>
-    <form id="searchForm">
-      <div class="row g-3">
-        <div class="col-md-4">
-          <input type="text" class="form-control" placeholder="Enter your location" id="locationInput">
+      <h3 class="mb-4 text-center">Vehicle Tips & How to Use</h3>
+      <div class="row text-center">
+        <div class="col-md-4 mb-3">
+          <img src="img/oil.png" alt="Check Oil" class="mb-2" width="50">
+          <p>Check engine oil regularly</p>
         </div>
-        <div class="col-md-4">
-          <select class="form-select" id="vehicleType">
-            <option selected disabled>Select Vehicle Type</option>
-            <option value="bike">Bike</option>
-            <option value="car">Car</option>
-            <option value="others">Others</option>
-          </select>
+        <div class="col-md-4 mb-3">
+          <img src="img/location.png" alt="Location" class="mb-2" width="50">
+          <p>Enter your correct location</p>
         </div>
-        <div class="col-md-4">
-          <select class="form-select" id="brandSelect">
-            <option selected disabled>Select Brand</option>
-          </select>
-        </div>
-      </div>
-    </form><div class="mt-5" id="mechanicList">
-  <!-- Mechanic cards will appear here -->
-</div>
-
-  </div>  <div class="container my-5">
-    <h3 class="mb-4">How It Works</h3>
-    <div class="row text-center">
-      <div class="col-md-3">
-        <img src="https://img.icons8.com/ios-filled/100/ffd700/search--v1.png" alt="Search">
-        <h5 class="mt-2">Search Mechanic</h5>
-        <p>Enter your city and vehicle type to see available mechanics.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://img.icons8.com/ios-filled/100/ffd700/add-user-group-man-man.png" alt="Register">
-        <h5 class="mt-2">Mechanic Joins</h5>
-        <p>Mechanics can register with service info and location.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://img.icons8.com/ios-filled/100/ffd700/checkmark--v1.png" alt="Approval">
-        <h5 class="mt-2">Admin Verifies</h5>
-        <p>Only verified mechanics show a green tick on their profile.</p>
-      </div>
-      <div class="col-md-3">
-        <img src="https://img.icons8.com/ios-filled/100/ffd700/appointment-reminders--v1.png" alt="Book">
-        <h5 class="mt-2">Book Easily</h5>
-        <p>Contact and book the mechanic in just a few clicks.</p>
-      </div>
-    </div>
-  </div>  <div class="container my-5">
-    <h3 class="mb-4">Auto Tips & DIY Help</h3>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="card p-3">
-          <h5>How to Check Engine Oil?</h5>
-          <p>Park on level ground, let engine cool, pull out dipstick, wipe clean, insert again, then check oil level.</p>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-3">
-          <h5>Battery Dead? Try This</h5>
-          <p>Use jumper cables from another car, connect positive to positive and negative to engine block, then start the car.</p>
+        <div class="col-md-4 mb-3">
+          <img src="img/chat.png" alt="Chatbot" class="mb-2" width="50">
+          <p>Ask any questions using our chatbot</p>
         </div>
       </div>
     </div>
-  </div>  <script>
-    const brandOptions = {
-      bike: ["Royal Enfield", "Bajaj", "Hero", "TVS", "Honda"],
-      car: ["Maruti", "Hyundai", "Tata", "Mahindra", "Kia"],
-      others: ["Rickshaw", "Truck", "Tempo", "Van", "Others"]
-    };
-
+  </section>  <!-- Footer -->  <footer class="bg-gold text-center py-3 mt-4">
+    <small>&copy; 2025 Find My Mechanic. All rights reserved.</small>
+  </footer>  <!-- Chatbot -->  <div id="chatbot-icon" class="chatbot-icon">?</div>
+  <div id="chatbot-container" class="chatbot-container d-none">
+    <iframe src="chatbot.html" width="100%" height="400"></iframe>
+  </div>  <script src="chatbot.js"></script>  <script>
     document.getElementById("vehicleType").addEventListener("change", function () {
       const type = this.value;
-      const brandSelect = document.getElementById("brandSelect");
-      brandSelect.innerHTML = "";
-      brandOptions[type].forEach(brand => {
-        const option = document.createElement("option");
-        option.value = brand;
-        option.textContent = brand;
-        brandSelect.appendChild(option);
-      });
+      const brand = document.getElementById("brand");
+      brand.innerHTML = "";
+
+      let brands = [];
+      if (type === "bike") brands = ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"];
+      else if (type === "car") brands = ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra"];
+      else if (type === "truck") brands = ["Truck", "Auto Rickshaw", "Tempo", "Eicher", "Others"];
+
+      brand.innerHTML = brands.map(b => <option value="${b}">${b}</option>).join("");
     });
-  </script></body></html>
+  </script></body>
+</html>
