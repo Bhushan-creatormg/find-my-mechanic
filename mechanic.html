@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register Mechanic</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Mechanic Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <style>
     body {
       background-color: #fff;
-      color: #333;
     }
     .gold {
       color: #d4af37;
@@ -17,53 +16,38 @@
       background-color: #d4af37;
       color: white;
     }
+    .btn-gold:hover {
+      background-color: #c19b2e;
+    }
+    .profile-card {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background: white;
+    }
   </style>
 </head>
 <body>
   <div class="container mt-5">
-    <h2 class="text-center gold">Mechanic Registration</h2>
-    <form id="mechanicForm" class="mt-4">
-      <div class="mb-3">
-        <label for="name" class="form-label">Full Name</label>
-        <input type="text" class="form-control" id="name" required />
-      </div>
-      <div class="mb-3">
-        <label for="phone" class="form-label">Phone Number</label>
-        <input type="tel" class="form-control" id="phone" required />
-      </div>
-      <div class="mb-3">
-        <label for="experience" class="form-label">Experience (in years)</label>
-        <input type="number" class="form-control" id="experience" required />
-      </div>
-      <div class="mb-3">
-        <label for="location" class="form-label">City/Location</label>
-        <input type="text" class="form-control" id="location" required />
-      </div>
-      <div class="mb-3">
-        <label for="vehicleType" class="form-label">Vehicle Type</label>
-        <select class="form-select" id="vehicleType" required>
-          <option value="">Select Vehicle Type</option>
-          <option>Bike</option>
-          <option>Car</option>
-          <option>Truck</option>
-          <option>Others</option>
-        </select>
-      </div>
-      <div class="mb-3">
-        <label for="brand" class="form-label">Brand (or specialization)</label>
-        <input type="text" class="form-control" id="brand" placeholder="e.g. Bajaj, Tata, Maruti etc." required />
-      </div>
-      <button type="submit" class="btn btn-gold">Submit</button>
-    </form>
+    <div class="profile-card">
+      <h2 class="gold text-center" id="name">Mechanic Name</h2>
+      <p class="text-muted text-center mb-3" id="vehicleBrand">Vehicle Type & Brand</p>
+      <hr>
+      <p><strong>Phone:</strong> <span id="phone"></span></p>
+      <p><strong>Location:</strong> <span id="location"></span></p>
+      <p><strong>Services:</strong> <span id="services"></span></p>
+      <p><strong>Pricing:</strong> ₹<span id="price"></span></p>
+      <p><strong>Status:</strong> <span id="verified" class="text-success">Verified</span></p>
 
-    <div id="successMsg" class="alert alert-success mt-3 d-none">
-      Registration successful! Wait for admin approval.
+      <a href="#" id="bookNow" class="btn btn-gold w-100 mt-3">Book Now</a>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
@@ -77,30 +61,27 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const form = document.getElementById('mechanicForm');
-    const successMsg = document.getElementById('successMsg');
+    const urlParams = new URLSearchParams(window.location.search);
+    const nameParam = urlParams.get("name");
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    async function loadMechanicDetails() {
+      const querySnapshot = await getDocs(collection(db, "mechanics"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.name === nameParam) {
+          document.getElementById("name").innerText = data.name;
+          document.getElementById("vehicleBrand").innerText = ${data.vehicleType} - ${data.brand};
+          document.getElementById("phone").innerText = data.phone;
+          document.getElementById("location").innerText = data.city;
+          document.getElementById("services").innerText = data.services || "General Service, Repair";
+          document.getElementById("price").innerText = data.price || "Not specified";
 
-      const mechanicData = {
-        name: form.name.value,
-        phone: form.phone.value,
-        experience: form.experience.value,
-        location: form.location.value,
-        vehicleType: form.vehicleType.value,
-        brand: form.brand.value,
-        approved: false // Admin will approve manually
-      };
+          document.getElementById("bookNow").href = booking-mechanic.html?name=${encodeURIComponent(data.name)};
+        }
+      });
+    }
 
-      try {
-        await addDoc(collection(db, "mechanics"), mechanicData);
-        form.reset();
-        successMsg.classList.remove('d-none');
-      } catch (error) {
-        alert("Error saving data: " + error.message);
-      }
-    });
+    loadMechanicDetails();
   </script>
 </body>
 </html>
