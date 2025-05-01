@@ -1,23 +1,28 @@
-<!-- index.html --><!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Find My Mechanic</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-</head><body style="background-color: #fff; color: #000;">
+</head>
+<body style="background-color: #fff; color: #000;">
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
     <div class="container">
       <a class="navbar-brand fw-bold text-warning" href="#">Find My Mechanic</a>
     </div>
-  </nav>  <header class="text-center py-5" style="background-color: #fff4d6;">
+  </nav>
+
+  <header class="text-center py-5" style="background-color: #fff4d6;">
     <div class="container">
       <h1 class="display-5 fw-bold">Need a Mechanic?</h1>
       <p class="lead">We help you find verified mechanics near your location instantly.</p>
     </div>
-  </header>  <section class="container my-4">
+  </header>
+
+  <section class="container my-4">
     <form id="searchForm" class="row g-3">
       <div class="col-md-4">
         <label for="location" class="form-label">Enter Your Location</label>
@@ -40,46 +45,60 @@
         </select>
       </div>
     </form>
-  </section>  <section class="container my-5">
+  </section>
+
+  <!-- How to use -->
+  <section class="container my-5">
     <h2 class="text-center mb-4 text-warning">How to Use the Website</h2>
     <div class="row text-center">
       <div class="col-md-3">
-        <img src="img/location.png" width="60">
+        <div style="font-size: 40px;">📍</div>
         <h5 class="mt-2">1. Enter Location</h5>
         <p>Type your area or pin code.</p>
       </div>
       <div class="col-md-3">
-        <img src="img/vehicle.png" width="60">
+        <div style="font-size: 40px;">🚗</div>
         <h5 class="mt-2">2. Select Vehicle</h5>
         <p>Choose your vehicle type and brand.</p>
       </div>
       <div class="col-md-3">
-        <img src="img/mechanic.png" width="60">
+        <div style="font-size: 40px;">🔧</div>
         <h5 class="mt-2">3. Browse Mechanics</h5>
         <p>View verified mechanic profiles.</p>
       </div>
       <div class="col-md-3">
-        <img src="img/booking.png" width="60">
+        <div style="font-size: 40px;">📅</div>
         <h5 class="mt-2">4. Book Instantly</h5>
         <p>Get your vehicle fixed at your location.</p>
       </div>
     </div>
-  </section>  <section class="container my-5">
+  </section>
+
+  <!-- Tips -->
+  <section class="container my-5">
     <h2 class="text-center text-warning">Vehicle Tips</h2>
     <ul class="list-group list-group-flush mt-3">
-      <li class="list-group-item">Check tyre pressure monthly to improve mileage.</li>
-      <li class="list-group-item">Service your vehicle every 6 months for better performance.</li>
-      <li class="list-group-item">Clean air filters regularly to avoid engine issues.</li>
-      <li class="list-group-item">Always carry essential tools for emergencies.</li>
+      <li class="list-group-item">✅ Check tyre pressure monthly to improve mileage.</li>
+      <li class="list-group-item">🛠️ Service your vehicle every 6 months for better performance.</li>
+      <li class="list-group-item">🧽 Clean air filters regularly to avoid engine issues.</li>
+      <li class="list-group-item">🧰 Always carry essential tools for emergencies.</li>
     </ul>
-  </section>  <!-- Chatbot -->  <div id="chatbot-icon" style="position:fixed; bottom:20px; right:20px; background-color:#FFD700; padding:12px; border-radius:50%; cursor:pointer;">
-    <img src="img/chat.png" width="30">
+  </section>
+
+  <!-- Chatbot Icon -->
+  <div id="chatbot-icon" onclick="toggleChatbot()" style="position:fixed; bottom:20px; right:20px; background-color:#FFD700; padding:12px; border-radius:50%; cursor:pointer; z-index:999;">
+    💬
   </div>
-  <div id="chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+
+  <!-- Chatbot Box -->
+  <div id="chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:999;">
     <div class="p-2 border-bottom bg-warning text-white">Ask me anything</div>
-    <div id="chatbox" style="height:200px; overflow-y:auto; padding:10px;"></div>
+    <div id="chatbox" style="height:200px; overflow-y:auto; padding:10px; font-size: 14px;"></div>
     <input type="text" id="chatInput" class="form-control border-top" placeholder="Type here...">
-  </div>  <script src="chatbot.js"></script>  <script>
+  </div>
+
+  <script>
+    // Brand Dropdown Logic
     const brandSelect = document.getElementById("brand");
     const brandOptions = {
       Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
@@ -102,4 +121,40 @@
         brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
       }
     }
-  </script></body></html>
+
+    // Simple Chatbot Logic
+    function toggleChatbot() {
+      const chatbot = document.getElementById("chatbot");
+      chatbot.style.display = chatbot.style.display === "none" ? "block" : "none";
+    }
+
+    const chatInput = document.getElementById("chatInput");
+    const chatbox = document.getElementById("chatbox");
+
+    chatInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        const userMsg = chatInput.value.trim();
+        if (userMsg) {
+          const userDiv = document.createElement("div");
+          userDiv.textContent = "👤 " + userMsg;
+          chatbox.appendChild(userDiv);
+          chatInput.value = "";
+
+          const botReply = document.createElement("div");
+          botReply.textContent = "🤖 " + getBotReply(userMsg.toLowerCase());
+          botReply.style.color = "green";
+          chatbox.appendChild(botReply);
+          chatbox.scrollTop = chatbox.scrollHeight;
+        }
+      }
+    });
+
+    function getBotReply(msg) {
+      if (msg.includes("hello") || msg.includes("hi")) return "Hello! How can I help you today?";
+      if (msg.includes("book")) return "Please select your vehicle and location to book a mechanic.";
+      if (msg.includes("price")) return "Prices vary by service. Click a mechanic to see pricing.";
+      return "Sorry, I didn’t understand that. Please try asking something else.";
+    }
+  </script>
+</body>
+</html>
