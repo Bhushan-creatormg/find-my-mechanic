@@ -1,87 +1,51 @@
+<!-- mechanic-register.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mechanic Profile</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <style>
-    body {
-      background-color: #fff;
-    }
-    .gold {
-      color: #d4af37;
-    }
-    .btn-gold {
-      background-color: #d4af37;
-      color: white;
-    }
-    .btn-gold:hover {
-      background-color: #c19b2e;
-    }
-    .profile-card {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      background: white;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mechanic Registration</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
 </head>
 <body>
-  <div class="container mt-5">
-    <div class="profile-card">
-      <h2 class="gold text-center" id="name">Mechanic Name</h2>
-      <p class="text-muted text-center mb-3" id="vehicleBrand">Vehicle Type & Brand</p>
-      <hr>
-      <p><strong>Phone:</strong> <span id="phone"></span></p>
-      <p><strong>Location:</strong> <span id="location"></span></p>
-      <p><strong>Services:</strong> <span id="services"></span></p>
-      <p><strong>Pricing:</strong> ₹<span id="price"></span></p>
-      <p><strong>Status:</strong> <span id="verified" class="text-success">Verified</span></p>
+  <h2>Mechanic Registration</h2>
+  <form id="registerForm">
+    <input type="text" id="name" placeholder="Full Name" required /><br>
+    <input type="text" id="phone" placeholder="Phone Number" required /><br>
+    <input type="email" id="email" placeholder="Email" required /><br>
+    <input type="text" id="location" placeholder="City" required /><br>
+    <select id="vehicleType" required>
+      <option value="">Select Vehicle Type</option>
+      <option value="Bike">Bike</option>
+      <option value="Car">Car</option>
+      <option value="Truck">Truck</option>
+    </select><br>
+    <input type="text" id="brands" placeholder="Brands Specialized In" required /><br>
+    <textarea id="experience" placeholder="Experience Details" required></textarea><br>
+    <button type="submit">Register</button>
+  </form>
 
-      <a href="#" id="bookNow" class="btn btn-gold w-100 mt-3">Book Now</a>
-    </div>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
-      authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
-      projectId: "find-my-mechanic-ee65d",
-      storageBucket: "find-my-mechanic-ee65d.appspot.com",
-      messagingSenderId: "1044407480698",
-      appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const nameParam = urlParams.get("name");
-
-    async function loadMechanicDetails() {
-      const querySnapshot = await getDocs(collection(db, "mechanics"));
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.name === nameParam) {
-          document.getElementById("name").innerText = data.name;
-          document.getElementById("vehicleBrand").innerText = ${data.vehicleType} - ${data.brand};
-          document.getElementById("phone").innerText = data.phone;
-          document.getElementById("location").innerText = data.city;
-          document.getElementById("services").innerText = data.services || "General Service, Repair";
-          document.getElementById("price").innerText = data.price || "Not specified";
-
-          document.getElementById("bookNow").href = booking-mechanic.html?name=${encodeURIComponent(data.name)};
-        }
+  <script>
+    const db = firebase.firestore();
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await db.collection('mechanics').add({
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        location: document.getElementById('location').value,
+        vehicleType: document.getElementById('vehicleType').value,
+        brands: document.getElementById('brands').value,
+        experience: document.getElementById('experience').value,
+        approved: false,
+        timestamp: new Date()
       });
-    }
-
-    loadMechanicDetails();
+      alert('Registration submitted. Awaiting admin approval.');
+      document.getElementById('registerForm').reset();
+    });
   </script>
 </body>
 </html>
