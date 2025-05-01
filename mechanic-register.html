@@ -41,7 +41,7 @@
         brands: document.getElementById('brands').value,
         experience: document.getElementById('experience').value,
         approved: false,
-        timestamp: new Date()
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
       });
       alert('Registration submitted. Awaiting admin approval.');
       document.getElementById('registerForm').reset();
