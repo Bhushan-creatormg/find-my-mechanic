@@ -1,48 +1,101 @@
-<!-- mechanic.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Mechanic Registration</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-</head>
-<body class="bg-light">
-
-  <div class="container mt-5">
-    <h2 class="text-center text-warning">Mechanic Registration</h2>
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mechanic Registration - Find My Mechanic</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #fff8e1;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .form-control {
+      border-radius: 10px;
+    }
+    .btn-gold {
+      background-color: #d4af37;
+      color: #fff;
+      border-radius: 10px;
+    }
+    .btn-gold:hover {
+      background-color: #c9a22f;
+    }
+  </style>
+</head><body>
+  <div class="container">
+    <h2 class="text-center mb-4 text-dark">Mechanic Registration</h2>
     <form id="mechanicForm">
-      <input type="text" class="form-control mb-2" placeholder="Name" id="name" required />
-      <input type="text" class="form-control mb-2" placeholder="Experience (in years)" id="experience" required />
-      <input type="text" class="form-control mb-2" placeholder="Location" id="location" required />
-      <input type="text" class="form-control mb-2" placeholder="Specialization" id="specialization" required />
-      <button type="submit" class="btn btn-warning w-100">Register</button>
+      <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="name" required>
+      </div>
+      <div class="mb-3">
+        <label for="experience" class="form-label">Experience (in years)</label>
+        <input type="number" class="form-control" id="experience" required>
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" required>
+      </div>
+      <div class="mb-3">
+        <label for="vehicleTypes" class="form-label">Vehicle Types Serviced</label>
+        <select multiple class="form-control" id="vehicleTypes">
+          <option>Bike</option>
+          <option>Car</option>
+          <option>Truck</option>
+          <option>Others</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Phone Number</label>
+        <input type="tel" class="form-control" id="phone" required>
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" required>
+      </div>
+      <button type="submit" class="btn btn-gold w-100">Register</button>
     </form>
-  </div>
+  </div>  <script type="module">
+    // Firebase setup
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-  <script type="module">
-    import { db, collection, addDoc } from './firebase.js';
+    const firebaseConfig = {
+      apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+      authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+      projectId: "find-my-mechanic-ee65d",
+      storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
+      messagingSenderId: "1044407480698",
+      appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+    };
 
-    document.getElementById("mechanicForm").addEventListener("submit", async (e) => {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("mechanicForm");
+
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      const name = document.getElementById("name").value;
-      const experience = document.getElementById("experience").value;
-      const location = document.getElementById("location").value;
-      const specialization = document.getElementById("specialization").value;
+      const mechanicData = {
+        name: document.getElementById("name").value,
+        experience: document.getElementById("experience").value,
+        location: document.getElementById("location").value,
+        vehicleTypes: Array.from(document.getElementById("vehicleTypes").selectedOptions).map(opt => opt.value),
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        approved: false // Default until admin approval
+      };
 
       try {
-        await addDoc(collection(db, "mechanics"), {
-          name,
-          experience,
-          location,
-          specialization,
-          approved: false
-        });
-        alert("Registration submitted! Await admin approval.");
-      } catch (err) {
-        alert("Error saving data: " + err);
+        await addDoc(collection(db, "mechanics"), mechanicData);
+        alert("Registration submitted successfully. You will be notified once approved.");
+        form.reset();
+      } catch (error) {
+        alert("Error registering: " + error);
       }
     });
-  </script>
-</body>
+  </script></body>
 </html>
