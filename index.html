@@ -1,80 +1,105 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- index.html --><!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Find My Mechanic</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
-  <script src="firebase.js"></script>
-</head>
-<body class="bg-white text-dark">
-  <!-- Header -->
-  <header class="bg-gold py-3 mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h1 class="h3">Find My Mechanic</h1>
-      <a href="mechanic.html" class="btn btn-dark">Register as Mechanic</a>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+</head><body style="background-color: #fff; color: #000;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold text-warning" href="#">Find My Mechanic</a>
     </div>
-  </header>  <!-- Main Search Section -->  <section class="container mb-5">
-    <h2 class="text-center mb-4">Need a Mechanic Fast?</h2>
+  </nav>  <header class="text-center py-5" style="background-color: #fff4d6;">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Need a Mechanic?</h1>
+      <p class="lead">We help you find verified mechanics near your location instantly.</p>
+    </div>
+  </header>  <section class="container my-4">
     <form id="searchForm" class="row g-3">
       <div class="col-md-4">
-        <label for="location" class="form-label">Enter Location</label>
-        <input type="text" class="form-control" id="location" placeholder="e.g. Mumbai" required />
+        <label for="location" class="form-label">Enter Your Location</label>
+        <input type="text" class="form-control" id="location" placeholder="e.g., Andheri, Mumbai">
       </div>
       <div class="col-md-4">
-        <label for="vehicleType" class="form-label">Vehicle Type</label>
-        <select id="vehicleType" class="form-select" required>
+        <label for="vehicleType" class="form-label">Select Vehicle Type</label>
+        <select class="form-select" id="vehicleType" onchange="updateBrandOptions()">
           <option value="">Choose...</option>
-          <option value="bike">Bike</option>
-          <option value="car">Car</option>
-          <option value="truck">Others</option>
+          <option value="Bike">Bike</option>
+          <option value="Car">Car</option>
+          <option value="Truck">Truck</option>
+          <option value="Others">Others</option>
         </select>
       </div>
       <div class="col-md-4">
-        <label for="brand" class="form-label">Brand</label>
-        <select id="brand" class="form-select" required>
-          <option value="">Select Vehicle Type First</option>
+        <label for="brand" class="form-label">Select Brand</label>
+        <select class="form-select" id="brand">
+          <option value="">Select vehicle type first</option>
         </select>
-      </div>
-      <div class="col-12 text-center">
-        <button type="submit" class="btn btn-gold px-4">Find Mechanic</button>
       </div>
     </form>
-  </section>  <!-- Tips and How-To Section -->  <section class="bg-light py-5">
-    <div class="container">
-      <h3 class="mb-4 text-center">Vehicle Tips & How to Use</h3>
-      <div class="row text-center">
-        <div class="col-md-4 mb-3">
-          <img src="img/oil.png" alt="Check Oil" class="mb-2" width="50">
-          <p>Check engine oil regularly</p>
-        </div>
-        <div class="col-md-4 mb-3">
-          <img src="img/location.png" alt="Location" class="mb-2" width="50">
-          <p>Enter your correct location</p>
-        </div>
-        <div class="col-md-4 mb-3">
-          <img src="img/chat.png" alt="Chatbot" class="mb-2" width="50">
-          <p>Ask any questions using our chatbot</p>
-        </div>
+  </section>  <section class="container my-5">
+    <h2 class="text-center mb-4 text-warning">How to Use the Website</h2>
+    <div class="row text-center">
+      <div class="col-md-3">
+        <img src="img/location.png" width="60">
+        <h5 class="mt-2">1. Enter Location</h5>
+        <p>Type your area or pin code.</p>
+      </div>
+      <div class="col-md-3">
+        <img src="img/vehicle.png" width="60">
+        <h5 class="mt-2">2. Select Vehicle</h5>
+        <p>Choose your vehicle type and brand.</p>
+      </div>
+      <div class="col-md-3">
+        <img src="img/mechanic.png" width="60">
+        <h5 class="mt-2">3. Browse Mechanics</h5>
+        <p>View verified mechanic profiles.</p>
+      </div>
+      <div class="col-md-3">
+        <img src="img/booking.png" width="60">
+        <h5 class="mt-2">4. Book Instantly</h5>
+        <p>Get your vehicle fixed at your location.</p>
       </div>
     </div>
-  </section>  <!-- Footer -->  <footer class="bg-gold text-center py-3 mt-4">
-    <small>&copy; 2025 Find My Mechanic. All rights reserved.</small>
-  </footer>  <!-- Chatbot -->  <div id="chatbot-icon" class="chatbot-icon">?</div>
-  <div id="chatbot-container" class="chatbot-container d-none">
-    <iframe src="chatbot.html" width="100%" height="400"></iframe>
+  </section>  <section class="container my-5">
+    <h2 class="text-center text-warning">Vehicle Tips</h2>
+    <ul class="list-group list-group-flush mt-3">
+      <li class="list-group-item">Check tyre pressure monthly to improve mileage.</li>
+      <li class="list-group-item">Service your vehicle every 6 months for better performance.</li>
+      <li class="list-group-item">Clean air filters regularly to avoid engine issues.</li>
+      <li class="list-group-item">Always carry essential tools for emergencies.</li>
+    </ul>
+  </section>  <!-- Chatbot -->  <div id="chatbot-icon" style="position:fixed; bottom:20px; right:20px; background-color:#FFD700; padding:12px; border-radius:50%; cursor:pointer;">
+    <img src="img/chat.png" width="30">
+  </div>
+  <div id="chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+    <div class="p-2 border-bottom bg-warning text-white">Ask me anything</div>
+    <div id="chatbox" style="height:200px; overflow-y:auto; padding:10px;"></div>
+    <input type="text" id="chatInput" class="form-control border-top" placeholder="Type here...">
   </div>  <script src="chatbot.js"></script>  <script>
-    document.getElementById("vehicleType").addEventListener("change", function () {
-      const type = this.value;
-      const brand = document.getElementById("brand");
-      brand.innerHTML = "";
+    const brandSelect = document.getElementById("brand");
+    const brandOptions = {
+      Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
+      Car: ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Toyota"],
+      Truck: ["Others"],
+      Others: ["Rickshaw", "E-Rickshaw", "Tempo", "Tractor", "Others"]
+    };
 
-      let brands = [];
-      if (type === "bike") brands = ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"];
-      else if (type === "car") brands = ["Maruti", "Hyundai", "Tata", "Toyota", "Mahindra"];
-      else if (type === "truck") brands = ["Truck", "Auto Rickshaw", "Tempo", "Eicher", "Others"];
-
-      brand.innerHTML = brands.map(b => <option value="${b}">${b}</option>).join("");
-    });
-  </script></body>
-</html>
+    function updateBrandOptions() {
+      const vehicleType = document.getElementById("vehicleType").value;
+      brandSelect.innerHTML = "";
+      if (vehicleType && brandOptions[vehicleType]) {
+        brandOptions[vehicleType].forEach((brand) => {
+          const option = document.createElement("option");
+          option.value = brand;
+          option.textContent = brand;
+          brandSelect.appendChild(option);
+        });
+      } else {
+        brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
+      }
+    }
+  </script></body></html>
