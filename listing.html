@@ -50,14 +50,19 @@
 
   <script>
     // Firebase Config (Use your own Firebase project details)
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT.firebaseio.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_MESSAGING_ID",
-      appId: "YOUR_APP_ID"
+    
+     const firebaseConfig = {
+  apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+  authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+  projectId: "find-my-mechanic-ee65d",
+  storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
+  messagingSenderId: "1044407480698",
+    appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+};
+
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
     };
 
     firebase.initializeApp(firebaseConfig);
