@@ -22,6 +22,15 @@
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
+    .btn-gold {
+      background-color: #d4af37;
+      color: #000;
+      font-weight: bold;
+      border: none;
+    }
+    .btn-gold:hover {
+      background-color: #bfa534;
+    }
   </style>
 </head>
 <body>
@@ -92,7 +101,7 @@
             <div class="card p-3">
               <h5>${mech.name} <span class="tick">&#10004;</span></h5>
               <p><strong>Phone:</strong> ${mech.phone}</p>
-              <p><strong>Experience:</strong> ${mech.experience} years</p>
+              <p><strong>Experience:</strong> ${mech.experience || 'N/A'} years</p>
               <p><strong>Location:</strong> ${mech.location}</p>
               <p><strong>Vehicle Type:</strong> ${mech.vehicleType}</p>
               <p><strong>Brand:</strong> ${mech.brand}</p>
