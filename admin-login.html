@@ -1,33 +1,60 @@
-<!-- admin-login.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
-  <script src="firebase-config.js"></script>
+  <title>Admin Login - Find My Mechanic</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
 </head>
 <body>
   <h2>Admin Login</h2>
-  <form id="loginForm">
-    <input type="email" id="adminEmail" placeholder="Admin Email" required><br>
-    <input type="password" id="adminPassword" placeholder="Password" required><br>
+
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Enter Email" required><br><br>
+    <input type="password" id="password" placeholder="Enter Password" required><br><br>
     <button type="submit">Login</button>
   </form>
+
+  <p id="message"></p>
+
   <script>
+    // Firebase configuration (replace with your actual Firebase config)
+    const firebaseConfig = {
+     apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+  authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+  projectId: "find-my-mechanic-ee65d",
+  storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
+  messagingSenderId: "1044407480698",
+  appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+
+    const form = document.getElementById('login-form');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('adminEmail').value;
-      const password = document.getElementById('adminPassword').value;
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        window.location.href = 'admin-panel.html';
-      } catch (error) {
-        alert('Login failed: ' + error.message);
-      }
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user.email === "bhushanbhalerao2205@gmail.com") {
+            message.textContent = "Admin login successful!";
+            // Redirect to admin dashboard or page
+            window.location.href = "admin-dashboard.html";
+          } else {
+            message.textContent = "Access Denied: Not an Admin.";
+            auth.signOut();
+          }
+        })
+        .catch((error) => {
+          message.textContent = "Error: " + error.message;
+        });
     });
   </script>
 </body>
