@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Admin Login - Find My Mechanic</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 </head>
 <body>
   <h2>Admin Login</h2>
@@ -17,18 +17,15 @@
   <p id="message"></p>
 
   <script>
-    // Firebase configuration (replace with your actual Firebase config)
     const firebaseConfig = {
-     apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
-  authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
-  projectId: "find-my-mechanic-ee65d",
-  storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
-  messagingSenderId: "1044407480698",
-  appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
-
+      apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+      authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+      projectId: "find-my-mechanic-ee65d",
+      storageBucket: "find-my-mechanic-ee65d.appspot.com",
+      messagingSenderId: "1044407480698",
+      appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
@@ -45,7 +42,6 @@
           const user = userCredential.user;
           if (user.email === "bhushanbhalerao2205@gmail.com") {
             message.textContent = "Admin login successful!";
-            // Redirect to admin dashboard or page
             window.location.href = "admin-dashboard.html";
           } else {
             message.textContent = "Access Denied: Not an Admin.";
