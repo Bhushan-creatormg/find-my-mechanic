@@ -60,7 +60,14 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      where,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
@@ -78,13 +85,12 @@
     let allMechanics = [];
 
     async function fetchMechanics() {
-      const querySnapshot = await getDocs(collection(db, "mechanics"));
+      const mechanicsRef = collection(db, "mechanics");
+      const q = query(mechanicsRef, where("isApproved", "==", true), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
       allMechanics = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        if (data.approved === true) {
-          allMechanics.push(data);
-        }
+        allMechanics.push(doc.data());
       });
       displayMechanics(allMechanics);
     }
