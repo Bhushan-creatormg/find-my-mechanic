@@ -2,19 +2,31 @@
 <html>
 <head>
   <title>Admin Login - Find My Mechanic</title>
+  <!-- Firebase & Bootstrap (Optional) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-  <h2>Admin Login</h2>
+<body class="bg-light">
 
-  <form id="login-form">
-    <input type="email" id="email" placeholder="Enter Email" required><br><br>
-    <input type="password" id="password" placeholder="Enter Password" required><br><br>
-    <button type="submit">Login</button>
-  </form>
+  <div class="container mt-5">
+    <h2 class="mb-4 text-warning">Admin Login</h2>
 
-  <p id="message"></p>
+    <form id="login-form" class="p-4 bg-white shadow rounded">
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" id="email" class="form-control" placeholder="Enter Email" required>
+      </div>
+      <div class="mb-3">
+        <label>Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter Password" required>
+      </div>
+      <button type="submit" class="btn btn-warning w-100">Login</button>
+    </form>
+
+    <p id="message" class="mt-3 text-danger"></p>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -28,30 +40,43 @@
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
 
     const form = document.getElementById('login-form');
     const message = document.getElementById('message');
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      message.textContent = "Logging in...";
+
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          if (user.email === "bhushanbhalerao2205@gmail.com") {
-            message.textContent = "Admin login successful!";
-            window.location.href = "admin-dashboard.html";
-          } else {
-            message.textContent = "Access Denied: Not an Admin.";
-            auth.signOut();
-          }
+
+          // Check if user is an admin from Firestore
+          db.collection("users").doc(user.uid).get()
+            .then((doc) => {
+              if (doc.exists && doc.data().admin === true) {
+                message.style.color = "green";
+                message.textContent = "Admin login successful!";
+                window.location.href = "admin-dashboard.html";
+              } else {
+                message.textContent = "Access Denied: You are not an Admin.";
+                auth.signOut();
+              }
+            })
+            .catch((err) => {
+              message.textContent = "Error checking admin role: " + err.message;
+            });
         })
         .catch((error) => {
-          message.textContent = "Error: " + error.message;
+          message.textContent = "Login failed: " + error.message;
         });
     });
   </script>
+
 </body>
 </html>
