@@ -61,6 +61,91 @@
           onclick = "searchMechanic()">Search</button>
       </div>
     </form>
+    <div class="text-center">
+  <button class="btn btn-warning mt-3" onclick="searchMechanics()">Search</button>
+</div>
+
+<div id="resultsSection" class="container mt-5" style="display: none;">
+  <h2 class="text-center mb-4 text-success">Available Mechanics</h2>
+  <div id="mechanicResults" class="row g-4"></div>
+</div>
+
+<!-- Firebase App SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase Config - replace with your actual config
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+  authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+  projectId: "find-my-mechanic-ee65d",
+  storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
+  messagingSenderId: "1044407480698",
+  appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  async function searchMechanics() {
+    const location = document.getElementById("location").value.trim().toLowerCase();
+    const vehicleType = document.getElementById("vehicleType").value;
+    const brand = document.getElementById("brand").value;
+    const resultsDiv = document.getElementById("mechanicResults");
+    const section = document.getElementById("resultsSection");
+
+    resultsDiv.innerHTML = "";
+    section.style.display = "none";
+
+    if (!location || !vehicleType || !brand) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      const snapshot = await db.collection("mechanics").get();
+      let found = false;
+
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+
+        if (
+          data.isApproved === true &&
+          data.location.toLowerCase().includes(location) &&
+          data.vehicleType === vehicleType &&
+          data.brand === brand
+        ) {
+          found = true;
+          const card = document.createElement("div");
+          card.className = "col-md-6";
+          card.innerHTML = `
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title text-warning">${data.name}</h5>
+                <p class="card-text">📍 ${data.location}</p>
+                <p class="card-text">🚘 ${data.vehicleType} - ${data.brand}</p>
+                <p class="card-text">⭐ ${data.rating || 'Not Rated'}</p>
+                <a href="booking-mechanic.html?id=${doc.id}" class="btn btn-outline-warning">Book Now</a>
+              </div>
+            </div>
+          `;
+          resultsDiv.appendChild(card);
+        }
+      });
+
+      if (!found) {
+        resultsDiv.innerHTML = '<p class="text-center text-danger">No verified mechanics found for your selection.</p>';
+      }
+
+      section.style.display = "block";
+    } catch (error) {
+      console.error("Error fetching mechanics:", error);
+      resultsDiv.innerHTML = '<p class="text-center text-danger">Something went wrong. Please try again later.</p>';
+      section.style.display = "block";
+    }
+  }
+</script>
   </section>
 
   <!-- How to use -->
