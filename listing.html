@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mechanic Listings</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -38,7 +38,7 @@
     <h2 class="text-center gold">Available Mechanics</h2>
 
     <div class="row my-4">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <select id="filterVehicle" class="form-select">
           <option value="">All Vehicle Types</option>
           <option>Bike</option>
@@ -47,11 +47,14 @@
           <option>Others</option>
         </select>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <input type="text" id="filterLocation" class="form-control" placeholder="Enter City" />
       </div>
-      <div class="col-md-4">
-        <button class="btn btn-gold w-100" onclick="filterMechanics()">Filter</button>
+      <div class="col-md-3">
+        <input type="text" id="filterBrand" class="form-control" placeholder="Enter Brand" />
+      </div>
+      <div class="col-md-3">
+        <button class="btn btn-gold w-100" onclick="filterMechanics()">Search</button>
       </div>
     </div>
 
@@ -86,12 +89,11 @@
 
     async function fetchMechanics() {
       const mechanicsRef = collection(db, "mechanics");
-      const q = query(mechanicsRef, where("approved", "==", true), orderBy("timestamp", "desc")); // ✅ fixed
+      const q = query(mechanicsRef, where("isApproved", "==", true), orderBy("timestamp", "desc"));
       const querySnapshot = await getDocs(q);
       allMechanics = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        allMechanics.push({ id: doc.id, ...data });
+        allMechanics.push(doc.data());
       });
       displayMechanics(allMechanics);
     }
@@ -106,12 +108,12 @@
         mechanicList.innerHTML += `
           <div class="col-md-4">
             <div class="card p-3">
-              <h5>${mech.name || 'N/A'} <span class="tick">&#10004;</span></h5>
-              <p><strong>Phone:</strong> ${mech.phone || 'N/A'}</p>
+              <h5>${mech.name} <span class="tick">&#10004;</span></h5>
+              <p><strong>Phone:</strong> ${mech.phone}</p>
               <p><strong>Experience:</strong> ${mech.experience || 'N/A'} years</p>
-              <p><strong>Location:</strong> ${mech.location || 'N/A'}</p>
-              <p><strong>Vehicle Type:</strong> ${mech.vehicleType || 'N/A'}</p>
-              <p><strong>Brand:</strong> ${mech.brand || 'N/A'}</p>
+              <p><strong>Location:</strong> ${mech.location}</p>
+              <p><strong>Vehicle Type:</strong> ${mech.vehicleType}</p>
+              <p><strong>Brand:</strong> ${mech.brand}</p>
               <a href="booking-mechanic.html?name=${encodeURIComponent(mech.name)}" class="btn btn-gold">Book Now</a>
             </div>
           </div>
@@ -122,11 +124,13 @@
     window.filterMechanics = function () {
       const type = document.getElementById("filterVehicle").value.toLowerCase();
       const location = document.getElementById("filterLocation").value.toLowerCase();
+      const brand = document.getElementById("filterBrand").value.toLowerCase();
 
       const filtered = allMechanics.filter(mech => {
         return (
-          (type === "" || (mech.vehicleType || "").toLowerCase() === type) &&
-          (location === "" || (mech.location || "").toLowerCase().includes(location))
+          (type === "" || mech.vehicleType.toLowerCase() === type) &&
+          (location === "" || mech.location.toLowerCase().includes(location)) &&
+          (brand === "" || mech.brand.toLowerCase().includes(brand))
         );
       });
 
