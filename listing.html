@@ -44,12 +44,12 @@
       <option>Others</option>
     </select>
   </div>
-  <div class="col-md-4">
-    <input type="text" id="filterLocation" class="form-control" placeholder="Enter City or Pincode" />
+  <div class="col-md-4 d-flex">
+    <input type="text" id="filterLocation" class="form-control me-2" placeholder="Enter City or Pincode" />
+    <button class="btn btn-outline-secondary" onclick="useMyLocation()" title="Use My Location">📍</button>
   </div>
-  <div class="col-md-4 d-flex gap-2">
-    <button class="btn btn-gold w-50" onclick="filterMechanics()">Filter</button>
-    <button class="btn btn-outline-secondary w-50" onclick="detectLocation()">Use My Location</button>
+  <div class="col-md-4">
+    <button class="btn btn-gold w-100" onclick="filterMechanics()">Filter</button>
   </div>
 </div>
 
@@ -121,6 +121,8 @@
               <p><strong>Location:</strong> ${location}</p>
               <p><strong>Vehicle Type:</strong> ${vehicleType}</p>
               <p><strong>Brand:</strong> ${brand}</p>
+              <p><strong>Estimated Time:</strong> ~20–30 mins</p>
+              <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}" class="btn btn-outline-primary mb-2" target="_blank">View on Google Maps</a>
               <a href="booking-mechanic.html?name=${encodeURIComponent(name)}" class="btn btn-gold">Book Now</a>
             </div>
           </div>
@@ -144,27 +146,30 @@
       displayMechanics(filtered);
     };
 
-    window.detectLocation = function () {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async function(position) {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          try {
-            const res = await fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng});
-            const data = await res.json();
-            const city = data.address.city || data.address.town || data.address.village || data.address.state || "";
-            document.getElementById("filterLocation").value = city;
-            filterMechanics();
-          } catch (err) {
-            alert("Location detected but failed to fetch area details.");
-          }
-        }, function(err) {
-          alert("Error getting location.");
-        });
-      } else {
-        alert("Geolocation is not supported by this browser.");
+    window.useMyLocation = async function () {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
       }
-    }
+
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+          const res = await fetch(https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json);
+          const data = await res.json();
+          const city = data.address.city || data.address.town || data.address.village || data.address.state_district || "";
+          const pincode = data.address.postcode || "";
+          document.getElementById("filterLocation").value = city || pincode;
+        } catch (err) {
+          alert("Could not detect location.");
+          console.error(err);
+        }
+      }, () => {
+        alert("Unable to retrieve your location.");
+      });
+    };
 
     fetchMechanics();
   </script></body>
