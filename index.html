@@ -33,7 +33,7 @@
       <div class="col-md-4">
         <label for="location" class="form-label">Enter Your Location</label>
         <input type="text" class="form-control" id="location" placeholder="e.g., Andheri, Mumbai">
-        <button type="button" class="btn btn-sm btn-link text-primary" onclick="getCurrentLocation()">📍 Use My Location</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="getLocation()">Use My Location</button>
       </div>
       <div class="col-md-4">
         <label for="vehicleType" class="form-label">Select Vehicle Type</label>
@@ -59,121 +59,155 @@
   <div id="mechanicResults" class="row g-4"></div>
 </div>
 
-  </section>  <!-- Firebase SDK -->  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
-      authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
-      projectId: "find-my-mechanic-ee65d",
-      storageBucket: "find-my-mechanic-ee65d.appspot.com",
-      messagingSenderId: "1044407480698",
-      appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
-    };
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+    authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+    projectId: "find-my-mechanic-ee65d",
+    storageBucket: "find-my-mechanic-ee65d.firebaseapp.com",
+    messagingSenderId: "1044407480698",
+    appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+  };
 
-    async function searchMechanics() {
-      const location = document.getElementById("location").value.trim().toLowerCase();
-      const vehicleType = document.getElementById("vehicleType").value;
-      const brand = document.getElementById("brand").value;
-      const resultsDiv = document.getElementById("mechanicResults");
-      const section = document.getElementById("resultsSection");
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-      resultsDiv.innerHTML = "";
-      section.style.display = "none";
+  async function searchMechanics() {
+    const location = document.getElementById("location").value.trim().toLowerCase();
+    const vehicleType = document.getElementById("vehicleType").value;
+    const brand = document.getElementById("brand").value;
+    const resultsDiv = document.getElementById("mechanicResults");
+    const section = document.getElementById("resultsSection");
 
-      if (!location || !vehicleType || !brand) {
-        alert("Please fill in all fields.");
-        return;
-      }
+    resultsDiv.innerHTML = "";
+    section.style.display = "none";
 
-      try {
-        const snapshot = await db.collection("mechanics").get();
-        let found = false;
+    if (!location || !vehicleType || !brand) {
+      alert("Please fill in all fields.");
+      return;
+    }
 
-        snapshot.forEach((doc) => {
-          const data = doc.data();
+    try {
+      const snapshot = await db.collection("mechanics").get();
+      let found = false;
 
-          if (
-            data.isApproved === true &&
-            data.location.toLowerCase().includes(location) &&
-            data.vehicleType === vehicleType &&
-            data.brand === brand
-          ) {
-            found = true;
-            const card = document.createElement("div");
-            card.className = "col-md-6";
-            card.innerHTML = `
-              <div class="card shadow-sm">
-                <div class="card-body">
-                  <h5 class="card-title text-warning">${data.name}</h5>
-                  <p class="card-text">📍 ${data.location}</p>
-                  <p class="card-text">🚘 ${data.vehicleType} - ${data.brand}</p>
-                  <p class="card-text">⭐ ${data.rating || 'Not Rated'}</p>
-                  <a href="booking-mechanic.html?id=${doc.id}" class="btn btn-outline-warning">Book Now</a>
-                </div>
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (
+          data.isApproved === true &&
+          data.location.toLowerCase().includes(location) &&
+          data.vehicleType === vehicleType &&
+          data.brand === brand
+        ) {
+          found = true;
+          const card = document.createElement("div");
+          card.className = "col-md-6";
+          card.innerHTML = `
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title text-warning">${data.name}</h5>
+                <p class="card-text">📍 ${data.location}</p>
+                <p class="card-text">🚘 ${data.vehicleType} - ${data.brand}</p>
+                <p class="card-text">⭐ ${data.rating || 'Not Rated'}</p>
+                <a href="booking-mechanic.html?id=${doc.id}" class="btn btn-outline-warning">Book Now</a>
               </div>
-            `;
-            resultsDiv.appendChild(card);
-          }
-        });
-
-        if (!found) {
-          resultsDiv.innerHTML = '<p class="text-center text-danger">No verified mechanics found for your selection.</p>';
+            </div>
+          `;
+          resultsDiv.appendChild(card);
         }
+      });
 
-        section.style.display = "block";
-      } catch (error) {
-        console.error("Error fetching mechanics:", error);
-        resultsDiv.innerHTML = '<p class="text-center text-danger">Something went wrong. Please try again later.</p>';
-        section.style.display = "block";
+      if (!found) {
+        resultsDiv.innerHTML = '<p class="text-center text-danger">No verified mechanics found for your selection.</p>';
       }
+
+      section.style.display = "block";
+    } catch (error) {
+      console.error("Error fetching mechanics:", error);
+      resultsDiv.innerHTML = '<p class="text-center text-danger">Something went wrong. Please try again later.</p>';
+      section.style.display = "block";
     }
+  }
 
-    // Live location API
-    function getCurrentLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (position) => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          const api = https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon};
-
-          try {
-            const res = await fetch(api);
-            const data = await res.json();
-            const area = data.address.city || data.address.town || data.address.village || data.address.suburb || data.address.state || data.address.postcode;
-            if (area) document.getElementById("location").value = area;
-          } catch (err) {
-            alert("Unable to get your location. Try manually entering your area.");
-          }
-        });
-      } else {
-        alert("Geolocation is not supported by this browser.");
-      }
+  // Location Autofill
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        try {
+          const res = await fetch(https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en);
+          const data = await res.json();
+          document.getElementById("location").value = data.city || data.locality || data.principalSubdivision || "";
+        } catch (err) {
+          console.error("Reverse geocoding failed", err);
+          alert("Couldn't get your location");
+        }
+      });
+    } else {
+      alert("Geolocation is not supported by your browser.");
     }
+  }
 
-    // Don't touch brand logic
-    const brandSelect = document.getElementById("brand");
-    const brandOptions = {
-      Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
-      Car: ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Toyota"],
-      Truck: ["Others"],
-      Others: ["Rickshaw", "E-Rickshaw", "Tempo", "Tractor", "Others"]
-    };
+  // Brand dropdown logic (UNTOUCHED)
+  const brandSelect = document.getElementById("brand");
+  const brandOptions = {
+    Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
+    Car: ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Toyota"],
+    Truck: ["Others"],
+    Others: ["Rickshaw", "E-Rickshaw", "Tempo", "Tractor", "Others"]
+  };
 
-    function updateBrandOptions() {
-      const vehicleType = document.getElementById("vehicleType").value;
-      brandSelect.innerHTML = "";
-      if (vehicleType && brandOptions[vehicleType]) {
-        brandOptions[vehicleType].forEach((brand) => {
-          const option = document.createElement("option");
-          option.value = brand;
-          option.textContent = brand;
-          brandSelect.appendChild(option);
-        });
-      } else {
-        brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
-      }
+  function updateBrandOptions() {
+    const vehicleType = document.getElementById("vehicleType").value;
+    brandSelect.innerHTML = "";
+    if (vehicleType && brandOptions[vehicleType]) {
+      brandOptions[vehicleType].forEach((brand) => {
+        const option = document.createElement("option");
+        option.value = brand;
+        option.textContent = brand;
+        brandSelect.appendChild(option);
+      });
+    } else {
+      brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
     }
-  </script></body>
+  }
+</script>
+
+  </section>  <section class="container my-5">
+    <h2 class="text-center mb-4 text-warning">How to Use the Website</h2>
+    <div class="row text-center">
+      <div class="col-md-3">
+        <div style="font-size: 40px;">📍</div>
+        <h5 class="mt-2">1. Enter Location</h5>
+        <p>Type your area or pin code.</p>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size: 40px;">🚗</div>
+        <h5 class="mt-2">2. Select Vehicle</h5>
+        <p>Choose your vehicle type and brand.</p>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size: 40px;">🔧</div>
+        <h5 class="mt-2">3. Browse Mechanics</h5>
+        <p>View verified mechanic profiles.</p>
+      </div>
+      <div class="col-md-3">
+        <div style="font-size: 40px;">📅</div>
+        <h5 class="mt-2">4. Book Instantly</h5>
+        <p>Get your vehicle fixed at your location.</p>
+      </div>
+    </div>
+  </section>  <section class="container my-5">
+    <h2 class="text-center text-warning">Vehicle Tips</h2>
+    <ul class="list-group list-group-flush mt-3">
+      <li class="list-group-item">✅ Check tyre pressure monthly to improve mileage.</li>
+      <li class="list-group-item">🛠 Service your vehicle every 6 months for better performance.</li>
+      <li class="list-group-item">🧽 Clean air filters regularly to avoid engine issues.</li>
+      <li class="list-group-item">🧰 Always carry essential tools for emergencies.</li>
+    </ul>
+  </section></body>
 </html>
