@@ -49,7 +49,7 @@
   </div>
   <div class="col-md-4 d-flex gap-2">
     <button class="btn btn-gold w-50" onclick="filterMechanics()">Filter</button>
-    <button class="btn btn-outline-secondary w-50" onclick="getLiveLocation()">📍 Use My Location</button>
+    <button class="btn btn-outline-secondary w-50" onclick="detectLocation()">Use My Location</button>
   </div>
 </div>
 
@@ -144,26 +144,27 @@
       displayMechanics(filtered);
     };
 
-    window.getLiveLocation = async function () {
+    window.detectLocation = function () {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async function (position) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
           const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-
-          const res = await fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon});
-          const data = await res.json();
-          const city = data.address.city || data.address.town || data.address.village || "";
-          const postcode = data.address.postcode || "";
-
-          document.getElementById("filterLocation").value = city || postcode;
-          filterMechanics();
-        }, function (err) {
-          alert("Unable to fetch location.");
+          const lng = position.coords.longitude;
+          try {
+            const res = await fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng});
+            const data = await res.json();
+            const city = data.address.city || data.address.town || data.address.village || data.address.state || "";
+            document.getElementById("filterLocation").value = city;
+            filterMechanics();
+          } catch (err) {
+            alert("Location detected but failed to fetch area details.");
+          }
+        }, function(err) {
+          alert("Error getting location.");
         });
       } else {
-        alert("Geolocation is not supported by your browser.");
+        alert("Geolocation is not supported by this browser.");
       }
-    };
+    }
 
     fetchMechanics();
   </script></body>
