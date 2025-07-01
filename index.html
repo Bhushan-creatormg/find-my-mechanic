@@ -33,7 +33,7 @@
       <div class="col-md-4">
         <label for="location" class="form-label">Enter Your Location</label>
         <input type="text" class="form-control" id="location" placeholder="e.g., Andheri, Mumbai">
-        <button type="button" class="btn btn-outline-secondary btn-sm mt-1" onclick="useMyLocation()">Use My Location</button>
+        <button type="button" class="btn btn-link p-0 mt-1" onclick="getCurrentLocation()">📍 Use My Location</button>
       </div>
       <div class="col-md-4">
         <label for="vehicleType" class="form-label">Select Vehicle Type</label>
@@ -68,26 +68,13 @@
     apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
     authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
     projectId: "find-my-mechanic-ee65d",
-    storageBucket: "find-my-mechanic-ee65d.appspot.com",
+    storageBucket: "find-my-mechanic-ee65d.firebasestorage.app",
     messagingSenderId: "1044407480698",
     appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
   };
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
-
-  async function useMyLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (position) => {
-        const { latitude, longitude } = position.coords;
-        const res = await fetch(https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en);
-        const data = await res.json();
-        document.getElementById("location").value = data.city || data.locality || data.principalSubdivision || "";
-      });
-    } else {
-      alert("Geolocation is not supported by this browser.");
-    }
-  }
 
   async function searchMechanics() {
     const location = document.getElementById("location").value.trim().toLowerCase();
@@ -110,6 +97,7 @@
 
       snapshot.forEach((doc) => {
         const data = doc.data();
+
         if (
           data.isApproved === true &&
           data.location.toLowerCase().includes(location) &&
@@ -128,7 +116,8 @@
                 <p class="card-text">⭐ ${data.rating || 'Not Rated'}</p>
                 <a href="booking-mechanic.html?id=${doc.id}" class="btn btn-outline-warning">Book Now</a>
               </div>
-            </div>`;
+            </div>
+          `;
           resultsDiv.appendChild(card);
         }
       });
@@ -142,6 +131,47 @@
       console.error("Error fetching mechanics:", error);
       resultsDiv.innerHTML = '<p class="text-center text-danger">Something went wrong. Please try again later.</p>';
       section.style.display = "block";
+    }
+  }
+
+  function getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const response = await fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon});
+        const data = await response.json();
+        if (data.address) {
+          const place = data.address.suburb || data.address.city || data.address.town || data.address.village || "";
+          const postcode = data.address.postcode || "";
+          document.getElementById("location").value = place + " " + postcode;
+        }
+      }, () => alert("Failed to get location"));
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  const brandSelect = document.getElementById("brand");
+  const brandOptions = {
+    Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
+    Car: ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Toyota"],
+    Truck: ["Others"],
+    Others: ["Rickshaw", "E-Rickshaw", "Tempo", "Tractor", "Others"]
+  };
+
+  function updateBrandOptions() {
+    const vehicleType = document.getElementById("vehicleType").value;
+    brandSelect.innerHTML = "";
+    if (vehicleType && brandOptions[vehicleType]) {
+      brandOptions[vehicleType].forEach((brand) => {
+        const option = document.createElement("option");
+        option.value = brand;
+        option.textContent = brand;
+        brandSelect.appendChild(option);
+      });
+    } else {
+      brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
     }
   }
 </script>
@@ -178,67 +208,6 @@
       <li class="list-group-item">🧽 Clean air filters regularly to avoid engine issues.</li>
       <li class="list-group-item">🧰 Always carry essential tools for emergencies.</li>
     </ul>
-  </section>  <div id="chatbot-icon" onclick="toggleChatbot()" style="position:fixed; bottom:20px; right:20px; background-color:#FFD700; padding:12px; border-radius:50%; cursor:pointer; z-index:999;">
-    💬
-  </div>  <div id="chatbot" style="display:none; position:fixed; bottom:80px; right:20px; width:300px; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:999;">
-    <div class="p-2 border-bottom bg-warning text-white">Ask me anything</div>
-    <div id="chatbox" style="height:200px; overflow-y:auto; padding:10px; font-size: 14px;"></div>
-    <input type="text" id="chatInput" class="form-control border-top" placeholder="Type here...">
-  </div>  <script>
-    function toggleChatbot() {
-      const chatbot = document.getElementById("chatbot");
-      chatbot.style.display = chatbot.style.display === "none" ? "block" : "none";
-    }
-
-    const chatInput = document.getElementById("chatInput");
-    const chatbox = document.getElementById("chatbox");
-
-    chatInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        const userMsg = chatInput.value.trim();
-        if (userMsg) {
-          const userDiv = document.createElement("div");
-          userDiv.textContent = "👤 " + userMsg;
-          chatbox.appendChild(userDiv);
-          chatInput.value = "";
-
-          const botReply = document.createElement("div");
-          botReply.textContent = "🤖 " + getBotReply(userMsg.toLowerCase());
-          botReply.style.color = "green";
-          chatbox.appendChild(botReply);
-          chatbox.scrollTop = chatbox.scrollHeight;
-        }
-      }
-    });
-
-    function getBotReply(msg) {
-      if (msg.includes("hello") || msg.includes("hi")) return "Hello! How can I help you today?";
-      if (msg.includes("book")) return "Please select your vehicle and location to book a mechanic.";
-      if (msg.includes("price")) return "Prices vary by service. Click a mechanic to see pricing.";
-      return "Sorry, I didn’t understand that. Please try asking something else.";
-    }
-
-    const brandSelect = document.getElementById("brand");
-    const brandOptions = {
-      Bike: ["Royal Enfield", "Bajaj", "TVS", "Hero", "Honda"],
-      Car: ["Maruti Suzuki", "Hyundai", "Tata", "Honda", "Toyota"],
-      Truck: ["Others"],
-      Others: ["Rickshaw", "E-Rickshaw", "Tempo", "Tractor", "Others"]
-    };
-
-    function updateBrandOptions() {
-      const vehicleType = document.getElementById("vehicleType").value;
-      brandSelect.innerHTML = "";
-      if (vehicleType && brandOptions[vehicleType]) {
-        brandOptions[vehicleType].forEach((brand) => {
-          const option = document.createElement("option");
-          option.value = brand;
-          option.textContent = brand;
-          brandSelect.appendChild(option);
-        });
-      } else {
-        brandSelect.innerHTML = '<option value="">Select vehicle type first</option>';
-      }
-    }
-  </script></body>
+  </section>
+</body>
 </html>
