@@ -1,153 +1,163 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mechanic Listings</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #fff;
-    }
-    .gold {
-      color: #d4af37;
-    }
-    .tick {
-      color: green;
-      font-weight: bold;
-    }
-    .card {
-      border: 1px solid #d4af37;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .btn-gold {
-      background-color: #d4af37;
-      color: #000;
-      font-weight: bold;
-      border: none;
-    }
-    .btn-gold:hover {
-      background-color: #bfa534;
-    }
-  </style>
+  <title>Find My Mechanic</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-  <div class="container mt-4">
-    <h2 class="text-center gold">Available Mechanics</h2>
-
-    <div class="row my-4">
-      <div class="col-md-4">
-        <select id="filterVehicle" class="form-select">
-          <option value="">All Vehicle Types</option>
-          <option>Bike</option>
-          <option>Car</option>
-          <option>Truck</option>
-          <option>Others</option>
+<body style="background-color: #fff; color: #000;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <ul class="navbar-nav ms-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="mechanic-register.html">Mechanic Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="admin-login.html">Admin Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="admin-panel.html">Admin Panel</a>
+      </li>
+    </ul>
+    <div class="container">
+      <a class="navbar-brand fw-bold text-warning" href="#">Find My Mechanic</a>
+    </div>
+  </nav>  <header class="text-center py-5" style="background-color: #fff4d6;">
+    <div class="container">
+      <h1 class="display-5 fw-bold">Need a Mechanic?</h1>
+      <p class="lead">We help you find verified mechanics near your location instantly.</p>
+    </div>
+  </header>  <section class="container my-4">
+    <form id="searchForm" class="row g-3">
+      <div class="col-md-3">
+        <label for="location" class="form-label">Enter Your Location</label>
+        <input type="text" class="form-control" id="location" placeholder="e.g., Andheri, Mumbai">
+      </div>
+      <div class="col-md-3">
+        <label for="pincode" class="form-label">Enter Pincode</label>
+        <input type="text" class="form-control" id="pincode" placeholder="e.g., 400053">
+      </div>
+      <div class="col-md-3">
+        <label for="vehicleType" class="form-label">Select Vehicle Type</label>
+        <select class="form-select" id="vehicleType" onchange="updateBrandOptions()">
+          <option value="">Choose...</option>
+          <option value="Bike">Bike</option>
+          <option value="Car">Car</option>
+          <option value="Truck">Truck</option>
+          <option value="Others">Others</option>
         </select>
       </div>
-      <div class="col-md-4">
-        <input type="text" id="filterLocation" class="form-control" placeholder="Enter City" />
+      <div class="col-md-3">
+        <label for="brand" class="form-label">Select Brand</label>
+        <select class="form-select" id="brand">
+          <option value="">Select vehicle type first</option>
+        </select>
       </div>
-      <div class="col-md-4">
-        <button class="btn btn-gold w-100" onclick="filterMechanics()">Filter</button>
-      </div>
-    </div>
+    </form><div class="text-center">
+  <button class="btn btn-warning mt-3" onclick="searchMechanics()">Search</button>
+  <button class="btn btn-outline-secondary mt-3 ms-2" onclick="useMyLocation()">Use My Location</button>
+</div>
 
-    <div id="mechanicList" class="row"></div>
-  </div>
+<div id="resultsSection" class="container mt-5" style="display: none;">
+  <h2 class="text-center mb-4 text-success">Available Mechanics</h2>
+  <div id="mechanicResults" class="row g-4"></div>
+</div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      query,
-      where,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
-      authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
-      projectId: "find-my-mechanic-ee65d",
-      storageBucket: "find-my-mechanic-ee65d.appspot.com",
-      messagingSenderId: "1044407480698",
-      appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
-    };
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCjc5AVGj18SOiEdyzuepffcyOJXB9FVz4",
+    authDomain: "find-my-mechanic-ee65d.firebaseapp.com",
+    projectId: "find-my-mechanic-ee65d",
+    storageBucket: "find-my-mechanic-ee65d.appspot.com",
+    messagingSenderId: "1044407480698",
+    appId: "1:1044407480698:web:54bcc09f8579038e80e6c3"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    const mechanicList = document.getElementById("mechanicList");
-    let allMechanics = [];
+  async function useMyLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        const res = await fetch(https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon});
+        const data = await res.json();
+        document.getElementById("location").value = data.address.city || data.address.town || "";
+        document.getElementById("pincode").value = data.address.postcode || "";
+      }, () => {
+        alert("Unable to access location.");
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
 
-    async function fetchMechanics() {
-      try {
-        const mechanicsRef = collection(db, "mechanics");
-        const q = query(mechanicsRef, where("isApproved", "==", true), orderBy("timestamp", "desc"));
-        const querySnapshot = await getDocs(q);
-        allMechanics = [];
-        querySnapshot.forEach((doc) => {
-          allMechanics.push(doc.data());
-        });
-        displayMechanics(allMechanics);
-      } catch (err) {
-        mechanicList.innerHTML = <p class="text-danger">Something went wrong while fetching mechanics. Please try again later.</p>;
-        console.error("Error fetching mechanics:", err);
-      }
+  async function searchMechanics() {
+    const location = document.getElementById("location").value.trim().toLowerCase();
+    const pincode = document.getElementById("pincode").value.trim();
+    const vehicleType = document.getElementById("vehicleType").value;
+    const brand = document.getElementById("brand").value;
+    const resultsDiv = document.getElementById("mechanicResults");
+    const section = document.getElementById("resultsSection");
+
+    resultsDiv.innerHTML = "";
+    section.style.display = "none";
+
+    if (!location || !vehicleType || !brand) {
+      alert("Please fill in all fields.");
+      return;
     }
 
-    function displayMechanics(mechanics) {
-      mechanicList.innerHTML = "";
-      if (mechanics.length === 0) {
-        mechanicList.innerHTML = "<p>No mechanics found.</p>";
-        return;
-      }
+    try {
+      const snapshot = await db.collection("mechanics").get();
+      let found = false;
 
-      mechanics.forEach((mech) => {
-        const name = mech.name || "Not available";
-        const phone = mech.phone || "N/A";
-        const experience = mech.experience || "N/A";
-        const location = mech.location || "N/A";
-        const vehicleType = mech.vehicleType || "N/A";
-        const brand = mech.brand || "N/A";
-
-        mechanicList.innerHTML += `
-          <div class="col-md-4">
-            <div class="card p-3">
-              <h5>${name} <span class="tick">&#10004;</span></h5>
-              <p><strong>Phone:</strong> ${phone}</p>
-              <p><strong>Experience:</strong> ${experience} years</p>
-              <p><strong>Location:</strong> ${location}</p>
-              <p><strong>Vehicle Type:</strong> ${vehicleType}</p>
-              <p><strong>Brand:</strong> ${brand}</p>
-              <a href="booking-mechanic.html?name=${encodeURIComponent(name)}" class="btn btn-gold">Book Now</a>
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (
+          data.isApproved === true &&
+          data.location.toLowerCase().includes(location) &&
+          data.vehicleType === vehicleType &&
+          data.brand === brand &&
+          (pincode === "" || (data.pincode && data.pincode.includes(pincode)))
+        ) {
+          found = true;
+          const card = document.createElement("div");
+          card.className = "col-md-6";
+          card.innerHTML = `
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h5 class="card-title text-warning">${data.name}</h5>
+                <p class="card-text">📍 ${data.location}</p>
+                <p class="card-text">🚘 ${data.vehicleType} - ${data.brand}</p>
+                <p class="card-text">📮 ${data.pincode || 'Not Provided'}</p>
+                <p class="card-text">⭐ ${data.rating || 'Not Rated'}</p>
+                <a href="booking-mechanic.html?id=${doc.id}" class="btn btn-outline-warning">Book Now</a>
+              </div>
             </div>
-          </div>
-        `;
+          `;
+          resultsDiv.appendChild(card);
+        }
       });
+
+      if (!found) {
+        resultsDiv.innerHTML = '<p class="text-center text-danger">No verified mechanics found for your selection.</p>';
+      }
+
+      section.style.display = "block";
+    } catch (error) {
+      console.error("Error fetching mechanics:", error);
+      resultsDiv.innerHTML = '<p class="text-center text-danger">Something went wrong. Please try again later.</p>';
+      section.style.display = "block";
     }
+  }
+</script>
 
-    window.filterMechanics = function () {
-      const type = document.getElementById("filterVehicle").value.toLowerCase();
-      const location = document.getElementById("filterLocation").value.toLowerCase();
-
-      const filtered = allMechanics.filter(mech => {
-        const mechType = mech.vehicleType ? mech.vehicleType.toLowerCase() : "";
-        const mechLocation = mech.location ? mech.location.toLowerCase() : "";
-        return (
-          (type === "" || mechType === type) &&
-          (location === "" || mechLocation.includes(location))
-        );
-      });
-
-      displayMechanics(filtered);
-    };
-
-    fetchMechanics();
-  </script>
+  </section>
 </body>
 </html>
